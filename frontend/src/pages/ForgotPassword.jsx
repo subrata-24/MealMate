@@ -1,15 +1,30 @@
 import React, { useState } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { serverUrl } from "../App";
 
 const ForgotPassword = () => {
-  const [step, setStep] = useState(1); // start from step 1
+  const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOTP] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
+  const handleSendOtp = async () => {
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/auth/send-otp`,
+        { email },
+        { withCredentials: true }
+      );
+      console.log(result);
+      setStep(2);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-green-50 p-4 font-sans">
       <div className="w-full max-w-md p-8 rounded-2xl bg-white shadow-2xl hover:shadow-3xl transition-shadow">
