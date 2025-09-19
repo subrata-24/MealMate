@@ -117,3 +117,24 @@ export const verifyOtp = async (req, res) => {
     return res.status(500).json(`sign out error ${error}`);
   }
 };
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user || !user.isOtpVerified) {
+      return res.status(400).json({ message: "OTP verification required" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.isOtpVerified = false;
+    await user.save();
+
+    return res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    console.error("Password reset error:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
