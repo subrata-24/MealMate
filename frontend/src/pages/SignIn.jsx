@@ -80,8 +80,11 @@ const SignIn = () => {
 
         {/* Forget Password */}
         <div className="flex justify-end mt-2">
-          <button className="text-orange-600 font-semibold cursor-pointer hover:text-orange-700 hover:underline transition-colors">
-            Forget Password?
+          <button
+            className="text-orange-600 font-semibold cursor-pointer hover:text-orange-700 hover:underline transition-colors"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Forgot Password?
           </button>
         </div>
 
