@@ -3,28 +3,31 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
-  const [step, setStep] = useState(3);
-  const [email, setEmail] = useState(" ");
-  const [otp, setOTP] = useState();
+  const [step, setStep] = useState(1); // start from step 1
+  const [email, setEmail] = useState("");
+  const [otp, setOTP] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-[#fff9f6] p-4">
-      <div className="w-full max-w-md p-8 rounded-lg shadow-2xl">
-        <div className="flex items-center gap-4 mb-4">
+    <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-green-50 p-4 font-sans">
+      <div className="w-full max-w-md p-8 rounded-2xl bg-white shadow-2xl hover:shadow-3xl transition-shadow">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-6">
           <IoMdArrowRoundBack
-            size={25}
-            className="text-[#ff4d2d] font-bold cursor-pointer"
+            size={28}
+            className="text-orange-600 cursor-pointer hover:text-orange-700 transition-colors"
             onClick={() => navigate("/signin")}
           />
-          <h1 className="text-2xl font-bold text-[#ff4d2d] text-center">
+          <h1 className="text-3xl font-extrabold text-orange-600 tracking-tight">
             Forgot Password
           </h1>
         </div>
 
+        {/* Step 1: Enter Email */}
         {step === 1 && (
-          <div className="mb-4">
+          <div>
             <label
               htmlFor="email"
               className="block text-gray-700 font-medium mb-2"
@@ -38,16 +41,20 @@ const ForgotPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
-            <div className="flex justify-center mt-4">
-              <button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 w-full rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 cursor-pointer">
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={() => setStep(2)}
+                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300"
+              >
                 Send OTP
               </button>
             </div>
           </div>
         )}
 
+        {/* Step 2: Enter OTP */}
         {step === 2 && (
-          <div className="mb-4">
+          <div>
             <label
               htmlFor="otp"
               className="block text-gray-700 font-medium mb-2"
@@ -61,16 +68,20 @@ const ForgotPassword = () => {
               onChange={(e) => setOTP(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
-            <div className="flex justify-center mt-4">
-              <button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 w-full rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 cursor-pointer">
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={() => setStep(3)}
+                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300"
+              >
                 Verify
               </button>
             </div>
           </div>
         )}
 
+        {/* Step 3: Reset Password */}
         {step === 3 && (
-          <div className="mb-4">
+          <div>
             <label
               htmlFor="newPassword"
               className="block text-gray-700 font-medium mb-2"
@@ -78,7 +89,7 @@ const ForgotPassword = () => {
               New Password
             </label>
             <input
-              type="text"
+              type="password"
               placeholder="Enter new password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -91,14 +102,14 @@ const ForgotPassword = () => {
               Confirm Password
             </label>
             <input
-              type="text"
+              type="password"
               placeholder="Enter password again"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
-            <div className="flex justify-center mt-4">
-              <button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 w-full rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 cursor-pointer">
+            <div className="flex justify-center mt-6">
+              <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300">
                 Reset Password
               </button>
             </div>
