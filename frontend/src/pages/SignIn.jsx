@@ -7,31 +7,26 @@ import { serverUrl } from "../App";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSignIn = async () => {
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signin`,
-        {
-          email,
-          password,
-        },
+        { email, password },
         { withCredentials: true }
       );
-
       console.log(result);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-6 bg-gradient-to-br from-orange-50 to-green-50 font-sans">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 border border-orange-100 transition-all">
+      <div className="bg-white rounded-2xl shadow-2xl hover:shadow-3xl transition-shadow w-full max-w-md p-8 border border-orange-100">
         {/* Logo / Title */}
         <h1 className="text-4xl font-extrabold mb-2 text-orange-600 text-center tracking-tight">
           MealMate
@@ -50,17 +45,15 @@ const SignIn = () => {
           </label>
           <input
             type="email"
-            className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             placeholder="Enter your email"
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
             value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
           />
         </div>
 
         {/* Password */}
-        <div className="mb-4">
+        <div className="mb-2">
           <label
             htmlFor="password"
             className="block text-gray-700 font-medium mb-2"
@@ -70,16 +63,14 @@ const SignIn = () => {
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-              className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
               placeholder="Enter your password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
               value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
             <button
               type="button"
-              className="absolute right-3 top-3.5 text-gray-400 hover:text-orange-500"
+              className="absolute right-3 top-3.5 text-gray-400 hover:text-orange-700 transition-colors"
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -87,13 +78,18 @@ const SignIn = () => {
           </div>
         </div>
 
-        {/* Sign Up Button */}
-        <div className="flex justify-center">
+        {/* Forget Password */}
+        <div className="flex justify-end mt-2">
+          <button className="text-orange-600 font-semibold cursor-pointer hover:text-orange-700 hover:underline transition-colors">
+            Forget Password?
+          </button>
+        </div>
+
+        {/* Sign In Button */}
+        <div className="flex justify-center mt-4">
           <button
-            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-10 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer"
-            onClick={() => {
-              handleSignIn();
-            }}
+            onClick={handleSignIn}
+            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-10 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 cursor-pointer"
           >
             Sign In
           </button>
@@ -112,12 +108,12 @@ const SignIn = () => {
           <span>Continue with Google</span>
         </button>
 
-        {/* Sign In Link */}
+        {/* Sign Up Link */}
         <p className="text-gray-600 text-center mt-6">
           Don't have an account?
           <span
-            className="text-orange-600 font-semibold ml-2 cursor-pointer hover:underline"
             onClick={() => navigate("/signup")}
+            className="text-orange-600 font-semibold ml-2 cursor-pointer hover:underline hover:text-orange-700 transition-colors"
           >
             Sign Up
           </span>
