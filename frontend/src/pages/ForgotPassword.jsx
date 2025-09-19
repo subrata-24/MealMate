@@ -3,9 +3,11 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(3);
   const [email, setEmail] = useState(" ");
   const [otp, setOTP] = useState();
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-[#fff9f6] p-4">
@@ -62,6 +64,42 @@ const ForgotPassword = () => {
             <div className="flex justify-center mt-4">
               <button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 w-full rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 cursor-pointer">
                 Verify
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="mb-4">
+            <label
+              htmlFor="newPassword"
+              className="block text-gray-700 font-medium mb-2"
+            >
+              New Password
+            </label>
+            <input
+              type="text"
+              placeholder="Enter new password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all mb-4"
+            />
+            <label
+              htmlFor="confirmPassword"
+              className="block text-gray-700 font-medium mb-2"
+            >
+              Confirm Password
+            </label>
+            <input
+              type="text"
+              placeholder="Enter password again"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
+            />
+            <div className="flex justify-center mt-4">
+              <button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 w-full rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 cursor-pointer">
+                Reset Password
               </button>
             </div>
           </div>
