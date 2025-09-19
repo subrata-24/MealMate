@@ -2,11 +2,38 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { serverUrl } from "../App";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [role, setRole] = useState("user");
   const navigate = useNavigate();
+
+  const handleSignUp = async () => {
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/auth/signup`,
+        {
+          fullname,
+          email,
+          mobileNo,
+          password,
+          role,
+        },
+        { withCredentials: true }
+      );
+
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("user");
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-6 bg-gradient-to-br from-orange-50 to-green-50 font-sans">
@@ -22,7 +49,7 @@ const SignUp = () => {
         {/* Full Name */}
         <div className="mb-4">
           <label
-            htmlFor="fullName"
+            htmlFor="fullname"
             className="block text-gray-700 font-medium mb-2"
           >
             Full Name
@@ -31,6 +58,10 @@ const SignUp = () => {
             type="text"
             className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             placeholder="Enter your full name"
+            onChange={(e) => {
+              setFullname(e.target.value);
+            }}
+            value={fullname}
           />
         </div>
 
@@ -46,6 +77,10 @@ const SignUp = () => {
             type="email"
             className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             placeholder="Enter your email"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            value={email}
           />
         </div>
 
@@ -61,6 +96,10 @@ const SignUp = () => {
             type="number"
             className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             placeholder="Enter your mobile number"
+            onChange={(e) => {
+              setMobileNo(e.target.value);
+            }}
+            value={mobileNo}
           />
         </div>
 
@@ -77,6 +116,10 @@ const SignUp = () => {
               type={showPassword ? "text" : "password"}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
               placeholder="Enter your password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              value={password}
             />
             <button
               type="button"
@@ -116,7 +159,12 @@ const SignUp = () => {
 
         {/* Sign Up Button */}
         <div className="flex justify-center">
-          <button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-10 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer">
+          <button
+            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-10 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+            onClick={() => {
+              handleSignUp();
+            }}
+          >
             Sign Up
           </button>
         </div>
