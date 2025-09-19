@@ -90,7 +90,7 @@ const ForgotPassword = () => {
             />
             <div className="flex justify-center mt-6">
               <button
-                onClick={() => setStep(2)}
+                onClick={handleSendOtp}
                 className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300"
               >
                 Send OTP
@@ -117,7 +117,7 @@ const ForgotPassword = () => {
             />
             <div className="flex justify-center mt-6">
               <button
-                onClick={() => setStep(3)}
+                onClick={handleVerifyOtp}
                 className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300"
               >
                 Verify
@@ -156,7 +156,10 @@ const ForgotPassword = () => {
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
             <div className="flex justify-center mt-6">
-              <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300">
+              <button
+                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300"
+                onClick={handleResetPassword}
+              >
                 Reset Password
               </button>
             </div>
