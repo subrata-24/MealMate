@@ -4,8 +4,8 @@ import genToken from "../utils/token.js";
 
 export const signUp = async (req, res) => {
   try {
-    const { fullname, email, password, mobileNo, role } = req.body;
-    const user = await User.findOne({ email });
+    const { fullname, email, mobileNo, password, role } = req.body;
+    let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ message: "User already exist." });
     }
@@ -14,7 +14,7 @@ export const signUp = async (req, res) => {
         .status(400)
         .json({ message: "Password must be at least 6 character." });
     }
-    if (mobileNo.le < 11) {
+    if (mobileNo.length < 11) {
       return res
         .status(400)
         .json({ message: "Mobile number must be 11 digit." });
