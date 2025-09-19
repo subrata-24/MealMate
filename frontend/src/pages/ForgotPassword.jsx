@@ -25,6 +25,21 @@ const ForgotPassword = () => {
       console.error(error);
     }
   };
+
+  const handleVerifyOtp = async () => {
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/auth/verify-otp`,
+        { email, otp },
+        { withCredentials: true }
+      );
+      console.log(result);
+      setStep(3);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-green-50 p-4 font-sans">
       <div className="w-full max-w-md p-8 rounded-2xl bg-white shadow-2xl hover:shadow-3xl transition-shadow">
