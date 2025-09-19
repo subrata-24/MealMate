@@ -9,19 +9,18 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-6 bg-gray-50 font-sans">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 border border-gray-100 transition-all">
+    <div className="min-h-screen w-full flex items-center justify-center p-6 bg-gradient-to-br from-orange-50 to-green-50 font-sans">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 border border-orange-100 transition-all">
         {/* Logo / Title */}
-        <h1 className="text-4xl font-extrabold mb-2 text-gray-800 text-center">
+        <h1 className="text-4xl font-extrabold mb-2 text-orange-600 text-center tracking-tight">
           MealMate
         </h1>
-        <p className="text-gray-500 text-center mb-8">
-          Create your account and start enjoying fast, fresh, and delicious
-          meals.
+        <p className="text-gray-600 text-center mb-8">
+          Fresh, fast & delicious meals delivered to your door 🍴
         </p>
 
         {/* Full Name */}
-        <div className="mb-5">
+        <div className="mb-4">
           <label
             htmlFor="fullName"
             className="block text-gray-700 font-medium mb-2"
@@ -30,13 +29,13 @@ const SignUp = () => {
           </label>
           <input
             type="text"
-            className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300 transition-all"
+            className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             placeholder="Enter your full name"
           />
         </div>
 
         {/* Email */}
-        <div className="mb-5">
+        <div className="mb-4">
           <label
             htmlFor="email"
             className="block text-gray-700 font-medium mb-2"
@@ -45,13 +44,13 @@ const SignUp = () => {
           </label>
           <input
             type="email"
-            className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300 transition-all"
+            className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             placeholder="Enter your email"
           />
         </div>
 
         {/* Mobile Number */}
-        <div className="mb-5">
+        <div className="mb-4">
           <label
             htmlFor="mobileNo"
             className="block text-gray-700 font-medium mb-2"
@@ -60,13 +59,13 @@ const SignUp = () => {
           </label>
           <input
             type="number"
-            className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300 transition-all"
+            className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             placeholder="Enter your mobile number"
           />
         </div>
 
         {/* Password */}
-        <div className="mb-5">
+        <div className="mb-4">
           <label
             htmlFor="password"
             className="block text-gray-700 font-medium mb-2"
@@ -76,12 +75,12 @@ const SignUp = () => {
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-              className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300 transition-all"
+              className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
               placeholder="Enter your password"
             />
             <button
               type="button"
-              className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 top-3.5 text-gray-400 hover:text-orange-500"
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -90,7 +89,7 @@ const SignUp = () => {
         </div>
 
         {/* Role Selection */}
-        <div className="mb-6">
+        <div className="mb-4">
           <label
             htmlFor="role"
             className="block text-gray-700 font-medium mb-2"
@@ -104,8 +103,8 @@ const SignUp = () => {
                 className={`flex-1 rounded-lg px-3 py-2 text-center font-medium transition-all border cursor-pointer
                   ${
                     role === r
-                      ? "bg-gradient-to-r from-indigo-500 to-violet-500 text-white shadow-md"
-                      : "border-indigo-500 text-indigo-500 hover:bg-indigo-50"
+                      ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md"
+                      : "border-orange-400 text-orange-500 hover:bg-orange-50"
                   }`}
                 onClick={() => setRole(r)}
               >
@@ -117,7 +116,7 @@ const SignUp = () => {
 
         {/* Sign Up Button */}
         <div className="flex justify-center">
-          <button className="bg-gradient-to-r from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600 text-white font-semibold py-3 px-10 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer">
+          <button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-10 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 cursor-pointer">
             Sign Up
           </button>
         </div>
@@ -136,10 +135,10 @@ const SignUp = () => {
         </button>
 
         {/* Sign In Link */}
-        <p className="text-gray-500 text-center mt-6">
+        <p className="text-gray-600 text-center mt-6">
           Already have an account?
           <span
-            className="text-indigo-600 font-semibold ml-2 cursor-pointer hover:underline"
+            className="text-orange-600 font-semibold ml-2 cursor-pointer hover:underline"
             onClick={() => navigate("/signin")}
           >
             Sign In
