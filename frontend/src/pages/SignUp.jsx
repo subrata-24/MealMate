@@ -37,7 +37,23 @@ const SignUp = () => {
     }
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    console.log(result);
+    try {
+      const { data } = await axios.post(
+        `${serverUrl}/api/auth/google-auth`,
+        {
+          fullname: result.user.displayName,
+          email: result.user.email,
+          role,
+          mobileNo,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const [fullname, setFullname] = useState("");
