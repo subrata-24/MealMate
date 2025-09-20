@@ -6,12 +6,14 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
+import { ClipLoader } from "react-spinners";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSignUp = async () => {
+    setLoading(true);
     let newErrors = {};
 
     if (!fullname) newErrors.fullname = "Full name is required";
@@ -42,10 +44,12 @@ const SignUp = () => {
         { withCredentials: true }
       );
       setErrors("");
+      setLoading(false);
 
       console.log(result);
     } catch (error) {
       setErrors({ global: error?.response?.data?.message });
+      setLoading(false);
     }
   };
 
@@ -86,6 +90,7 @@ const SignUp = () => {
   const [role, setRole] = useState("user");
   const [err, setErr] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-6 bg-gradient-to-br from-orange-50 to-green-50 font-sans">
@@ -322,8 +327,16 @@ const SignUp = () => {
             onClick={() => {
               handleSignUp();
             }}
+            disabled={loading}
           >
-            Sign Up
+            {loading ? (
+              <>
+                <ClipLoader size={18} color="white" />
+                <span className="text-sm font-medium">Processing...</span>
+              </>
+            ) : (
+              "Sign Up"
+            )}
           </button>
         </div>
 
