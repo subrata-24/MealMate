@@ -12,6 +12,23 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const handleSignUp = async () => {
+    let newErrors = {};
+
+    if (!fullname) newErrors.fullname = "Full name is required";
+    if (!email) newErrors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      newErrors.email = "Invalid email format";
+    if (!mobileNo) newErrors.mobileNo = "Mobile number is required";
+    else if (mobileNo.length < 11)
+      newErrors.mobileNo = "Mobile No must be 11 characters";
+    if (!password) newErrors.password = "Password is required";
+    else if (password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+
+    if (Object.keys(newErrors).length > 0) {
+      return setErrors(newErrors);
+    }
+
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signup`,
@@ -24,17 +41,22 @@ const SignUp = () => {
         },
         { withCredentials: true }
       );
+      setErrors("");
 
       console.log(result);
     } catch (error) {
-      console.error(error);
+      setErrors({ global: error?.response?.data?.message });
     }
   };
 
   const handleGoogleSignUp = async () => {
+    let newErrors = {};
     if (!mobileNo) {
-      return alert("Mobile Number is required");
+      newErrors.mobileNo = "Mobile No is required";
+      setErrors(newErrors);
+      return;
     }
+
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     try {
@@ -50,9 +72,10 @@ const SignUp = () => {
           withCredentials: true,
         }
       );
+      setErrors("");
       console.log(data);
     } catch (error) {
-      console.log(error);
+      setErrors(error?.response?.data?.message);
     }
   };
 
@@ -61,6 +84,8 @@ const SignUp = () => {
   const [mobileNo, setMobileNo] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
+  const [err, setErr] = useState("");
+  const [errors, setErrors] = useState({});
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-6 bg-gradient-to-br from-orange-50 to-green-50 font-sans">
@@ -91,6 +116,27 @@ const SignUp = () => {
             value={fullname}
             required
           />
+          {errors.fullname && (
+            <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+              <svg
+                className="w-4 h-4 text-red-500 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p className="text-red-600 text-sm font-medium">
+                {errors.fullname}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Email */}
@@ -111,6 +157,25 @@ const SignUp = () => {
             value={email}
             required
           />
+          {errors.email && (
+            <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+              <svg
+                className="w-4 h-4 text-red-500 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p className="text-red-600 text-sm font-medium">{errors.email}</p>
+            </div>
+          )}
         </div>
 
         {/* Mobile Number */}
@@ -131,6 +196,27 @@ const SignUp = () => {
             value={mobileNo}
             required
           />
+          {errors.mobileNo && (
+            <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+              <svg
+                className="w-4 h-4 text-red-500 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p className="text-red-600 text-sm font-medium">
+                {errors.mobileNo}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Password */}
@@ -160,6 +246,27 @@ const SignUp = () => {
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
+          {errors.password && (
+            <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+              <svg
+                className="w-4 h-4 text-red-500 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p className="text-red-600 text-sm font-medium">
+                {errors.password}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Role Selection */}
@@ -187,6 +294,26 @@ const SignUp = () => {
             ))}
           </div>
         </div>
+
+        {errors.global && (
+          <div className="flex items-center gap-2 my-3 px-3 py-2 rounded-lg bg-red-50 border border-red-200">
+            <svg
+              className="w-5 h-5 text-red-500 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <p className="text-red-600 text-sm font-medium">{errors.global}</p>
+          </div>
+        )}
 
         {/* Sign Up Button */}
         <div className="flex justify-center">
