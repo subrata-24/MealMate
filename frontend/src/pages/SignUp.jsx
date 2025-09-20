@@ -28,6 +28,7 @@ const SignUp = () => {
       newErrors.password = "Password must be at least 6 characters";
 
     if (Object.keys(newErrors).length > 0) {
+      setLoading(false);
       return setErrors(newErrors);
     }
 

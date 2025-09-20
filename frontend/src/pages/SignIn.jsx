@@ -6,6 +6,7 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
+import { ClipLoader } from "react-spinners";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,8 +14,10 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
+    setLoading(true);
     let newErrors = {};
 
     if (!email) newErrors.email = "Email is required";
@@ -26,6 +29,7 @@ const SignIn = () => {
       newErrors.password = "Password must be at least 6 characters";
 
     if (Object.keys(newErrors).length > 0) {
+      setLoading(false);
       return setErrors(newErrors);
     }
 
@@ -35,10 +39,12 @@ const SignIn = () => {
         { email, password },
         { withCredentials: true }
       );
+      setLoading(false);
       setErrors({});
       console.log(result);
     } catch (error) {
       setErrors({ global: error?.response?.data?.message });
+      setLoading(false);
     }
   };
 
@@ -193,8 +199,16 @@ const SignIn = () => {
           <button
             onClick={handleSignIn}
             className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 w-full rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 cursor-pointer"
+            disabled={loading}
           >
-            Sign In
+            {loading ? (
+              <>
+                <ClipLoader size={18} color="white" />
+                <span className="text-sm font-medium">Processing...</span>
+              </>
+            ) : (
+              "Sign In"
+            )}
           </button>
         </div>
 

@@ -3,6 +3,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
+import { ClipLoader } from "react-spinners";
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
@@ -11,15 +12,20 @@ const ForgotPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSendOtp = async () => {
+    setLoading(true);
     let newErrors = {};
     if (!email) newErrors.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
       newErrors.email = "Invalid email format";
 
-    if (Object.keys(newErrors).length > 0) return setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
+      setLoading(false);
+      return setErrors(newErrors);
+    }
 
     try {
       const result = await axios.post(
@@ -27,19 +33,25 @@ const ForgotPassword = () => {
         { email },
         { withCredentials: true }
       );
+      setLoading(false);
       console.log(result);
       setErrors({});
       setStep(2);
     } catch (error) {
+      setLoading(false);
       setErrors({ global: error?.response?.data?.message });
     }
   };
 
   const handleVerifyOtp = async () => {
+    setLoading(true);
     let newErrors = {};
     if (!otp) newErrors.otp = "OTP is required";
 
-    if (Object.keys(newErrors).length > 0) return setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
+      setLoading(false);
+      return setErrors(newErrors);
+    }
 
     try {
       const result = await axios.post(
@@ -47,15 +59,18 @@ const ForgotPassword = () => {
         { email, otp },
         { withCredentials: true }
       );
+      setLoading(false);
       console.log(result);
       setErrors({});
       setStep(3);
     } catch (error) {
+      setLoading(false);
       setErrors({ global: error?.response?.data?.message });
     }
   };
 
   const handleResetPassword = async () => {
+    setLoading(true);
     let newErrors = {};
     if (!newPassword) newErrors.newPassword = "New password is required";
     else if (newPassword.length < 6)
@@ -66,7 +81,10 @@ const ForgotPassword = () => {
     else if (newPassword !== confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
 
-    if (Object.keys(newErrors).length > 0) return setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) {
+      setLoading(false);
+      return setErrors(newErrors);
+    }
 
     try {
       const result = await axios.post(
@@ -74,10 +92,12 @@ const ForgotPassword = () => {
         { email, newPassword },
         { withCredentials: true }
       );
+      setLoading(false);
       console.log(result);
       setErrors({});
       navigate("/signin");
     } catch (error) {
+      setLoading(false);
       setErrors({ global: error?.response?.data?.message });
     }
   };
@@ -139,8 +159,16 @@ const ForgotPassword = () => {
               <button
                 onClick={handleSendOtp}
                 className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300"
+                disabled={loading}
               >
-                Send OTP
+                {loading ? (
+                  <>
+                    <ClipLoader size={18} color="white" />
+                    <span className="text-sm font-medium">Processing...</span>
+                  </>
+                ) : (
+                  "Send OTP"
+                )}
               </button>
             </div>
           </div>
@@ -186,8 +214,16 @@ const ForgotPassword = () => {
               <button
                 onClick={handleVerifyOtp}
                 className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300"
+                disabled={loading}
               >
-                Verify
+                {loading ? (
+                  <>
+                    <ClipLoader size={18} color="white" />
+                    <span className="text-sm font-medium">Processing...</span>
+                  </>
+                ) : (
+                  "Verify OTP"
+                )}
               </button>
             </div>
           </div>
@@ -270,8 +306,16 @@ const ForgotPassword = () => {
               <button
                 className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300"
                 onClick={handleResetPassword}
+                disabled={loading}
               >
-                Reset Password
+                {loading ? (
+                  <>
+                    <ClipLoader size={18} color="white" />
+                    <span className="text-sm font-medium">Processing...</span>
+                  </>
+                ) : (
+                  "Reset Password"
+                )}
               </button>
             </div>
           </div>
