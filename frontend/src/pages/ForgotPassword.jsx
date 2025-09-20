@@ -10,9 +10,17 @@ const ForgotPassword = () => {
   const [otp, setOTP] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const handleSendOtp = async () => {
+    let newErrors = {};
+    if (!email) newErrors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      newErrors.email = "Invalid email format";
+
+    if (Object.keys(newErrors).length > 0) return setErrors(newErrors);
+
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/send-otp`,
@@ -20,13 +28,19 @@ const ForgotPassword = () => {
         { withCredentials: true }
       );
       console.log(result);
+      setErrors({});
       setStep(2);
     } catch (error) {
-      console.error(error);
+      setErrors({ global: error?.response?.data?.message });
     }
   };
 
   const handleVerifyOtp = async () => {
+    let newErrors = {};
+    if (!otp) newErrors.otp = "OTP is required";
+
+    if (Object.keys(newErrors).length > 0) return setErrors(newErrors);
+
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/verify-otp`,
@@ -34,16 +48,26 @@ const ForgotPassword = () => {
         { withCredentials: true }
       );
       console.log(result);
+      setErrors({});
       setStep(3);
     } catch (error) {
-      console.error(error);
+      setErrors({ global: error?.response?.data?.message });
     }
   };
 
   const handleResetPassword = async () => {
-    if (newPassword != confirmPassword) {
-      return null;
-    }
+    let newErrors = {};
+    if (!newPassword) newErrors.newPassword = "New password is required";
+    else if (newPassword.length < 6)
+      newErrors.newPassword = "Password must be at least 6 characters";
+
+    if (!confirmPassword)
+      newErrors.confirmPassword = "Confirm password is required";
+    else if (newPassword !== confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
+
+    if (Object.keys(newErrors).length > 0) return setErrors(newErrors);
+
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/reset-password`,
@@ -51,9 +75,10 @@ const ForgotPassword = () => {
         { withCredentials: true }
       );
       console.log(result);
+      setErrors({});
       navigate("/signin");
     } catch (error) {
-      console.error(error);
+      setErrors({ global: error?.response?.data?.message });
     }
   };
 
@@ -89,6 +114,27 @@ const ForgotPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
+            {errors.email && (
+              <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+                <svg
+                  className="w-4 h-4 text-red-500 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <p className="text-red-600 text-sm font-medium">
+                  {errors.email}
+                </p>
+              </div>
+            )}
             <div className="flex justify-center mt-6">
               <button
                 onClick={handleSendOtp}
@@ -117,6 +163,25 @@ const ForgotPassword = () => {
               onChange={(e) => setOTP(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
+            {errors.otp && (
+              <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+                <svg
+                  className="w-4 h-4 text-red-500 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <p className="text-red-600 text-sm font-medium">{errors.otp}</p>
+              </div>
+            )}
             <div className="flex justify-center mt-6">
               <button
                 onClick={handleVerifyOtp}
@@ -143,8 +208,29 @@ const ForgotPassword = () => {
               value={newPassword}
               required
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all mb-4"
+              className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all mb-2"
             />
+            {errors.newPassword && (
+              <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+                <svg
+                  className="w-4 h-4 text-red-500 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <p className="text-red-600 text-sm font-medium">
+                  {errors.newPassword}
+                </p>
+              </div>
+            )}
             <label
               htmlFor="confirmPassword"
               className="block text-gray-700 font-medium mb-2"
@@ -159,6 +245,27 @@ const ForgotPassword = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
+            {errors.confirmPassword && (
+              <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+                <svg
+                  className="w-4 h-4 text-red-500 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <p className="text-red-600 text-sm font-medium">
+                  {errors.confirmPassword}
+                </p>
+              </div>
+            )}
             <div className="flex justify-center mt-6">
               <button
                 className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300"
@@ -167,6 +274,13 @@ const ForgotPassword = () => {
                 Reset Password
               </button>
             </div>
+          </div>
+        )}
+        {/* Global error */}
+        {errors.global && (
+          <div className="flex items-center gap-2 my-3 px-3 py-2 rounded-lg bg-red-50 border border-red-200">
+            <span className="text-red-600 text-lg font-bold">⚠️</span>
+            <p className="text-red-600 text-sm font-medium">{errors.global}</p>
           </div>
         )}
       </div>
