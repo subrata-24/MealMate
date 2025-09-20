@@ -12,17 +12,33 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
   const handleSignIn = async () => {
+    let newErrors = {};
+
+    if (!email) newErrors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      newErrors.email = "Invalid email format";
+
+    if (!password) newErrors.password = "Password is required";
+    else if (password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+
+    if (Object.keys(newErrors).length > 0) {
+      return setErrors(newErrors);
+    }
+
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signin`,
         { email, password },
         { withCredentials: true }
       );
+      setErrors({});
       console.log(result);
     } catch (error) {
-      console.error(error);
+      setErrors({ global: error?.response?.data?.message });
     }
   };
 
@@ -39,9 +55,10 @@ const SignIn = () => {
           withCredentials: true,
         }
       );
+      setErrors({});
       console.log(data);
     } catch (error) {
-      console.log(error);
+      setErrors(error?.response?.data?.message);
     }
   };
 
@@ -72,6 +89,25 @@ const SignIn = () => {
             onChange={(e) => setEmail(e.target.value)}
             className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
           />
+          {errors.email && (
+            <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+              <svg
+                className="w-4 h-4 text-red-500 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p className="text-red-600 text-sm font-medium">{errors.email}</p>
+            </div>
+          )}
         </div>
 
         {/* Password */}
@@ -99,6 +135,27 @@ const SignIn = () => {
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
+          {errors.password && (
+            <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+              <svg
+                className="w-4 h-4 text-red-500 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <p className="text-red-600 text-sm font-medium">
+                {errors.password}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Forget Password */}
@@ -110,6 +167,26 @@ const SignIn = () => {
             Forgot Password?
           </button>
         </div>
+
+        {errors.global && (
+          <div className="flex items-center gap-2 mt-1 px-3 py-1 rounded-md bg-red-50 border border-red-200">
+            <svg
+              className="w-4 h-4 text-red-500 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <p className="text-red-600 text-sm font-medium">{errors.global}</p>
+          </div>
+        )}
 
         {/* Sign In Button */}
         <div className="flex justify-center mt-4">
