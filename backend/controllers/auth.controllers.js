@@ -85,7 +85,7 @@ export const sendOtp = async (req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "User already exist." });
+      return res.status(400).json({ message: "User does not exist." });
     }
 
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
@@ -136,5 +136,27 @@ export const resetPassword = async (req, res) => {
   } catch (error) {
     console.error("Password reset error:", error);
     return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const googleAuth = async (req, res) => {
+  try {
+    const { fullname, email, mobileNo } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      user = await User.create({ fullname, email, mobileNo });
+    }
+
+    const token = await genToken(user._id);
+    res.cookie("token", token, {
+      secure: false,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+
+    return res.status(201).json(user);
+  } catch (error) {
+    return res.status(500).json(`sign up error ${error}`);
   }
 };
