@@ -89,6 +89,7 @@ const SignUp = () => {
               setFullname(e.target.value);
             }}
             value={fullname}
+            required
           />
         </div>
 
@@ -108,6 +109,7 @@ const SignUp = () => {
               setEmail(e.target.value);
             }}
             value={email}
+            required
           />
         </div>
 
@@ -127,6 +129,7 @@ const SignUp = () => {
               setMobileNo(e.target.value);
             }}
             value={mobileNo}
+            required
           />
         </div>
 
@@ -147,6 +150,7 @@ const SignUp = () => {
                 setPassword(e.target.value);
               }}
               value={password}
+              required
             />
             <button
               type="button"

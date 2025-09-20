@@ -85,6 +85,7 @@ const ForgotPassword = () => {
               type="email"
               placeholder="Enter your email"
               value={email}
+              required
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
@@ -112,6 +113,7 @@ const ForgotPassword = () => {
               type="text"
               placeholder="Enter OTP"
               value={otp}
+              required
               onChange={(e) => setOTP(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
@@ -139,6 +141,7 @@ const ForgotPassword = () => {
               type="password"
               placeholder="Enter new password"
               value={newPassword}
+              required
               onChange={(e) => setNewPassword(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all mb-4"
             />
@@ -152,6 +155,7 @@ const ForgotPassword = () => {
               type="password"
               placeholder="Enter password again"
               value={confirmPassword}
+              required
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />

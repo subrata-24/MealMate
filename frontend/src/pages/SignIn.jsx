@@ -68,6 +68,7 @@ const SignIn = () => {
             type="email"
             placeholder="Enter your email"
             value={email}
+            required
             onChange={(e) => setEmail(e.target.value)}
             className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
           />
@@ -86,6 +87,7 @@ const SignIn = () => {
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               value={password}
+              required
               onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-lg px-4 py-3 border border-gray-200 bg-white text-gray-800 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-300 transition-all"
             />
