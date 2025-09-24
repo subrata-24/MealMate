@@ -7,6 +7,8 @@ import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
 import { ClipLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +17,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const handleSignIn = async () => {
     setLoading(true);

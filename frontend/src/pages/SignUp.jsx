@@ -81,7 +81,7 @@ const SignUp = () => {
         }
       );
       setErrors("");
-      dispatch(setUserData(result.data));
+      dispatch(setUserData(data));
     } catch (error) {
       setErrors(error?.response?.data?.message);
     }

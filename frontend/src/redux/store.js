@@ -5,4 +5,5 @@ export const store = configureStore({
   reducer: {
     user: userSlice,
   },
+  devTools: process.env.NODE_ENV !== "production",
 });
