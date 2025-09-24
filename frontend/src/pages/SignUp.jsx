@@ -49,7 +49,7 @@ const SignUp = () => {
       );
       setErrors("");
       setLoading(false);
-
+      // console.log()
       dispatch(setUserData(result.data));
     } catch (error) {
       setErrors({ global: error?.response?.data?.message });
