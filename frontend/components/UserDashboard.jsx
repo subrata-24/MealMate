@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
 
 const UserDashboard = () => {
-  const { userData } = useSelector((state) => state.user);
+  const { userData, city } = useSelector((state) => state.user);
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
 
@@ -17,7 +17,9 @@ const UserDashboard = () => {
           {/* Location */}
           <div className="flex items-center gap-2 w-1/3 pr-3 border-r-2 border-gray-200">
             <IoLocation size={22} className="text-orange-500" />
-            <span className="truncate text-gray-600 font-medium">Barishal</span>
+            <span className="truncate text-gray-600 font-medium">
+              {city || "Detecting..."}
+            </span>
           </div>
 
           {/* Search */}
@@ -41,7 +43,9 @@ const UserDashboard = () => {
       <div className="hidden md:flex items-center w-full md:w-2/3 lg:w-2/5 h-14 bg-white gap-4 shadow-lg rounded-xl px-4 border border-orange-100">
         <div className="flex items-center gap-2 w-1/3 pr-3 border-r-2 border-gray-200">
           <IoLocation size={22} className="text-orange-500" />
-          <span className="truncate text-gray-600 font-medium">Barishal</span>
+          <span className="truncate text-gray-600 font-medium">
+            {city || "Detecting..."}
+          </span>
         </div>
         <div className="flex items-center gap-3 w-2/3">
           <FaSearch size={20} className="text-orange-500" />
