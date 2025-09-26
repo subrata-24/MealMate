@@ -2,12 +2,27 @@ import React, { useState } from "react";
 import { IoLocation } from "react-icons/io5";
 import { FaSearch, FaCartArrowDown } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { serverUrl } from "../src/App";
+import { setUserData } from "../src/redux/userSlice";
 
 const Navbar = () => {
   const { userData, city } = useSelector((state) => state.user);
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleSignOut = async () => {
+    try {
+      const result = await axios.get(`${serverUrl}/api/auth/signout`, {
+        withCredentials: true,
+      });
+      dispatch(setUserData(null));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="fixed top-0 left-0 w-full h-20 flex items-center justify-between md:justify-center px-4 md:px-8 z-[9999] bg-gradient-to-r from-orange-50 via-white to-green-100 shadow-md">
@@ -104,7 +119,10 @@ const Navbar = () => {
             <div className="md:hidden text-orange-600 font-semibold cursor-pointer hover:text-red-500 transition-colors">
               My Orders
             </div>
-            <div className="text-orange-600 font-semibold cursor-pointer hover:text-red-500 transition-colors">
+            <div
+              className="text-orange-600 font-semibold cursor-pointer hover:text-red-500 transition-colors"
+              onClick={handleSignOut}
+            >
               Log Out
             </div>
           </div>
