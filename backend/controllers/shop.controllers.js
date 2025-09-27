@@ -13,18 +13,34 @@ export const createShop = async (req, res) => {
       image = await uploadOnCloudinary(req.file.path);
     }
 
-    // Create a new Shop document in MongoDB
-    // - Saves the shop details
-    // - Uses `req.userID` (set by authentication middleware) as the owner
-    // - Stores the Cloudinary image URL if available
-    const shop = await Shop.create({
-      name,
-      city,
-      state,
-      address,
-      image,
-      owner: req.userID,
-    });
+    let shop = await Shop.findOne({ owner: req.userID });
+    if (!shop) {
+      // Create a new Shop document in MongoDB
+      // - Saves the shop details
+      // - Uses `req.userID` (set by authentication middleware) as the owner
+      // - Stores the Cloudinary image URL if available
+      shop = await Shop.create({
+        name,
+        city,
+        state,
+        address,
+        image,
+        owner: req.userID,
+      });
+    } else {
+      shop = await Shop.findByIdAndUpdate(
+        shop._id,
+        {
+          name,
+          city,
+          state,
+          address,
+          image,
+          owner: req.userID,
+        },
+        { new: true }
+      );
+    }
 
     //     Mongoose sees that owner is a reference to the User model (ref: "User" in your schema).
     // It uses the stored _id (from req.userID) to query the User collection in MongoDB.
