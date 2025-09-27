@@ -27,7 +27,7 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 left-0 w-full h-20 flex items-center justify-between md:justify-center px-4 md:px-8 z-[9999] bg-gradient-to-r from-orange-50 via-white to-green-100 shadow-md">
       {/* Mobile search dropdown */}
-      {showSearch && (
+      {showSearch && userData.role === "user" && (
         <div className="w-[90%] h-[70px] flex items-center fixed top-[80px] left-[5%] bg-white gap-5 shadow-2xl rounded-xl px-4 border border-orange-100 animate-fadeIn">
           {/* Location */}
           <div className="flex items-center gap-2 w-1/3 pr-3 border-r-2 border-gray-200">
@@ -54,48 +54,53 @@ const Navbar = () => {
         MealMate
       </h1>
 
-      {/* Search Bar (desktop only) */}
-      <div className="hidden md:flex items-center w-full md:w-2/3 lg:w-2/5 h-14 bg-white gap-4 shadow-lg rounded-xl px-4 border border-orange-100">
-        <div className="flex items-center gap-2 w-1/3 pr-3 border-r-2 border-gray-200">
-          <IoLocation size={22} className="text-orange-500" />
-          <span className="truncate text-gray-600 font-medium">
-            {city || "Detecting..."}
-          </span>
+      {/* Search Bar (desktop only) and only for user */}
+      {userData.role === "user" && (
+        <div className="hidden md:flex items-center w-full md:w-2/3 lg:w-2/5 h-14 bg-white gap-4 shadow-lg rounded-xl px-4 border border-orange-100">
+          <div className="flex items-center gap-2 w-1/3 pr-3 border-r-2 border-gray-200">
+            <IoLocation size={22} className="text-orange-500" />
+            <span className="truncate text-gray-600 font-medium">
+              {city || "Detecting..."}
+            </span>
+          </div>
+          <div className="flex items-center gap-3 w-2/3">
+            <FaSearch size={20} className="text-orange-500" />
+            <input
+              type="text"
+              placeholder="Search for food..."
+              className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-orange-300 rounded-md"
+            />
+          </div>
         </div>
-        <div className="flex items-center gap-3 w-2/3">
-          <FaSearch size={20} className="text-orange-500" />
-          <input
-            type="text"
-            placeholder="Search for food..."
-            className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-orange-300 rounded-md"
-          />
-        </div>
-      </div>
+      )}
 
       {/* Right section */}
       <div className="flex items-center gap-5 ml-4">
-        {/* Search (mobile toggle) */}
-        {showSearch ? (
-          <RxCross2
-            size={22}
-            className="text-orange-500 md:hidden cursor-pointer hover:scale-110 transition-transform"
-            onClick={() => setShowSearch(false)}
-          />
-        ) : (
-          <FaSearch
-            size={20}
-            className="text-orange-500 md:hidden cursor-pointer hover:scale-110 transition-transform"
-            onClick={() => setShowSearch(true)}
-          />
-        )}
+        {/* Search (mobile toggle) and only for user*/}
+        {userData.role === "user" &&
+          (showSearch ? (
+            <RxCross2
+              size={22}
+              className="text-orange-500 md:hidden cursor-pointer hover:scale-110 transition-transform"
+              onClick={() => setShowSearch(false)}
+            />
+          ) : (
+            <FaSearch
+              size={20}
+              className="text-orange-500 md:hidden cursor-pointer hover:scale-110 transition-transform"
+              onClick={() => setShowSearch(true)}
+            />
+          ))}
 
         {/* Cart with badge */}
-        <div className="relative cursor-pointer hover:scale-110 transition-transform">
-          <FaCartArrowDown size={26} className="text-orange-500" />
-          <span className="absolute -right-2 -top-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">
-            0
-          </span>
-        </div>
+        {userData.role === "user" && (
+          <div className="relative cursor-pointer hover:scale-110 transition-transform">
+            <FaCartArrowDown size={26} className="text-orange-500" />
+            <span className="absolute -right-2 -top-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">
+              0
+            </span>
+          </div>
+        )}
 
         {/* My Orders button (desktop only) */}
         <button className="hidden md:block px-4 py-2 rounded-lg bg-gradient-to-r from-orange-200 to-green-200 text-orange-700 text-sm font-semibold hover:from-orange-300 hover:to-green-300 transition-colors shadow-sm">
