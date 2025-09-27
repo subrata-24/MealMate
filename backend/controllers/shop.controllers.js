@@ -1,7 +1,7 @@
-import Shop from "../models/shop.model";
-import uploadOnCloudinary from "../utils/cloudinary";
+import Shop from "../models/shop.model.js";
+import uploadOnCloudinary from "../utils/cloudinary.js";
 
-export const createShop = async (req, res) => {
+export const createAndEditShop = async (req, res) => {
   try {
     // Extract shop details from request body
     const { name, city, state, address } = req.body;
