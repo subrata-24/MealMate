@@ -12,8 +12,8 @@ const isAuth = (req, res, next) => {
       return res.status(400).json({ message: "Token not verified" });
     }
 
-    console.log("Decoded JWT:", decodeToken);
-    req.userId = decodeToken.userID;
+    // console.log("Decoded JWT:", decodeToken);
+    req.userID = decodeToken.userID;
     next();
   } catch (error) {
     console.error("isAuth error:", error);

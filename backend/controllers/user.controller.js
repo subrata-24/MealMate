@@ -4,12 +4,12 @@ import User from "../models/user.model.js";
 // Provide a secure way to fetch the currently logged-in user’s information using the JWT, without requiring the user to log in again.The user may refresh the page, open the app later, or return after some time.The frontend no longer has the user info in memory — it only has the JWT cookie.After login, or on page refresh, the frontend can call this endpoint to get the user’s details(like name, email, role) based on the JWT stored in cookies.
 export const getCurrentUser = async (req, res) => {
   try {
-    const userId = req.userId;
-    if (!userId) {
-      return res.status(400).json({ message: "userId is not found" });
+    const userID = req.userID;
+    if (!userID) {
+      return res.status(400).json({ message: "userID is not found" });
     }
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userID);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
