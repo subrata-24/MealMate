@@ -51,6 +51,30 @@ export const createAndEditShop = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: `Found error when creating the shop` });
+      .json({ message: `Found error when creating the shop: ${error}` });
+  }
+};
+
+export const getShop = async (req, res) => {
+  try {
+    // Using populate() will replace the "owner" and "items" ObjectIDs(which are just references in the schema) with their full documents.
+    // This means:
+    // - Instead of only returning the owner's ID, we get the full owner details.
+    // - Instead of only returning an array of item IDs, we get the complete info for every item that belongs to the shop.
+    // In short, populate() enriches the shop document with full related data
+    // so the frontend can directly use it without making extra queries.
+
+    const shop = await Shop.findOne({ owner: req.userID }).populate(
+      "owner items"
+    );
+    if (!shop) {
+      return null;
+    }
+
+    return res.status(200).json(shop);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `Found error when get shop: ${error}` });
   }
 };
