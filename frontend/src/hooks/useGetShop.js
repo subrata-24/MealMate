@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { useDispatch } from "react-redux";
-import { setOwnerData } from "../redux/ownerSlice";
+import { setShopData } from "../redux/ownerSlice.js";
 
 const useGetShop = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const useGetShop = () => {
         const result = await axios.get(`${serverUrl}/api/shop/get-shop`, {
           withCredentials: true,
         });
-        dispatch(setOwnerData(result.data));
+        dispatch(setShopData(result.data));
         // console.log(result);
       } catch (error) {
         console.log(error);

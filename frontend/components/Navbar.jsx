@@ -14,6 +14,7 @@ const Navbar = () => {
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const dispatch = useDispatch();
+  const { shopData } = useSelector((state) => state.owner);
 
   const handleSignOut = async () => {
     try {
@@ -106,16 +107,20 @@ const Navbar = () => {
 
         {userData.role === "owner" ? (
           <>
-            {/* Desktop Add Item */}
-            <button className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-200 to-green-200  font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
-              <FaPlus size={16} />
-              <span>Add Item</span>
-            </button>
+            {shopData && (
+              <>
+                {/* Desktop Add Item */}
+                <button className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-200 to-green-200  font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
+                  <FaPlus size={16} />
+                  <span>Add Item</span>
+                </button>
 
-            {/* Mobile Add Item */}
-            <button className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
-              <FaPlus size={18} />
-            </button>
+                {/* Mobile Add Item */}
+                <button className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
+                  <FaPlus size={18} />
+                </button>
+              </>
+            )}
 
             {/* Desktop Show pending item */}
             <div className="relative hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-200 to-green-200 font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
