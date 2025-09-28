@@ -29,7 +29,7 @@ const shopSchema = new mongoose.Schema(
     },
     items: [
       {
-        type: mongoose.Types.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Item",
       },
     ],
