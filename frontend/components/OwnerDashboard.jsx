@@ -2,9 +2,11 @@ import React from "react";
 import Navbar from "./Navbar";
 import { useSelector } from "react-redux";
 import { FaUtensils } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const OwnerDashboard = () => {
   const { shopData } = useSelector((state) => state.owner);
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -30,7 +32,10 @@ const OwnerDashboard = () => {
               </p>
 
               {/* CTA Button */}
-              <button className="px-6 py-3 rounded-xl font-semibold text-white shadow-md bg-gradient-to-r from-orange-500 to-red-500 hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
+              <button
+                className="px-6 py-3 rounded-xl font-semibold text-white shadow-md bg-gradient-to-r from-orange-500 to-red-500 hover:shadow-lg hover:scale-105 transition-transform cursor-pointer"
+                onClick={() => navigate("/create-edit-shop")}
+              >
                 Get Started
               </button>
             </div>
