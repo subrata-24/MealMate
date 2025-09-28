@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setCity, setState } from "../redux/userSlice";
+import {
+  setCurrentAddress,
+  setCurrentCity,
+  setCurrentState,
+} from "../redux/userSlice";
 
 const useGetCity = () => {
   const dispatch = useDispatch();
@@ -19,8 +23,9 @@ const useGetCity = () => {
       //   console.log(result);
       //   const city = result.data.results[0].city;
       //   console.log(city);
-      dispatch(setCity(result?.data?.results[0].city));
-      dispatch(setState(result?.data?.results[0].state));
+      dispatch(setCurrentCity(result?.data?.results[0].city));
+      dispatch(setCurrentState(result?.data?.results[0].state));
+      dispatch(setCurrentAddress(result?.data?.results[0].address));
     });
   }, [userData]);
 };

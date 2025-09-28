@@ -10,7 +10,7 @@ import { FaPlus } from "react-icons/fa";
 import { IoReceiptSharp } from "react-icons/io5";
 
 const Navbar = () => {
-  const { userData, city } = useSelector((state) => state.user);
+  const { userData, currentCity } = useSelector((state) => state.user);
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const Navbar = () => {
           <div className="flex items-center gap-2 w-1/3 pr-3 border-r-2 border-gray-200">
             <IoLocation size={22} className="text-orange-500" />
             <span className="truncate text-gray-600 font-medium">
-              {city || "Detecting..."}
+              {currentCity || "Detecting..."}
             </span>
           </div>
 
@@ -63,7 +63,7 @@ const Navbar = () => {
           <div className="flex items-center gap-2 w-1/3 pr-3 border-r-2 border-gray-200">
             <IoLocation size={22} className="text-orange-500" />
             <span className="truncate text-gray-600 font-medium">
-              {city || "Detecting..."}
+              {currentCity || "Detecting..."}
             </span>
           </div>
           <div className="flex items-center gap-3 w-2/3">
