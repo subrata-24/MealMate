@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { serverUrl } from "../src/App";
 import { setUserData } from "../src/redux/userSlice";
+import { FaPlus } from "react-icons/fa";
+import { IoReceiptSharp } from "react-icons/io5";
 
 const Navbar = () => {
   const { userData, city } = useSelector((state) => state.user);
@@ -102,10 +104,43 @@ const Navbar = () => {
           </div>
         )}
 
-        {/* My Orders button (desktop only) */}
-        <button className="hidden md:block px-4 py-2 rounded-lg bg-gradient-to-r from-orange-200 to-green-200 text-orange-700 text-sm font-semibold hover:from-orange-300 hover:to-green-300 transition-colors shadow-sm">
-          My Orders
-        </button>
+        {userData.role === "owner" ? (
+          <>
+            {/* Desktop Add Item */}
+            <button className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-200 to-green-200  font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
+              <FaPlus size={16} />
+              <span>Add Item</span>
+            </button>
+
+            {/* Mobile Add Item */}
+            <button className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
+              <FaPlus size={18} />
+            </button>
+
+            {/* Desktop Show pending item */}
+            <div className="relative hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-200 to-green-200 font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
+              <IoReceiptSharp size={16} />
+              <span>Pending Orders</span>
+              <span className="absolute -right-2 -top-2 bg-gradient-to-r from-orange-400 to-red-400 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">
+                0
+              </span>
+            </div>
+
+            {/* Mobile Show pending item */}
+            <div className="relative md:hidden flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
+              <IoReceiptSharp size={16} />
+              <span className="absolute -right-2 -top-2 bg-gradient-to-r from-orange-200 to-green-200 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow-md">
+                0
+              </span>
+            </div>
+          </>
+        ) : (
+          <>
+            <button className="hidden md:block px-4 py-2 rounded-lg bg-gradient-to-r from-orange-200 to-green-200 text-orange-700 text-sm font-semibold hover:from-orange-300 hover:to-green-300 transition-colors shadow-sm">
+              My Orders
+            </button>
+          </>
+        )}
 
         {/* User Avatar */}
         <div
