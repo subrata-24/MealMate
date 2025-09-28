@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,14 @@ import { FaUtensils } from "react-icons/fa6";
 const CreateEditShop = () => {
   const navigate = useNavigate();
   const { shopData } = useSelector((state) => state.owner);
+  const { currentCity, currentState, currentAddress } = useSelector(
+    (state) => state.user
+  );
+  const [name, setName] = useState(shopData?.name || " ");
+  const [city, setCity] = useState(shopData?.city || currentCity);
+  const [state, setState] = useState(shopData?.state || currentState);
+  const [address, setAddress] = useState(shopData?.name || currentAddress);
+
   return (
     <div className="flex items-center justify-center flex-col bg-gradient-to-br from-orange-50 to-white relative p-6 min-h-screen">
       <div className="absolute top-[20px] left-[20px] z-[10] mb-20px">
@@ -35,6 +43,8 @@ const CreateEditShop = () => {
               type="text"
               placeholder="Enter shop name"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
             />
           </div>
 
@@ -57,6 +67,8 @@ const CreateEditShop = () => {
                 type="text"
                 placeholder="Enter city"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                onChange={(e) => setCity(e.target.value)}
+                value={city}
               />
             </div>
             <div>
@@ -67,6 +79,8 @@ const CreateEditShop = () => {
                 type="text"
                 placeholder="Enter state"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                onChange={(e) => setState(e.target.value)}
+                value={state}
               />
             </div>
           </div>
@@ -79,6 +93,8 @@ const CreateEditShop = () => {
               type="text"
               placeholder="Enter shop address"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              onChange={(e) => setAddress(e.target.value)}
+              value={address}
             />
           </div>
 

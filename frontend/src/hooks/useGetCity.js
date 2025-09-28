@@ -25,7 +25,12 @@ const useGetCity = () => {
       //   console.log(city);
       dispatch(setCurrentCity(result?.data?.results[0].city));
       dispatch(setCurrentState(result?.data?.results[0].state));
-      dispatch(setCurrentAddress(result?.data?.results[0].address));
+      dispatch(
+        setCurrentAddress(
+          result?.data?.results[0].address_line2 ||
+            result?.data?.results[0].address_line1
+        )
+      );
     });
   }, [userData]);
 };
