@@ -104,7 +104,7 @@ const OwnerDashboard = () => {
                   {/* CTA Button */}
                   <button
                     className="px-6 py-3 rounded-xl font-semibold text-white shadow-md bg-gradient-to-r from-orange-500 to-red-500 hover:shadow-lg hover:scale-105 transition-transform cursor-pointer"
-                    onClick={() => navigate("/aad-item")}
+                    onClick={() => navigate("/add-item")}
                   >
                     Add Item
                   </button>
