@@ -24,7 +24,11 @@ export const createItem = async (req, res) => {
       shop: shop._id,
     });
 
-    return res.status(201).json(result);
+    shop.items.push(result._id);
+    await shop.save();
+    await shop.populate("owner items");
+
+    return res.status(201).json(shop);
   } catch (error) {
     return res.status(500).json({ message: `Unable to create item: ${error}` });
   }
