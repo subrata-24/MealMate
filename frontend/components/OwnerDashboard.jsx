@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { FaUtensils } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { FaPencilAlt } from "react-icons/fa";
+import OwnerItemCard from "./OwnerItemCard";
 
 const OwnerDashboard = () => {
   const { shopData } = useSelector((state) => state.owner);
@@ -110,6 +111,14 @@ const OwnerDashboard = () => {
                   </button>
                 </div>
               </div>
+            </div>
+          )}
+
+          {shopData.items.length > 0 && (
+            <div className="flex flex-col items-center gap-4 w-full max-w-3xl">
+              {shopData.items.map((data, index) => (
+                <OwnerItemCard data={data} key={index} />
+              ))}
             </div>
           )}
         </div>
