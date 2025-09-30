@@ -9,7 +9,8 @@ import Home from "./pages/Home";
 import useGetCity from "./hooks/useGetCity";
 import useGetShop from "./hooks/useGetShop";
 import CreateEditShop from "./pages/CreateEditShop";
-import AddAndEditItem from "./pages/AddAndEditItem";
+import AddItem from "./pages/AddItem";
+import EditItem from "./pages/EditItem";
 export const serverUrl = "http://localhost:8000";
 
 const App = () => {
@@ -42,7 +43,11 @@ const App = () => {
         />
         <Route
           path="/add-item"
-          element={userData ? <AddAndEditItem /> : <Navigate to={"/signin"} />}
+          element={userData ? <AddItem /> : <Navigate to={"/signin"} />}
+        />
+        <Route
+          path="/edit-item/:itemID"
+          element={userData ? <EditItem /> : <Navigate to={"/signin"} />}
         />
       </Routes>
     </div>

@@ -8,6 +8,7 @@ import { serverUrl } from "../src/App";
 import { setUserData } from "../src/redux/userSlice";
 import { FaPlus } from "react-icons/fa";
 import { IoReceiptSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { userData, currentCity } = useSelector((state) => state.user);
@@ -15,6 +16,7 @@ const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
   const dispatch = useDispatch();
   const { shopData } = useSelector((state) => state.owner);
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
@@ -110,7 +112,10 @@ const Navbar = () => {
             {shopData && (
               <>
                 {/* Desktop Add Item */}
-                <button className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-200 to-green-200  font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
+                <button
+                  className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-200 to-green-200  font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer"
+                  onClick={() => navigate("/add-item")}
+                >
                   <FaPlus size={16} />
                   <span>Add Item</span>
                 </button>
