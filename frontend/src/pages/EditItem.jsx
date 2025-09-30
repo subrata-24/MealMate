@@ -1,22 +1,27 @@
 import React, { useRef, useState } from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaUtensils } from "react-icons/fa6";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { setShopData } from "../redux/ownerSlice";
+import { useEffect } from "react";
 
 const EditItem = () => {
   const navigate = useNavigate();
+  const [currentItem, setCurrentItem] = useState(null);
   const { shopData } = useSelector((state) => state.owner);
-  const [name, setName] = useState(null);
-  const [frontendImage, setFrontendImage] = useState(null);
+  const [name, setName] = useState(currentItem?.name || "");
+  const [frontendImage, setFrontendImage] = useState(
+    currentItem?.image || null
+  );
   const [backendImage, setBackendImage] = useState(null);
-  const [price, setPrice] = useState();
-  const [category, setCategory] = useState("");
-  const [foodType, setFoodType] = useState("veg");
+  const [price, setPrice] = useState(currentItem?.price || 0);
+  const [category, setCategory] = useState(currentItem?.category || "");
+  const [foodType, setFoodType] = useState(currentItem?.foodType || "veg");
   const dispatch = useDispatch();
+  const { itemID } = useParams();
   const categories = [
     "Snacks",
     "Hilsa Curry",
@@ -71,6 +76,21 @@ const EditItem = () => {
     }
   };
 
+  useEffect(() => {
+    const handleGetItemByID = async () => {
+      try {
+        const result = await axios.get(
+          `${serverUrl}/api/item/get-item-by-id/${itemID}`,
+          { withCredentials: true }
+        );
+        setCurrentItem(result.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    handleGetItemByID();
+  }, [itemID]);
+
   return (
     <div className="flex items-center justify-center flex-col bg-gradient-to-br from-orange-50 via-white to-green-50 relative p-6 min-h-screen">
       <div className="absolute top-[20px] left-[20px] z-[10]">
@@ -87,7 +107,7 @@ const EditItem = () => {
             <FaUtensils className="text-white w-8 h-8 sm:w-10 sm:h-10" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
-            Add Food
+            Edit Food
           </h1>
           <p className="text-gray-600 text-sm mt-1">
             Add information about your food item
@@ -179,7 +199,7 @@ const EditItem = () => {
             className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 w-full rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 cursor-pointer"
             onClick={() => navigate("/")}
           >
-            Add Food
+            Edit Food
           </button>
         </form>
       </div>
