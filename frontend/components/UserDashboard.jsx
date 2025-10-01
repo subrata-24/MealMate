@@ -1,21 +1,26 @@
 import React from "react";
 import Navbar from "./Navbar";
+import { categories } from "../src/category";
+import CategoryCard from "./CategoryCard";
 
 const UserDashboard = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="w-screen min-h-screen flex flex-col gap-6 items-center bg-[#fff9f6] overflow-y-auto">
       {/* Navbar */}
       <Navbar />
 
       {/* Page Body */}
-      <div className="pt-24 px-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          Welcome to MealMate Dashboard
-        </h2>
-        <p className="text-gray-600">
-          Here you can manage your orders, browse restaurants, and explore food
-          options.
-        </p>
+      <div className="w-full max-w-6xl flex flex-col gap-5 items-start px-4 sm:px-6 py-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          Inspiration for your first order
+        </h1>
+
+        {/* Categories Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 w-full">
+          {categories.map((cate, index) => (
+            <CategoryCard data={cate} key={index} />
+          ))}
+        </div>
       </div>
     </div>
   );
