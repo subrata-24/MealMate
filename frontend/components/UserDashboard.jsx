@@ -12,9 +12,9 @@ const UserDashboard = () => {
   const updateButton = (ref, setLeftButton, setRightButton) => {
     const element = ref.current;
     if (element) {
-      console.log("How much you’ve scrolled from left ", element.scrollLeft);
-      console.log("How much total content exists: ", element.scrollWidth);
-      console.log("How much is visible at once: ", element.clientWidth);
+      // console.log("How much you’ve scrolled from left ", element.scrollLeft);
+      // console.log("How much total content exists: ", element.scrollWidth);
+      // console.log("How much is visible at once: ", element.clientWidth);
       setLeftButton(element.scrollLeft > 0);
       setRightButton(
         element.scrollLeft + element.clientWidth < element.scrollWidth
