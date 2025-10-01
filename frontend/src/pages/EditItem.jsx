@@ -12,14 +12,12 @@ const EditItem = () => {
   const navigate = useNavigate();
   const [currentItem, setCurrentItem] = useState(null);
   const { shopData } = useSelector((state) => state.owner);
-  const [name, setName] = useState(currentItem?.name || "");
-  const [frontendImage, setFrontendImage] = useState(
-    currentItem?.image || null
-  );
+  const [name, setName] = useState("");
+  const [frontendImage, setFrontendImage] = useState(null);
   const [backendImage, setBackendImage] = useState(null);
-  const [price, setPrice] = useState(currentItem?.price || 0);
-  const [category, setCategory] = useState(currentItem?.category || "");
-  const [foodType, setFoodType] = useState(currentItem?.foodType || "veg");
+  const [price, setPrice] = useState(0);
+  const [category, setCategory] = useState("");
+  const [foodType, setFoodType] = useState("veg");
   const dispatch = useDispatch();
   const { itemID } = useParams();
   const categories = [
@@ -70,7 +68,6 @@ const EditItem = () => {
         { withCredentials: true }
       );
       dispatch(setShopData(result.data)); // save shop data in Redux
-      console.log(result.data);
     } catch (error) {
       console.log(error);
     }
@@ -84,7 +81,7 @@ const EditItem = () => {
           { withCredentials: true }
         );
 
-        console.log(result);
+        // console.log(result);
         setCurrentItem(result.data);
       } catch (error) {
         // console.log(itemID);
@@ -93,6 +90,14 @@ const EditItem = () => {
     };
     handleGetItemByID();
   }, [itemID]);
+
+  useEffect(() => {
+    setName(currentItem?.name || "");
+    setFrontendImage(currentItem?.image || null);
+    setCategory(currentItem?.category || "");
+    setFoodType(currentItem?.foodType || "veg");
+    setPrice(currentItem?.price || 0);
+  }, [currentItem]);
 
   return (
     <div className="flex items-center justify-center flex-col bg-gradient-to-br from-orange-50 via-white to-green-50 relative p-6 min-h-screen">
