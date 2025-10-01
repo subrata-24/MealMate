@@ -7,6 +7,7 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { setShopData } from "../redux/ownerSlice";
 import { useEffect } from "react";
+import { ClipLoader } from "react-spinners";
 
 const EditItem = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const EditItem = () => {
   const [price, setPrice] = useState(0);
   const [category, setCategory] = useState("");
   const [foodType, setFoodType] = useState("veg");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { itemID } = useParams();
   const categories = [
@@ -53,6 +55,7 @@ const EditItem = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const formData = new FormData(); // Used for file + text upload(If file is included the must send the to backend like this)
       formData.append("name", name);
@@ -67,8 +70,10 @@ const EditItem = () => {
         formData,
         { withCredentials: true }
       );
+      setLoading(false);
       dispatch(setShopData(result.data)); // save shop data in Redux
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -206,8 +211,16 @@ const EditItem = () => {
           <button
             className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 w-full rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 cursor-pointer"
             onClick={() => navigate("/")}
+            disabled={loading}
           >
-            Edit Food
+            {loading ? (
+              <>
+                <ClipLoader size={18} color="white" />
+                <span className="text-sm font-medium">Processing...</span>
+              </>
+            ) : (
+              "Edit Item"
+            )}
           </button>
         </form>
       </div>

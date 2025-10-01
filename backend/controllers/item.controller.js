@@ -26,7 +26,10 @@ export const createItem = async (req, res) => {
 
     shop.items.push(result._id);
     await shop.save();
-    await shop.populate("owner items");
+    await shop.populate([
+      { path: "owner" },
+      { path: "items", options: { sort: { updatedAt: -1 } } },
+    ]);
 
     return res.status(201).json(shop);
   } catch (error) {
@@ -36,7 +39,7 @@ export const createItem = async (req, res) => {
 
 export const editItem = async (req, res) => {
   try {
-    console.log("Edit Item Called");
+    // console.log("Edit Item Called");
     const { name, category, price, foodType } = req.body;
     const itemID = req.params.itemID;
     let image;
@@ -60,7 +63,10 @@ export const editItem = async (req, res) => {
       return res.status(400).json({ message: "Item not found" });
     }
 
-    const shop = await Shop.findOne({ owner: req.userID }).populate("items");
+    const shop = await Shop.findOne({ owner: req.userID }).populate({
+      path: "items",
+      options: { sort: { updatedAt: -1 } },
+    });
     return res.status(200).json(shop);
   } catch (error) {
     return res.status(500).json({ message: `Unable to update item: ${error}` });

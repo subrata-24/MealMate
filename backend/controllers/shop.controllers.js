@@ -64,9 +64,11 @@ export const getShop = async (req, res) => {
     // In short, populate() enriches the shop document with full related data
     // so the frontend can directly use it without making extra queries.
 
-    const shop = await Shop.findOne({ owner: req.userID }).populate(
-      "owner items"
-    );
+    const shop = await Shop.findOne({ owner: req.userID }).populate([
+      { path: "owner" },
+      { path: "items", options: { sort: { updatedAt: -1 } } },
+    ]);
+
     if (!shop) {
       return null;
     }
