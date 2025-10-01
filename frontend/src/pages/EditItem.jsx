@@ -83,8 +83,11 @@ const EditItem = () => {
           `${serverUrl}/api/item/get-item-by-id/${itemID}`,
           { withCredentials: true }
         );
+
+        console.log(result);
         setCurrentItem(result.data);
       } catch (error) {
+        // console.log(itemID);
         console.log(error);
       }
     };

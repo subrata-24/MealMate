@@ -10,10 +10,10 @@ import { setShopData } from "../redux/ownerSlice";
 const AddItem = () => {
   const navigate = useNavigate();
   const { shopData } = useSelector((state) => state.owner);
-  const [name, setName] = useState(null);
+  const [name, setName] = useState("");
   const [frontendImage, setFrontendImage] = useState(null);
   const [backendImage, setBackendImage] = useState(null);
-  const [price, setPrice] = useState();
+  const [price, setPrice] = useState(0);
   const [category, setCategory] = useState("");
   const [foodType, setFoodType] = useState("veg");
   const dispatch = useDispatch();

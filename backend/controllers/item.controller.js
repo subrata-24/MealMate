@@ -66,6 +66,7 @@ export const editItem = async (req, res) => {
 
 export const getItemById = async (req, res) => {
   try {
+    // console.log("getItemById called!");
     const itemID = req.params.itemID;
     const item = await Item.findById(itemID);
     if (!item) {
