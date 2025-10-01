@@ -86,3 +86,24 @@ export const getItemById = async (req, res) => {
     return res.status(500).json({ message: `Unable to get item: ${error}` });
   }
 };
+
+export const deleteItem = async (req, res) => {
+  try {
+    const itemID = req.params.itemID;
+    const item = await Item.findByIdAndDelete(itemID);
+    if (!item) {
+      return res.status(400).json({ message: "Item not found" });
+    }
+
+    const shop = await Shop.findOne({ owner: req.userID });
+    shop.items = shop.items.filter((i) => i != item._id);
+    await shop.save();
+    await shop.populate({
+      path: "items",
+      options: { sort: { updatedAt: -1 } },
+    });
+    return res.status(200).json(shop);
+  } catch (error) {
+    return res.status(500).json({ message: `Unable to delete item: ${error}` });
+  }
+};
