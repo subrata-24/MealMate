@@ -16,10 +16,12 @@ const UserDashboard = () => {
         </h1>
 
         {/* Categories Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 w-full">
-          {categories.map((cate, index) => (
-            <CategoryCard data={cate} key={index} />
-          ))}
+        <div className="w-full">
+          <div className="w-full flex overflow-x-auto gap-4 pb-2">
+            {categories.map((cate, index) => (
+              <CategoryCard data={cate} key={index} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
