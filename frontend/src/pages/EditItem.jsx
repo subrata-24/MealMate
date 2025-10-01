@@ -63,7 +63,7 @@ const EditItem = () => {
         formData.append("image", backendImage); // attach the actual image file
       }
       const result = await axios.post(
-        `${serverUrl}/api/item/add-item`,
+        `${serverUrl}/api/item/edit-item/${itemID}`,
         formData,
         { withCredentials: true }
       );

@@ -36,6 +36,7 @@ export const createItem = async (req, res) => {
 
 export const editItem = async (req, res) => {
   try {
+    console.log("Edit Item Called");
     const { name, category, price, foodType } = req.body;
     const itemID = req.params.itemID;
     let image;
@@ -58,7 +59,9 @@ export const editItem = async (req, res) => {
     if (!item) {
       return res.status(400).json({ message: "Item not found" });
     }
-    return res.status(200).json(item);
+
+    const shop = await Shop.findOne({ owner: req.userID }).populate("items");
+    return res.status(200).json(shop);
   } catch (error) {
     return res.status(500).json({ message: `Unable to update item: ${error}` });
   }
