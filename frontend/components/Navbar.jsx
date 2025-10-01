@@ -166,9 +166,11 @@ const Navbar = () => {
             <div className="text-lg font-semibold text-gray-900">
               {userData.fullname}
             </div>
-            <div className="md:hidden text-orange-600 font-semibold cursor-pointer hover:text-red-500 transition-colors">
-              My Orders
-            </div>
+            {userData.role === "user" && (
+              <div className="md:hidden text-orange-600 font-semibold cursor-pointer hover:text-red-500 transition-colors">
+                My Orders
+              </div>
+            )}
             <div
               className="text-orange-600 font-semibold cursor-pointer hover:text-red-500 transition-colors"
               onClick={handleSignOut}
