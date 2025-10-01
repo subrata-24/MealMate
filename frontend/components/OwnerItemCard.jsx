@@ -16,7 +16,7 @@ const OwnerItemCard = ({ data }) => {
         `${serverUrl}/api/item/delete/${data._id}`,
         { withCredentials: true }
       );
-      setShopData(result.data);
+      dispatch(setShopData(result.data));
     } catch (error) {
       console.log(error);
     }
