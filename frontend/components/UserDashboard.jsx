@@ -6,8 +6,12 @@ import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 
 const UserDashboard = () => {
   const cateScrollRef = useRef();
-  const [showLeftButton, setShowLeftButton] = useState(false);
-  const [showRightButton, setShowRightButton] = useState(false);
+  const shopScrollRef = useRef();
+
+  const [showCateLeftButton, setShowCateLeftButton] = useState(false);
+  const [showCateRightButton, setShowCateRightButton] = useState(false);
+  const [showShopLeftButton, setShowShopLeftButton] = useState(false);
+  const [showShopRightButton, setShowShopRightButton] = useState(false);
 
   const updateButton = (ref, setLeftButton, setRightButton) => {
     const element = ref.current;
@@ -27,24 +31,47 @@ const UserDashboard = () => {
   // - It checks if cateScrollRef.current exists (the scrollable div).
   // - If it exists, it attaches a scroll event listener to that element.
   // -  Whenever the user scrolls that div (manually or by button click), the browser automatically fires a scroll event.
-  // -  The attached listener then calls updateButton(), which checks the current scroll position (scrollLeft)/(scrollRight) and updates state (setShowLeftButton, setShowRightButton).
+  // -  The attached listener then calls updateButton(), which checks the current scroll position (scrollLeft)/(scrollRight) and updates state (setShowCateLeftButton, setShowCateRightButton).
   // - Because state changes, React re-renders, showing or hiding the left/right scroll buttons.
 
   useEffect(() => {
     const element = cateScrollRef.current;
+    const shopElement = shopScrollRef.current;
     if (element) {
-      // Check when first render
-      updateButton(cateScrollRef, setShowLeftButton, setShowRightButton);
-      const handleScroll = () => {
-        updateButton(cateScrollRef, setShowLeftButton, setShowRightButton);
-      };
-      element.addEventListener("scroll", handleScroll);
-
-      // cleanup on unmount
-      return () => {
-        element.removeEventListener("scroll", handleScroll);
-      };
+      updateButton(
+        cateScrollRef,
+        setShowCateLeftButton,
+        setShowCateRightButton
+      );
+      element.addEventListener("scroll", handleCateScroll);
     }
+    if (shopElement) {
+      updateButton(
+        shopScrollRef,
+        setShowShopLeftButton,
+        setShowShopRightButton
+      );
+      shopElement.addEventListener("scroll", handleShopScroll);
+    }
+    function handleCateScroll() {
+      updateButton(
+        cateScrollRef,
+        setShowCateLeftButton,
+        setShowCateRightButton
+      );
+    }
+    function handleShopScroll() {
+      updateButton(
+        shopScrollRef,
+        setShowShopLeftButton,
+        setShowShopRightButton
+      );
+    }
+    return () => {
+      if (element) element.removeEventListener("scroll", handleCateScroll);
+      if (shopElement)
+        shopElement.removeEventListener("scroll", handleShopScroll);
+    };
   }, []);
 
   const scrollHandler = (ref, direction) => {
@@ -70,7 +97,7 @@ const UserDashboard = () => {
         {/* Categories Section */}
         <div className="w-full relative">
           {/* Left Scroll Button */}
-          {showLeftButton && (
+          {showCateLeftButton && (
             <button
               className="absolute top-1/2 left-0 -translate-y-1/2 bg-gradient-to-r from-orange-500 to-red-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-10"
               onClick={() => scrollHandler(cateScrollRef, "left")}
@@ -90,10 +117,49 @@ const UserDashboard = () => {
           </div>
 
           {/* Right Scroll Button */}
-          {showRightButton && (
+          {showCateRightButton && (
             <button
               className="absolute top-1/2 right-0 -translate-y-1/2 bg-gradient-to-r from-orange-500 to-red-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-10"
               onClick={() => scrollHandler(cateScrollRef, "right")}
+            >
+              <FaArrowAltCircleRight size={28} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
+          Best shop in this city
+        </h1>
+
+        {/* Categories Section */}
+        <div className="w-full relative">
+          {/* Left Scroll Button */}
+          {showShopLeftButton && (
+            <button
+              className="absolute top-1/2 left-0 -translate-y-1/2 bg-gradient-to-r from-orange-500 to-red-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-10"
+              onClick={() => scrollHandler(shopScrollRef, "left")}
+            >
+              <FaArrowAltCircleLeft size={28} />
+            </button>
+          )}
+
+          {/* Scrollable Categories */}
+          <div
+            className="w-full flex overflow-x-auto gap-4 pb-3 px-10 scrollbar-hide scroll-smooth"
+            ref={shopScrollRef}
+          >
+            {categories.map((cate, index) => (
+              <CategoryCard data={cate} key={index} />
+            ))}
+          </div>
+
+          {/* Right Scroll Button */}
+          {showShopRightButton && (
+            <button
+              className="absolute top-1/2 right-0 -translate-y-1/2 bg-gradient-to-r from-orange-500 to-red-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-10"
+              onClick={() => scrollHandler(shopScrollRef, "right")}
             >
               <FaArrowAltCircleRight size={28} />
             </button>
