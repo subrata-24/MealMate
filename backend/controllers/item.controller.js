@@ -107,3 +107,28 @@ export const deleteItem = async (req, res) => {
     return res.status(500).json({ message: `Unable to delete item: ${error}` });
   }
 };
+
+export const getItemByCity = async (req, res) => {
+  try {
+    const { city } = req.params;
+    if (!city) {
+      return res.status(400).json({ message: "City is required" });
+    }
+
+    const shop = await Shop.find({
+      city: { $regex: new RegExp(`^${city}$`, "i") },
+    }).populate("items");
+
+    if (!shop) {
+      return res.status(400).json({ message: "Shop not found" });
+    }
+
+    const shopIds = shop.map((shop) => shop._id);
+    const items = await Item.find({ shop: { $in: shopIds } });
+    return res.status(200).json(items);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `Unable to get item by city: ${error}` });
+  }
+};
