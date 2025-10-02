@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserData } from "../redux/userSlice";
+import { setShopInMyCity, setUserData } from "../redux/userSlice";
 
 const useGetShopByCity = () => {
   const { currentCity } = useSelector((state) => state.user);
@@ -16,13 +16,14 @@ const useGetShopByCity = () => {
             withCredentials: true,
           }
         );
-        dispatch(setUserData(result.data));
+        dispatch(setShopInMyCity(result.data));
+        console.log(result);
       } catch (error) {
         console.log(error);
       }
     };
     fetchShop();
-  }, []);
+  }, [currentCity]);
 };
 
 export default useGetShopByCity;
