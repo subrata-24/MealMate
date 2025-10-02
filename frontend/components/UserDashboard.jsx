@@ -89,14 +89,14 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="w-screen min-h-screen flex flex-col items-center bg-gradient-to-br from-orange-50 via-white to-orange-100 overflow-y-auto">
+    <div className="w-screen min-h-screen flex flex-col gap-4 items-center bg-gradient-to-br from-orange-50 via-white to-orange-100 overflow-y-auto">
       {/* Navbar */}
       <Navbar />
 
       {/* Page Body */}
       {/* Category */}
       <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
           Inspiration for your first order
         </h1>
 
@@ -140,7 +140,7 @@ const UserDashboard = () => {
 
       {/* Shop */}
       <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
           {`Best Shop in ${currentCity}`}
         </h1>
 
@@ -176,10 +176,10 @@ const UserDashboard = () => {
 
       {/* Item */}
       <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
           Suggested food for you
         </h1>
-        <div className="w-full h-auto flex flex-wrap gap-[20px] justify-center ">
+        <div className="w-full h-auto flex flex-wrap justify-center gap-[20px]">
           {itemsInMyCity.map((item, index) => (
             <FoodCart data={item} key={index} />
           ))}
