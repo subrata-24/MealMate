@@ -4,11 +4,14 @@ import { categories } from "../src/category";
 import CategoryCard from "./CategoryCard";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import FoodCart from "./FoodCart";
 
 const UserDashboard = () => {
   const cateScrollRef = useRef();
   const shopScrollRef = useRef();
-  const { currentCity, shopInMyCity } = useSelector((state) => state.user);
+  const { currentCity, shopInMyCity, itemsInMyCity } = useSelector(
+    (state) => state.user
+  );
 
   const [showCateLeftButton, setShowCateLeftButton] = useState(false);
   const [showCateRightButton, setShowCateRightButton] = useState(false);
@@ -86,11 +89,12 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="w-screen min-h-screen flex flex-col gap-4 items-center bg-gradient-to-br from-orange-50 via-white to-orange-100 overflow-y-auto">
+    <div className="w-screen min-h-screen flex flex-col items-center bg-gradient-to-br from-orange-50 via-white to-orange-100 overflow-y-auto">
       {/* Navbar */}
       <Navbar />
 
       {/* Page Body */}
+      {/* Category */}
       <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
           Inspiration for your first order
@@ -134,6 +138,7 @@ const UserDashboard = () => {
         </div>
       </div>
 
+      {/* Shop */}
       <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
           {`Best Shop in ${currentCity}`}
@@ -166,6 +171,18 @@ const UserDashboard = () => {
               <FaArrowAltCircleRight size={28} />
             </button>
           )}
+        </div>
+      </div>
+
+      {/* Item */}
+      <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
+          Suggested food for you
+        </h1>
+        <div className="w-full h-auto flex flex-wrap gap-[20px] justify-center ">
+          {itemsInMyCity.map((item, index) => (
+            <FoodCart data={item} key={index} />
+          ))}
         </div>
       </div>
     </div>
