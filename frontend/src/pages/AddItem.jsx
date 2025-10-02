@@ -15,7 +15,7 @@ const AddItem = () => {
   const [backendImage, setBackendImage] = useState(null);
   const [price, setPrice] = useState(0);
   const [category, setCategory] = useState("");
-  const [foodType, setFoodType] = useState("veg");
+  const [foodType, setFoodType] = useState("Veg");
   const dispatch = useDispatch();
   const categories = [
     "Snacks",
