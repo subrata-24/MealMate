@@ -3,10 +3,12 @@ import Navbar from "./Navbar";
 import { categories } from "../src/category";
 import CategoryCard from "./CategoryCard";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const UserDashboard = () => {
   const cateScrollRef = useRef();
   const shopScrollRef = useRef();
+  const { currentCity, shopInMyCity } = useSelector((state) => state.user);
 
   const [showCateLeftButton, setShowCateLeftButton] = useState(false);
   const [showCateRightButton, setShowCateRightButton] = useState(false);
@@ -84,7 +86,7 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="w-screen min-h-screen flex flex-col gap-8 items-center bg-gradient-to-br from-orange-50 via-white to-orange-100 overflow-y-auto">
+    <div className="w-screen min-h-screen flex flex-col gap-4 items-center bg-gradient-to-br from-orange-50 via-white to-orange-100 overflow-y-auto">
       {/* Navbar */}
       <Navbar />
 
@@ -112,7 +114,11 @@ const UserDashboard = () => {
             ref={cateScrollRef}
           >
             {categories.map((cate, index) => (
-              <CategoryCard data={cate} key={index} />
+              <CategoryCard
+                name={cate.category}
+                image={cate.image}
+                key={index}
+              />
             ))}
           </div>
 
@@ -130,12 +136,10 @@ const UserDashboard = () => {
 
       <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
-          Best shop in this city
+          {`Best Shop in ${currentCity}`}
         </h1>
 
-        {/* Categories Section */}
         <div className="w-full relative">
-          {/* Left Scroll Button */}
           {showShopLeftButton && (
             <button
               className="absolute top-1/2 left-0 -translate-y-1/2 bg-gradient-to-r from-orange-500 to-red-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-10"
@@ -145,17 +149,15 @@ const UserDashboard = () => {
             </button>
           )}
 
-          {/* Scrollable Categories */}
           <div
             className="w-full flex overflow-x-auto gap-4 pb-3 px-10 scrollbar-hide scroll-smooth"
             ref={shopScrollRef}
           >
-            {categories.map((cate, index) => (
-              <CategoryCard data={cate} key={index} />
+            {shopInMyCity.map((shop, index) => (
+              <CategoryCard name={shop.name} image={shop.image} key={index} />
             ))}
           </div>
 
-          {/* Right Scroll Button */}
           {showShopRightButton && (
             <button
               className="absolute top-1/2 right-0 -translate-y-1/2 bg-gradient-to-r from-orange-500 to-red-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-10"
