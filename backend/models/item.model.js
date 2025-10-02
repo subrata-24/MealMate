@@ -53,6 +53,10 @@ const itemSchema = new mongoose.Schema(
       enum: ["Veg", "Non veg"],
       required: true,
     },
+    rating: {
+      average: { type: Number, default: 0 },
+      count: { type: Number, default: 0 },
+    },
   },
   { timestamps: true }
 );
