@@ -10,9 +10,10 @@ import {
 } from "react-icons/fa";
 import { TbCurrencyTaka } from "react-icons/tb";
 import { addToCart } from "../src/redux/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const FoodCart = ({ data }) => {
+  const { cartItems } = useSelector((state) => state.user);
   const [quantity, setQuantity] = useState(0);
   const dispatch = useDispatch();
 
@@ -85,7 +86,11 @@ const FoodCart = ({ data }) => {
             <FaPlus size={12} />
           </button>
           <button
-            className="bg-[#ff4d2d] text-white px-3 py-2 transition-colors"
+            className={`${
+              cartItems.some((i) => i.id == data._id)
+                ? "bg-gray-900"
+                : "bg-[#ff4d2d]"
+            } text-white px-3 py-2 cursor-pointer transition-colors`}
             onClick={() => {
               dispatch(
                 addToCart({
