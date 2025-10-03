@@ -44,6 +44,15 @@ const CheckOut = () => {
     }
   };
 
+  const ResetLocation = () => {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+      dispatch(setLocation({ lat: latitude, lon: longitude }));
+      getAddressByLatLng(latitude, longitude);
+    });
+  };
+
   useEffect(() => {
     if (markerRef.current) {
       markerRef.current.openPopup();
@@ -86,7 +95,10 @@ const CheckOut = () => {
             </button>
 
             {/* Current Location Button */}
-            <button className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md hover:scale-105 transition flex items-center justify-center cursor-pointer">
+            <button
+              className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md hover:scale-105 transition flex items-center justify-center cursor-pointer"
+              onClick={ResetLocation}
+            >
               <BiCurrentLocation size={20} />
             </button>
           </div>
