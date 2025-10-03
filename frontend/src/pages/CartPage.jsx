@@ -56,7 +56,8 @@ const CartPage = () => {
                 className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 
                text-lg font-semibold text-white rounded-xl 
                shadow-md hover:shadow-lg hover:scale-105 
-               transition-all duration-300"
+               transition-all duration-300 cursor-pointer"
+                onClick={() => navigate("/checkout")}
               >
                 Proceed to Checkout
               </button>
