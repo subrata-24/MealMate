@@ -4,16 +4,31 @@ import { ImLocation2 } from "react-icons/im";
 import { FaMagnifyingGlassLocation } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { BiCurrentLocation } from "react-icons/bi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "leaflet/dist/leaflet.css";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { useRef, useEffect } from "react";
+import { setLocation } from "../redux/mapSlice";
+
+function RecenterMap({ location }) {
+  const map = useMap();
+  if (location.lat && location.lon) {
+    map.setView([location.lat, location.lon], 16, { animate: true });
+  }
+  return null;
+}
 
 const CheckOut = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { location, address } = useSelector((state) => state.map);
 
   const markerRef = useRef();
+
+  const ondragend = (e) => {
+    const { lat, lng } = e.target._latlng;
+    dispatch(setLocation({ lat, lon: lng }));
+  };
 
   useEffect(() => {
     if (markerRef.current) {
@@ -73,6 +88,8 @@ const CheckOut = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   />
+                  {/* Recenter Map */}
+                  <RecenterMap location={location} />
 
                   {/* Marker */}
                   <Marker
@@ -81,6 +98,8 @@ const CheckOut = () => {
                       location?.lat || 23.8103,
                       location?.lon || 90.4125,
                     ]}
+                    draggable
+                    eventHandlers={{ dragend: ondragend }}
                   >
                     <Popup>
                       <div className="p-2 text-sm text-gray-800">
