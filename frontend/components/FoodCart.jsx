@@ -92,17 +92,19 @@ const FoodCart = ({ data }) => {
                 : "bg-[#ff4d2d]"
             } text-white px-3 py-2 cursor-pointer transition-colors`}
             onClick={() => {
-              dispatch(
-                addToCart({
-                  id: data._id,
-                  name: data.name,
-                  price: data.price,
-                  image: data.image,
-                  shop: data.shop,
-                  quantity,
-                  foodType: data.foodType,
-                })
-              );
+              quantity > 0
+                ? dispatch(
+                    addToCart({
+                      id: data._id,
+                      name: data.name,
+                      price: data.price,
+                      image: data.image,
+                      shop: data.shop,
+                      quantity,
+                      foodType: data.foodType,
+                    })
+                  )
+                : null;
             }}
           >
             <FaShoppingCart size={16} />

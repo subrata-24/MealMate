@@ -15,7 +15,7 @@ const useGetItemsByCity = () => {
           { withCredentials: true }
         );
         dispatch(setItemsInMyCity(result.data));
-        console.log(result.data);
+        // console.log(result.data);
       } catch (error) {
         console.log(error);
       }

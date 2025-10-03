@@ -42,6 +42,13 @@ const userSlice = createSlice({
         state.cartItems.push(cartItem);
       }
     },
+    updateQuantity: (state, action) => {
+      const { id, quantity } = action.payload;
+      const item = state.cartItems.find((i) => i.id == id);
+      if (item) {
+        item.quantity = quantity;
+      }
+    },
   },
 });
 
@@ -53,5 +60,6 @@ export const {
   setShopInMyCity,
   setItemsInMyCity,
   addToCart,
+  updateQuantity,
 } = userSlice.actions;
 export default userSlice.reducer;

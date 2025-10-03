@@ -11,7 +11,9 @@ import { IoReceiptSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const { userData, currentCity } = useSelector((state) => state.user);
+  const { userData, currentCity, cartItems } = useSelector(
+    (state) => state.user
+  );
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const dispatch = useDispatch();
@@ -100,9 +102,13 @@ const Navbar = () => {
         {/* Cart with badge */}
         {userData.role === "user" && (
           <div className="relative cursor-pointer hover:scale-110 transition-transform">
-            <FaCartArrowDown size={26} className="text-orange-500" />
+            <FaCartArrowDown
+              size={26}
+              className="text-orange-500 cursor-pointer"
+              onClick={() => navigate("/cart")}
+            />
             <span className="absolute -right-2 -top-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">
-              0
+              {cartItems.length}
             </span>
           </div>
         )}
