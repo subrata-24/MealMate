@@ -61,14 +61,13 @@ const CheckOut = () => {
               <BiCurrentLocation size={20} />
             </button>
           </div>
-          <div className="mt-5 bg-gradient-to-br from-orange-50 to-red-50 p-4 rounded-2xl shadow-inner">
-            <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-lg">
-              <div className="h-80 w-full">
+          <div className="mt-6">
+            <div className="bg-white rounded-3xl shadow-lg border border-gray-600 overflow-hidden transition hover:shadow-2xl">
+              <div className="relative h-80 w-full">
                 <MapContainer
-                  className="w-full h-full"
+                  className="w-full h-full rounded-3xl"
                   center={[location?.lat || 23.8103, location?.lon || 90.4125]} // Dhaka fallback
                   zoom={14}
-                  style={{ borderRadius: "16px" }}
                 >
                   <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -95,6 +94,9 @@ const CheckOut = () => {
                     </Popup>
                   </Marker>
                 </MapContainer>
+
+                {/* Decorative overlay (optional) */}
+                <div className="absolute inset-0 rounded-3xl ring-1 ring-orange-200 pointer-events-none"></div>
               </div>
             </div>
           </div>
