@@ -95,9 +95,9 @@ const UserDashboard = () => {
 
       {/* Page Body */}
       {/* Category */}
-      <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
+      <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8 shadow-lg">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-          Inspiration for your first order
+          🍴 Explore Categories
         </h1>
 
         {/* Categories Section */}
@@ -139,9 +139,9 @@ const UserDashboard = () => {
       </div>
 
       {/* Shop */}
-      <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
+      <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8 shadow-lg">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-          {`Best Shop in ${currentCity}`}
+          🏬 Best Shops in {currentCity}
         </h1>
 
         <div className="w-full relative">
@@ -175,9 +175,9 @@ const UserDashboard = () => {
       </div>
 
       {/* Item */}
-      <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8">
+      <div className="w-full max-w-6xl flex flex-col gap-6 items-start px-4 sm:px-6 py-8 shadow-lg">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-          Suggested food for you
+          🍜 Suggested for You
         </h1>
         <div className="w-full h-auto flex flex-wrap justify-center gap-[20px]">
           {itemsInMyCity.map((item, index) => (
