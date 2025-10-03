@@ -9,17 +9,7 @@ const userSlice = createSlice({
     currentAddress: null,
     shopInMyCity: [],
     itemsInMyCity: [],
-    cartItems: [
-      {
-        id: null,
-        name: null,
-        price: null,
-        image: null,
-        shop: null,
-        quantity: null,
-        foodType: null,
-      },
-    ],
+    cartItems: [],
   },
   reducers: {
     setUserData: (state, action) => {

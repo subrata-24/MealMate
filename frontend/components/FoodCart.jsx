@@ -9,9 +9,12 @@ import {
   FaStar,
 } from "react-icons/fa";
 import { TbCurrencyTaka } from "react-icons/tb";
+import { addToCart } from "../src/redux/userSlice";
+import { useDispatch } from "react-redux";
 
 const FoodCart = ({ data }) => {
   const [quantity, setQuantity] = useState(0);
+  const dispatch = useDispatch();
 
   const renderStars = (rating) => {
     let stars = [];
@@ -81,7 +84,22 @@ const FoodCart = ({ data }) => {
           >
             <FaPlus size={12} />
           </button>
-          <button className="bg-[#ff4d2d] text-white px-3 py-2 transition-colors">
+          <button
+            className="bg-[#ff4d2d] text-white px-3 py-2 transition-colors"
+            onClick={() => {
+              dispatch(
+                addToCart({
+                  id: data._id,
+                  name: data.name,
+                  price: data.price,
+                  image: data.image,
+                  shop: data.shop,
+                  quantity,
+                  foodType: data.foodType,
+                })
+              );
+            }}
+          >
             <FaShoppingCart size={16} />
           </button>
         </div>
