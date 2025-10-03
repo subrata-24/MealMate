@@ -49,6 +49,9 @@ const userSlice = createSlice({
         item.quantity = quantity;
       }
     },
+    removeCartItems: (state, action) => {
+      state.cartItems = state.cartItems.filter((i) => i.id !== action.payload);
+    },
   },
 });
 
@@ -61,5 +64,6 @@ export const {
   setItemsInMyCity,
   addToCart,
   updateQuantity,
+  removeCartItems,
 } = userSlice.actions;
 export default userSlice.reducer;

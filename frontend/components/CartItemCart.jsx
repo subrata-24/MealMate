@@ -2,7 +2,7 @@ import React from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { IoTrashBin } from "react-icons/io5";
 import { useDispatch } from "react-redux";
-import { updateQuantity } from "../src/redux/userSlice";
+import { removeCartItems, updateQuantity } from "../src/redux/userSlice";
 
 const CartItemCart = ({ data }) => {
   const dispatch = useDispatch();
@@ -57,7 +57,10 @@ const CartItemCart = ({ data }) => {
         </div>
 
         {/* Remove Button */}
-        <button className="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition cursor-pointer">
+        <button
+          className="p-2 rounded-full bg-red-100 hover:bg-red-200 text-red-600 transition cursor-pointer"
+          onClick={() => dispatch(removeCartItems(data.id))}
+        >
           <IoTrashBin size={18} />
         </button>
       </div>
