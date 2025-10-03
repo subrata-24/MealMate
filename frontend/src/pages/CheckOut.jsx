@@ -4,9 +4,22 @@ import { ImLocation2 } from "react-icons/im";
 import { FaMagnifyingGlassLocation } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { BiCurrentLocation } from "react-icons/bi";
+import { useSelector } from "react-redux";
+import "leaflet/dist/leaflet.css";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { useRef, useEffect } from "react";
 
 const CheckOut = () => {
   const navigate = useNavigate();
+  const { location, address } = useSelector((state) => state.map);
+
+  const markerRef = useRef();
+
+  useEffect(() => {
+    if (markerRef.current) {
+      markerRef.current.openPopup();
+    }
+  }, [location]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-b from-orange-50 to-red-50 font-[Inter] relative">
@@ -35,6 +48,7 @@ const CheckOut = () => {
               type="text"
               className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 transition"
               placeholder="Enter your delivery location..."
+              value={address}
             />
 
             {/* Search Button */}
@@ -46,6 +60,43 @@ const CheckOut = () => {
             <button className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md hover:scale-105 transition flex items-center justify-center cursor-pointer">
               <BiCurrentLocation size={20} />
             </button>
+          </div>
+          <div className="mt-5 bg-gradient-to-br from-orange-50 to-red-50 p-4 rounded-2xl shadow-inner">
+            <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-lg">
+              <div className="h-80 w-full">
+                <MapContainer
+                  className="w-full h-full"
+                  center={[location?.lat || 23.8103, location?.lon || 90.4125]} // Dhaka fallback
+                  zoom={14}
+                  style={{ borderRadius: "16px" }}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+
+                  {/* Marker */}
+                  <Marker
+                    ref={markerRef}
+                    position={[
+                      location?.lat || 23.8103,
+                      location?.lon || 90.4125,
+                    ]}
+                  >
+                    <Popup>
+                      <div className="p-2 text-sm text-gray-800">
+                        <p className="font-semibold text-orange-600">
+                          📍 Delivery Point
+                        </p>
+                        <p className="text-gray-600">
+                          {address || "Your selected location"}
+                        </p>
+                      </div>
+                    </Popup>
+                  </Marker>
+                </MapContainer>
+              </div>
+            </div>
           </div>
         </section>
       </div>
