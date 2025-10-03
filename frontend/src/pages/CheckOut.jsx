@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { useRef, useEffect } from "react";
-import { setLocation } from "../redux/mapSlice";
+import { setAddress, setLocation } from "../redux/mapSlice";
+import axios from "axios";
 
 function RecenterMap({ location }) {
   const map = useMap();
@@ -28,6 +29,19 @@ const CheckOut = () => {
   const ondragend = (e) => {
     const { lat, lng } = e.target._latlng;
     dispatch(setLocation({ lat, lon: lng }));
+    getAddressByLatLng(lat, lng);
+  };
+
+  const getAddressByLatLng = async (lat, lng) => {
+    try {
+      const apiKey = import.meta.env.VITE_GEOAPIKEY;
+      const result = await axios.get(
+        `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&format=json&apiKey=${apiKey}`
+      );
+      dispatch(setAddress(result?.data?.results[0].address_line2));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
