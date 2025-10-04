@@ -1,7 +1,11 @@
 import React, { useRef, useEffect, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { ImLocation2 } from "react-icons/im";
-import { FaMagnifyingGlassLocation } from "react-icons/fa6";
+import {
+  FaCreditCard,
+  FaMagnifyingGlassLocation,
+  FaMobileScreenButton,
+} from "react-icons/fa6";
 import { BiCurrentLocation } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +14,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { setAddress, setLocation } from "../redux/mapSlice";
 import axios from "axios";
-import locationIcon from "../assets/marker.png"; // ensure this file exists
+import { MdDeliveryDining } from "react-icons/md";
+import locationIcon from "../assets/marker.png";
 
 // custom icon (popupAnchor pushes popup above the marker)
 const customMarker = L.icon({
@@ -83,6 +88,7 @@ const CheckOut = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [addressInput, setAddressInput] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("cod");
   const apiKey = import.meta.env.VITE_GEOAPIKEY;
 
   // real Leaflet map instance will be stored here via whenCreated
@@ -239,6 +245,59 @@ const CheckOut = () => {
 
               {/* decorative ring */}
               <div className="absolute inset-0 rounded-3xl ring-1 ring-orange-200 pointer-events-none"></div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="text-xl font-bold mb-4 text-gray-900">
+            Payment Method
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {/* COD Option */}
+            <div
+              className={`flex items-center gap-4 p-2 rounded-2xl border-2 transition-all cursor-pointer ${
+                paymentMethod === "cod"
+                  ? "border-orange-500 bg-orange-50 shadow-md"
+                  : "border-gray-200 hover:border-orange-300 hover:bg-orange-50/30"
+              }`}
+              onClick={() => setPaymentMethod("cod")}
+            >
+              <div className="flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                <MdDeliveryDining className="text-green-600 text-2xl" />
+              </div>
+              <div>
+                <p className="font-semibold text-gray-900">Cash on Delivery</p>
+                <p className="text-sm text-gray-500">
+                  Pay in cash when your food arrives
+                </p>
+              </div>
+            </div>
+
+            {/* Online Option */}
+            <div
+              className={`flex items-center gap-4 p-2 rounded-2xl border-2 transition-all cursor-pointer ${
+                paymentMethod === "online"
+                  ? "border-orange-500 bg-orange-50 shadow-md"
+                  : "border-gray-200 hover:border-orange-300 hover:bg-orange-50/30"
+              }`}
+              onClick={() => setPaymentMethod("online")}
+            >
+              <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-purple-100">
+                  <FaMobileScreenButton className="text-purple-700 text-xl" />
+                </div>
+                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+                  <FaCreditCard className="text-blue-700 text-xl" />
+                </div>
+              </div>
+              <div>
+                <p className="font-semibold text-gray-900">
+                  bKash / Nagad / Debit / Credit
+                </p>
+                <p className="text-sm text-gray-500">Pay securely online</p>
+              </div>
             </div>
           </div>
         </section>
