@@ -19,6 +19,7 @@ import { setAddress, setLocation } from "../redux/mapSlice";
 import axios from "axios";
 import { MdDeliveryDining } from "react-icons/md";
 import locationIcon from "../assets/marker.png";
+import { serverUrl } from "../App";
 
 // custom icon (popupAnchor pushes popup above the marker)
 const customMarker = L.icon({
@@ -163,6 +164,27 @@ const CheckOut = () => {
     );
   };
 
+  const handlePlaceOrder = async () => {
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/order/create-order`,
+        {
+          paymentMethod,
+          totalAmount,
+          cartItems,
+          deliveryAddress: {
+            text: addressInput,
+            latitude: location.lat,
+            longitude: location.lon,
+          },
+        },
+        { withCredentials: true }
+      );
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-b from-orange-50 to-red-50 font-[Inter] relative">
       {/* Back Button */}
@@ -367,7 +389,10 @@ const CheckOut = () => {
         </section>
 
         {/* Place Order Button */}
-        <button className="w-full mt-6 bg-gradient-to-r from-orange-500 to-red-500 text-white py-3.5 font-semibold rounded-xl shadow-md hover:scale-[1.02] hover:shadow-lg transition-transform text-lg">
+        <button
+          className="w-full mt-6 bg-gradient-to-r from-orange-500 to-red-500 text-white py-3.5 font-semibold rounded-xl shadow-md hover:scale-[1.02] hover:shadow-lg transition-transform text-lg"
+          onClick={handlePlaceOrder}
+        >
           {paymentMethod === "cod" ? "Place Order" : "Pay & Place Order"}
         </button>
       </div>
