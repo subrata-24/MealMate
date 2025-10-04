@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { ImLocation2 } from "react-icons/im";
 import { FaMagnifyingGlassLocation } from "react-icons/fa6";
@@ -82,6 +82,8 @@ function RecenterMap({ location }) {
 const CheckOut = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [addressInput, setAddressInput] = useState("");
+  const apiKey = import.meta.env.VITE_GEOAPIKEY;
 
   // real Leaflet map instance will be stored here via whenCreated
   const mapRef = useRef(null);
@@ -99,7 +101,6 @@ const CheckOut = () => {
   // reverse geocoding
   const getAddressByLatLng = async (lat, lng) => {
     try {
-      const apiKey = import.meta.env.VITE_GEOAPIKEY;
       const result = await axios.get(
         `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&format=json&apiKey=${apiKey}`
       );
@@ -108,6 +109,26 @@ const CheckOut = () => {
       console.log(error);
     }
   };
+
+  //Forward Geocoding
+  const getLatLngByAddress = async () => {
+    try {
+      const result = await axios.get(
+        `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
+          addressInput
+        )}&apiKey=${apiKey}`
+      );
+      const { lat, lon } = result.data.features[0].properties;
+      dispatch(setLocation({ lat, lon }));
+      getAddressByLatLng(lat, lon);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setAddressInput(address);
+  }, [address]);
 
   // reset to user's current location (and pan/zoom the map to center)
   const resetLocation = () => {
@@ -155,11 +176,14 @@ const CheckOut = () => {
               type="text"
               className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 transition"
               placeholder="Enter your delivery location..."
-              value={address || ""}
-              readOnly
+              value={addressInput}
+              onChange={(e) => setAddressInput(e.target.value)}
             />
 
-            <button className="px-4 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl shadow-md hover:scale-105 hover:shadow-lg transition flex items-center justify-center cursor-pointer">
+            <button
+              className="px-4 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl shadow-md hover:scale-105 hover:shadow-lg transition flex items-center justify-center cursor-pointer"
+              onClick={getLatLngByAddress}
+            >
               <FaMagnifyingGlassLocation size={18} />
             </button>
 
@@ -181,7 +205,7 @@ const CheckOut = () => {
                 }}
                 className="w-full h-full rounded-3xl"
                 center={[location?.lat || 23.8103, location?.lon || 90.4125]}
-                zoom={16}
+                zoom={5}
                 scrollWheelZoom={true}
               >
                 <TileLayer
