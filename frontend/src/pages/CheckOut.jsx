@@ -5,6 +5,9 @@ import {
   FaCreditCard,
   FaMagnifyingGlassLocation,
   FaMobileScreenButton,
+  FaMoneyBillWave,
+  FaTruck,
+  FaUtensils,
 } from "react-icons/fa6";
 import { BiCurrentLocation } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
@@ -90,6 +93,9 @@ const CheckOut = () => {
   const [addressInput, setAddressInput] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const apiKey = import.meta.env.VITE_GEOAPIKEY;
+  const { cartItems, totalAmount } = useSelector((state) => state.user);
+  const delivaryFee = totalAmount > 1000 ? 0 : 40;
+  const amountWithDelivaryFee = totalAmount + delivaryFee;
 
   // real Leaflet map instance will be stored here via whenCreated
   const mapRef = useRef(null);
@@ -301,6 +307,69 @@ const CheckOut = () => {
             </div>
           </div>
         </section>
+
+        <section className="mt-10">
+          <h2 className="text-xl font-bold mb-4 text-gray-900">
+            Order Summary
+          </h2>
+
+          <div className="relative rounded-2xl border bg-white shadow-md p-6 overflow-hidden">
+            <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/asfalt-dark.png')]"></div>
+
+            <div className="relative space-y-3">
+              {cartItems.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center text-sm text-gray-700"
+                >
+                  <span className="font-medium">
+                    {item.name}{" "}
+                    <span className="text-gray-500">× {item.quantity}</span>
+                  </span>
+                  <span className="font-semibold text-gray-900">
+                    ৳{item.quantity * item.price}
+                  </span>
+                </div>
+              ))}
+
+              <div className="border-t border-dashed border-gray-300 my-3"></div>
+
+              <div className="flex justify-between items-center text-sm font-medium text-gray-800">
+                <span className="flex items-center gap-2">
+                  <FaUtensils className="text-orange-500" /> Subtotal
+                </span>
+                <span>৳{totalAmount}</span>
+              </div>
+
+              <div className="flex justify-between items-center text-sm text-gray-700">
+                <span className="flex items-center gap-2">
+                  <FaTruck className="text-blue-500" /> Delivery Fee
+                </span>
+                <span className="font-medium">
+                  {delivaryFee == 0 ? (
+                    <span className="text-green-600 font-semibold">Free</span>
+                  ) : (
+                    `৳${delivaryFee}`
+                  )}
+                </span>
+              </div>
+
+              <div className="border-t border-dashed border-gray-300 my-3"></div>
+
+              <div className="flex justify-between items-center text-lg font-bold text-orange-600">
+                <span className="flex items-center gap-2">
+                  <FaMoneyBillWave className="text-green-600" /> Total Amount
+                </span>
+                <span>৳{amountWithDelivaryFee}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Place Order Button */}
+        <button className="w-full mt-6 bg-gradient-to-r from-orange-500 to-red-500 text-white py-3.5 font-semibold rounded-xl shadow-md hover:scale-[1.02] hover:shadow-lg transition-transform text-lg">
+          {paymentMethod === "cod" ? "Place Order" : "Pay & Place Order"}
+        </button>
       </div>
     </div>
   );
