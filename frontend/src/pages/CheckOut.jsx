@@ -180,7 +180,7 @@ const CheckOut = () => {
         },
         { withCredentials: true }
       );
-      console.log(result);
+      navigate("/place-order");
     } catch (error) {
       console.log(error);
     }
@@ -390,7 +390,7 @@ const CheckOut = () => {
 
         {/* Place Order Button */}
         <button
-          className="w-full mt-6 bg-gradient-to-r from-orange-500 to-red-500 text-white py-3.5 font-semibold rounded-xl shadow-md hover:scale-[1.02] hover:shadow-lg transition-transform text-lg"
+          className="w-full mt-6 bg-gradient-to-r from-orange-500 to-red-500 text-white py-3.5 font-semibold rounded-xl shadow-md hover:scale-[1.02] hover:shadow-lg transition-transform text-lg cursor-pointer"
           onClick={handlePlaceOrder}
         >
           {paymentMethod === "cod" ? "Place Order" : "Pay & Place Order"}
