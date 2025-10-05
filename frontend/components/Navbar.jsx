@@ -134,7 +134,10 @@ const Navbar = () => {
             )}
 
             {/* Desktop Show pending item */}
-            <div className="relative hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-200 to-green-200 font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
+            <div
+              className="relative hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-200 to-green-200 font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer"
+              onClick={() => navigate("/my-orders")}
+            >
               <IoReceiptSharp size={16} />
               <span>Pending Orders</span>
               <span className="absolute -right-2 -top-2 bg-gradient-to-r from-orange-400 to-red-400 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">
@@ -143,7 +146,10 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Show pending item */}
-            <div className="relative md:hidden flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer">
+            <div
+              className="relative md:hidden flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer"
+              onClick={() => navigate("/my-orders")}
+            >
               <IoReceiptSharp size={16} />
               <span className="absolute -right-2 -top-2 bg-gradient-to-r from-orange-200 to-green-200 text-black text-xs font-bold px-2 py-0.5 rounded-full shadow-md">
                 0
@@ -152,7 +158,10 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <button className="hidden md:block px-4 py-2 rounded-lg bg-gradient-to-r from-orange-200 to-green-200 text-orange-700 text-sm font-semibold hover:from-orange-300 hover:to-green-300 transition-colors shadow-sm">
+            <button
+              className="hidden md:block px-4 py-2 rounded-lg bg-gradient-to-r from-orange-200 to-green-200 text-orange-700 text-sm font-semibold hover:from-orange-300 hover:to-green-300 transition-colors shadow-sm cursor-pointer"
+              onClick={() => navigate("/my-orders")}
+            >
               My Orders
             </button>
           </>
@@ -173,7 +182,10 @@ const Navbar = () => {
               {userData.fullname}
             </div>
             {userData.role === "user" && (
-              <div className="md:hidden text-orange-600 font-semibold cursor-pointer hover:text-red-500 transition-colors">
+              <div
+                className="md:hidden text-orange-600 font-semibold cursor-pointer hover:text-red-500 transition-colors"
+                onClick={() => navigate("/my-orders")}
+              >
                 My Orders
               </div>
             )}
