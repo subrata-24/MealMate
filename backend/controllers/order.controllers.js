@@ -72,7 +72,7 @@ export const placeOrder = async (req, res) => {
   }
 };
 
-export const getOrdersItem = async (req, res) => {
+export const getUserOrdersItem = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.userID })
       .sort({ createdAt: -1 })
