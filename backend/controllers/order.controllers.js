@@ -86,3 +86,18 @@ export const getOrdersItem = async (req, res) => {
       .json({ message: `Error to get orders: ${error.message}` });
   }
 };
+
+export const getOwnerOrdersItem = async (req, res) => {
+  try {
+    const orders = await Order.find({ "shopOrder.owner": req.userID })
+      .sort({ createdAt: -1 })
+      .populate("shopOrder.shop", "name")
+      .populate("user")
+      .populate("shopOrder.shopOrderItems.item", "name image price");
+    return res.status(200).json(orders);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `Error to get orders: ${error.message}` });
+  }
+};
