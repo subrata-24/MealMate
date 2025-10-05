@@ -1,3 +1,4 @@
+import Order from "../models/order.model.js";
 import Shop from "../models/shop.model.js";
 
 export const placeOrder = async (req, res) => {
@@ -46,7 +47,7 @@ export const placeOrder = async (req, res) => {
           owner: shop.owner._id,
           subTotal,
           shopOrderItems: items.map((i) => ({
-            item: i._id,
+            item: i.id,
             price: i.price,
             quantity: i.quantity,
             name: i.name,
@@ -68,5 +69,20 @@ export const placeOrder = async (req, res) => {
     return res
       .status(500)
       .json({ message: `Place order error: ${error.message}` });
+  }
+};
+
+export const getOrdersItem = async (req, res) => {
+  try {
+    const orders = await Order.find({ user: req.userID })
+      .sort({ createdAt: -1 })
+      .populate("shopOrder.shop", "name")
+      .populate("shopOrder.owner", "fullname email mobileNo")
+      .populate("shopOrder.shopOrderItems.item", "name image price");
+    return res.status(200).json(orders);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `Error to get orders: ${error.message}` });
   }
 };
