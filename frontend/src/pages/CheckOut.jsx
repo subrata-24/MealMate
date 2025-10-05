@@ -180,7 +180,6 @@ const CheckOut = () => {
         },
         { withCredentials: true }
       );
-      console.log(result);
       navigate("/place-order");
     } catch (error) {
       console.log(error);

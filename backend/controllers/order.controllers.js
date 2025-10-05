@@ -65,7 +65,9 @@ export const placeOrder = async (req, res) => {
       shopOrder,
     };
 
-    return res.status(200).json(newOrder);
+    const savedOrder = await Order.create(newOrder);
+
+    return res.status(200).json(savedOrder);
   } catch (error) {
     return res
       .status(500)
