@@ -69,6 +69,9 @@ const userSlice = createSlice({
     setMyOrders: (state, action) => {
       state.myOrders = action.payload;
     },
+    addOrders: (state, action) => {
+      state.myOrders = [action.payload, ...state.myOrders];
+    },
   },
 });
 
@@ -83,5 +86,6 @@ export const {
   updateQuantity,
   removeCartItems,
   setMyOrders,
+  addOrders,
 } = userSlice.actions;
 export default userSlice.reducer;

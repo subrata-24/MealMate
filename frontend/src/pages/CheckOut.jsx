@@ -20,6 +20,7 @@ import axios from "axios";
 import { MdDeliveryDining } from "react-icons/md";
 import locationIcon from "../assets/marker.png";
 import { serverUrl } from "../App";
+import { addOrders } from "../redux/userSlice";
 
 // custom icon (popupAnchor pushes popup above the marker)
 const customMarker = L.icon({
@@ -180,6 +181,7 @@ const CheckOut = () => {
         },
         { withCredentials: true }
       );
+      dispatch(addOrders(result.data));
       navigate("/place-order");
     } catch (error) {
       console.log(error);

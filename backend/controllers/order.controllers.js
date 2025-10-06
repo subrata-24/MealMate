@@ -66,6 +66,12 @@ export const placeOrder = async (req, res) => {
     };
 
     const savedOrder = await Order.create(newOrder);
+    await savedOrder.populate(
+      "shopOrder.shopOrderItems.item",
+      "name image price"
+    );
+
+    await savedOrder.populate("shopOrder.shop", "name");
 
     return res.status(200).json(savedOrder);
   } catch (error) {
