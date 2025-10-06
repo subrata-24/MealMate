@@ -45,6 +45,28 @@ const OwnerOrdersCart = ({ data }) => {
           </div>
         ))}
       </div>
+
+      <div className="flex justify-between items-center pt-3 mt-auto border-t border-orange-100">
+        <span className="text-sm">
+          Status:{" "}
+          <span className="font-semibold capitalize text-[#ff4d2d] ">
+            {data.shopOrder.status}
+          </span>
+        </span>
+
+        <select
+          value={data.shopOrder.status}
+          className="rounded-md px-3 py-1 border focus:outline-none focus:ring-2 text-[#ff4d2d] font-semibold cursor-pointer"
+        >
+          <option value="pending">Pending</option>
+          <option value="preparing">Preparing</option>
+          <option value="Out of Delivered">Out of Delivery</option>
+        </select>
+      </div>
+
+      <div className="text-left font-semibold text-gray-900 text-sm">
+        Total: {data.shopOrder.subTotal}
+      </div>
     </div>
   );
 };
