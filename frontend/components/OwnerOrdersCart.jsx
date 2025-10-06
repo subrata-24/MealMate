@@ -2,8 +2,11 @@ import axios from "axios";
 import React from "react";
 import { FaPhoneFlip } from "react-icons/fa6";
 import { serverUrl } from "../src/App";
+import { useDispatch } from "react-redux";
+import { upDateOrderStatus } from "../src/redux/userSlice";
 
 const OwnerOrdersCart = ({ data }) => {
+  const dispatch = useDispatch();
   const handleUpdateStatus = async (orderID, shopID, status) => {
     try {
       const result = await axios.post(
@@ -11,6 +14,7 @@ const OwnerOrdersCart = ({ data }) => {
         { status },
         { withCredentials: true }
       );
+      dispatch(upDateOrderStatus({ orderID, shopID, status }));
       console.log(result);
     } catch (error) {
       console.log(error);
@@ -78,6 +82,7 @@ const OwnerOrdersCart = ({ data }) => {
             )
           }
         >
+          <option value="">Select Status</option>
           <option value="pending">Pending</option>
           <option value="preparing">Preparing</option>
           <option value="Out of Delivered">Out of Delivery</option>
