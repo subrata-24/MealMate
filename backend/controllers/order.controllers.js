@@ -117,7 +117,7 @@ export const getMyOrders = async (req, res) => {
 
 export const updateStatus = async (req, res) => {
   try {
-    const { shopID, orderID } = req.params;
+    const { orderID, shopID } = req.params;
     const { status } = req.body;
     const order = await Order.findById(orderID);
     const shopOrders = order.shopOrder.find((o) => o.shop == shopID);
@@ -128,7 +128,7 @@ export const updateStatus = async (req, res) => {
 
     shopOrders.status = status;
     await order.save();
-    await shopOrders.populate("shopOrderItems.item", "name image price");
+    // await shopOrders.populate("shopOrderItems.item", "name image price");
 
     return res.status(200).json(shopOrders);
   } catch (error) {

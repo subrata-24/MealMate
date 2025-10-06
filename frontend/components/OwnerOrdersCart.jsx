@@ -1,7 +1,21 @@
+import axios from "axios";
 import React from "react";
 import { FaPhoneFlip } from "react-icons/fa6";
+import { serverUrl } from "../src/App";
 
 const OwnerOrdersCart = ({ data }) => {
+  const handleUpdateStatus = async (orderID, shopID, status) => {
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/order/update-status/${orderID}/${shopID}`,
+        { status },
+        { withCredentials: true }
+      );
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="rounded-lg shadow p-4 space-y-4 bg-white">
       <div>
@@ -55,8 +69,14 @@ const OwnerOrdersCart = ({ data }) => {
         </span>
 
         <select
-          value={data.shopOrder.status}
           className="rounded-md px-3 py-1 border focus:outline-none focus:ring-2 text-[#ff4d2d] font-semibold cursor-pointer"
+          onChange={(e) =>
+            handleUpdateStatus(
+              data._id,
+              data.shopOrder.shop._id,
+              e.target.value
+            )
+          }
         >
           <option value="pending">Pending</option>
           <option value="preparing">Preparing</option>

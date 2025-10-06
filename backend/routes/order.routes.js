@@ -10,6 +10,6 @@ const orderRouter = express.Router();
 
 orderRouter.post("/create-order", isAuth, placeOrder);
 orderRouter.get("/my-order", isAuth, getMyOrders);
-orderRouter.get("/update-status/:shopID/:orderID", isAuth, updateStatus);
+orderRouter.post("/update-status/:orderID/:shopID", isAuth, updateStatus);
 
 export default orderRouter;
