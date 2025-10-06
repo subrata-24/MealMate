@@ -97,9 +97,7 @@ export const getMyOrders = async (req, res) => {
         paymentMethod: order.paymentMethod,
         deliveryAddress: order.deliveryAddress,
         createdAt: order.createdAt,
-        shopOrder: order.shopOrder.find(
-          (o) => o.owner.toString() === req.userID.toString()
-        ),
+        shopOrder: order.shopOrder.find((o) => o.owner._id == req.userID),
       }));
 
       return res.status(200).json(filteredOrder);

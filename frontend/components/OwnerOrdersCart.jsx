@@ -22,6 +22,29 @@ const OwnerOrdersCart = ({ data }) => {
           {data.deliveryAddress.longitude}
         </p>
       </div>
+
+      <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+        {data.shopOrder.shopOrderItems.map((item, idx) => (
+          <div
+            key={idx}
+            className="flex-shrink-0 w-32 sm:w-36 bg-white rounded-xl border border-gray-100 shadow-2xl hover:shadow-lg transition hover:-translate-y-1"
+          >
+            <img
+              src={item.item.image}
+              alt={item.item.name}
+              className="w-full h-24 object-cover rounded-t-xl"
+            />
+            <div className="p-2">
+              <p className="text-sm font-semibold text-gray-800 truncate">
+                {item.name}
+              </p>
+              <p className="text-xs text-gray-500">
+                Qty {item.quantity} × ৳{item.price}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
