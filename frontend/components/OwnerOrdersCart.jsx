@@ -85,7 +85,7 @@ const OwnerOrdersCart = ({ data }) => {
           <option value="">Select Status</option>
           <option value="pending">Pending</option>
           <option value="preparing">Preparing</option>
-          <option value="Out of Delivered">Out of Delivery</option>
+          <option value="Out of Delivery">Out of Delivery</option>
         </select>
       </div>
 
