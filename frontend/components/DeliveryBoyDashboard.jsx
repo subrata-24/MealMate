@@ -24,73 +24,106 @@ const DeliveryBoyDashboard = () => {
   }, [userData]);
 
   return (
-    <div className="w-screen min-h-screen flex flex-col gap-4 items-center bg-gradient-to-br from-orange-50 via-white to-orange-100 overflow-y-auto">
+    <div className="w-screen min-h-screen flex flex-col items-center bg-gradient-to-br from-orange-50 via-white to-orange-100 text-gray-700">
       <Navbar />
-      <div
-        className="w-full max-w-[800px] flex flex-col gap-4 items-center
-      "
-      >
-        <div className="bg-white rounded-2xl shadow-md p-5 flex flex-col justify-start items-center w-[90%] border border-orange-100 text-center gap-2">
-          <h1 className="text-xl font-bold text-[#ff4d2d]">
-            Welcome, {userData.fullname}
-          </h1>
-          <p className="text-[#ff4d2d]">
-            {" "}
-            <span className="font-semibold">Latitude: </span>
-            {userData.location.coordinates[1]},{"  "}
-            <span className="font-semibold">Longitude: </span>
-            {userData.location.coordinates[0]}
-          </p>
-        </div>
 
-        <div className="bg-white rounded-2xl p-5 shadow-md w-[90%] border border-orange-100">
-          <h1 className="text-lg font-bold mb-4 flex items-center gap-2">
-            Available Orders
-          </h1>
+      <main className="w-full max-w-3xl px-4 py-6">
+        <section className="mb-5">
+          <div className="flex items-center justify-between bg-white border border-orange-100 rounded-2xl p-4 shadow-2xl">
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+                Welcome,{" "}
+                <span className="text-orange-500">{userData.fullname}</span>
+              </h1>
+              <p className="mt-1 text-sm md:text-base text-gray-600">
+                Ready to pick up fresh orders
+              </p>
+            </div>
 
-          <div className="space-y-4">
-            {availableAssignment.length > 0 ? (
-              availableAssignment.map((a, index) => (
-                <div
-                  className="border rounded-lg p-4 flex flex-col justify-between items-center"
-                  key={index}
-                >
-                  <p>
-                    <span className="font-semibold">Shop name: </span>
-                    {a.shopName}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Delivery Address: </span>
-                    {a.deliveryAddress.text}
-                  </p>
-                  {a.items.map((it, idx) => (
-                    <>
-                      <p>
-                        <span>Item name: </span>
-                        {it.name}
-                      </p>
-                      <p>
-                        <span>Item price: </span>
-                        {it.price}
-                      </p>
-                      <p>
-                        <span>Item quantity: </span>
-                        {it.quantity}
-                      </p>
-                    </>
-                  ))}
-                  <p>
-                    <span>Total amount: </span>
-                    {a.subTotal}
-                  </p>
+            <div className="flex gap-3 items-center">
+              <div className="text-center px-3 py-1 bg-white border border-gray-100 rounded-lg shadow-lg">
+                <div className="text-xs md:text-sm text-gray-500">Lat</div>
+                <div className="text-sm md:text-base font-medium text-gray-900">
+                  {userData.location.coordinates[1]}
                 </div>
-              ))
-            ) : (
-              <p className="text-gray-400 font-sm">No available order</p>
-            )}
+              </div>
+              <div className="text-center px-3 py-1 bg-white border border-gray-100 rounded-lg shadow-lg">
+                <div className="text-xs md:text-sm text-gray-500">Lng</div>
+                <div className="text-sm md:text-base font-medium text-gray-900">
+                  {userData.location.coordinates[0]}
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+
+        <section>
+          <div className="bg-white rounded-2xl border border-orange-100 shadow-2xl p-4 md:p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg md:text-xl font-bold text-gray-900">
+                Available Orders
+              </h2>
+              <span className="text-sm md:text-base text-orange-600 font-semibold bg-orange-50 px-3 py-1 rounded-full shadow-lg">
+                {availableAssignment.length}
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              {availableAssignment.length > 0 ? (
+                availableAssignment.map((a, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col gap-3 p-4 bg-white border border-gray-100 rounded-xl shadow-2xl 
+             transition-all duration-300 hover:shadow-lg hover:border-orange-400 hover:ring-2 hover:ring-orange-200"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-3">
+                          <h3 className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                            {a.shopName}
+                          </h3>
+                          <div className="text-sm md:text-base font-medium text-gray-800">
+                            {" "}
+                            Total amount: ৳ {a.subTotal}
+                          </div>
+                        </div>
+                        <p className="mt-1 text-sm md:text-base text-gray-700 truncate">
+                          {a.deliveryAddress.text}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-col items-end gap-2">
+                        <div className="text-xs md:text-sm text-green-700 bg-green-100 px-2 py-0.5 rounded-full font-medium shadow-2xl">
+                          New
+                        </div>
+                        <button className="text-sm md:text-base font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-orange-600 to-red-600 text-white shadow hover:scale-105 transition-transform cursor-pointer">
+                          Accept
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 text-sm md:text-base text-gray-700">
+                      {a.items.map((it, idx) => (
+                        <React.Fragment key={idx}>
+                          <div className="truncate">{it.name}</div>
+                          <div className="text-right">x{it.quantity}</div>
+                          <div className="text-right font-medium">
+                            ৳ {it.price}
+                          </div>
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-6 text-base md:text-lg text-gray-500">
+                  No available order
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   );
 };
