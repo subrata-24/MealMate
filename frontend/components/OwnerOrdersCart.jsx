@@ -4,8 +4,10 @@ import { FaPhoneFlip } from "react-icons/fa6";
 import { serverUrl } from "../src/App";
 import { useDispatch } from "react-redux";
 import { upDateOrderStatus } from "../src/redux/userSlice";
+import { useState } from "react";
 
 const OwnerOrdersCart = ({ data }) => {
+  const [availableBoys, setAvailableBoys] = useState([]);
   const dispatch = useDispatch();
   const handleUpdateStatus = async (orderID, shopID, status) => {
     try {
@@ -15,7 +17,8 @@ const OwnerOrdersCart = ({ data }) => {
         { withCredentials: true }
       );
       dispatch(upDateOrderStatus({ orderID, shopID, status }));
-      console.log(result);
+      setAvailableBoys(result.data.availableBoys);
+      console.log(result.data);
     } catch (error) {
       console.log(error);
     }
@@ -88,6 +91,34 @@ const OwnerOrdersCart = ({ data }) => {
           <option value="Out of Delivery">Out of Delivery</option>
         </select>
       </div>
+
+      {data.shopOrder.status === "Out of Delivery" && (
+        <div className="mt-4 p-4 rounded-2xl bg-orange-50 border border-orange-200 shadow-sm">
+          <p className="text-sm font-semibold text-orange-700 mb-2">
+            Available Delivery Boys
+          </p>
+
+          {availableBoys.length > 0 ? (
+            <div className="space-y-2">
+              {availableBoys.map((boy, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between bg-white rounded-xl px-4 py-2 border border-gray-100 shadow-sm hover:shadow-md transition"
+                >
+                  <span className="text-gray-800 font-medium">
+                    {boy.fullname}
+                  </span>
+                  <span className="text-sm text-gray-600">{boy.mobileNo}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-gray-600 text-sm italic">
+              ⏳ Waiting for available delivery boys...
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="text-left font-semibold text-gray-900 text-sm">
         Total: {data.shopOrder.subTotal}

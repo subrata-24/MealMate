@@ -185,20 +185,19 @@ export const updateStatus = async (req, res) => {
 
     await order.save();
 
+    const updatedShopOrder = order.shopOrder.find((o) => o.shop == shopID);
+
     await order.populate("shopOrder.shop", "name");
     await order.populate(
       "shopOrder.assignedDeliveryBoy",
       "fullname email mobileNo"
     );
 
-    const updatedShopOrder = order.shopOrder.find((o) => o.shop == shopID);
-    // await shopOrders.populate("shopOrderItems.item", "name image price");
-
     return res.status(200).json({
       shopOrder: updatedShopOrder,
-      assignedDeliveryBoy: updatedShopOrder.assignedDeliveryBoy,
+      assignedDeliveryBoy: updatedShopOrder?.assignedDeliveryBoy,
       availableBoys: deliveryBoyPayload,
-      assignment: updatedShopOrder.assignment._id,
+      assignment: updatedShopOrder?.assignment?._id,
     });
   } catch (error) {
     return res
