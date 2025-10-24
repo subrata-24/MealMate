@@ -177,7 +177,13 @@ const Navbar = () => {
 
         {/* Dropdown Info */}
         {showInfo && (
-          <div className="fixed top-[80px] right-[10px] md:right-[10%] lg:right-[25%] w-[200px] bg-white shadow-2xl rounded-xl flex flex-col p-4 gap-3 border border-gray-100 animate-fadeIn">
+          <div
+            className={`fixed top-[80px] right-[10px] ${
+              userData.role === "deliveryBoy"
+                ? "md:right-[20%] lg:right-[34%]"
+                : "md:right-[10%] lg:right-[25%]"
+            }  w-[200px] bg-white shadow-2xl rounded-xl flex flex-col p-4 gap-3 border border-gray-100 animate-fadeIn`}
+          >
             <div className="text-lg font-semibold text-gray-900">
               {userData.fullname}
             </div>
