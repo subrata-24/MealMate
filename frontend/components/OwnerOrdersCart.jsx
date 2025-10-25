@@ -94,9 +94,15 @@ const OwnerOrdersCart = ({ data }) => {
 
       {data.shopOrder.status === "Out of Delivery" && (
         <div className="mt-4 p-4 rounded-2xl bg-orange-50 border border-orange-200 shadow-sm">
-          <p className="text-sm font-semibold text-orange-700 mb-2">
-            Available Delivery Boys
-          </p>
+          {data.shopOrder.assignedDeliveryBoy ? (
+            <p className="text-sm font-semibold text-orange-700 mb-2">
+              Assigned Delivery Boy
+            </p>
+          ) : (
+            <p className="text-sm font-semibold text-orange-700 mb-2">
+              Available Delivery Boys
+            </p>
+          )}
 
           {availableBoys.length > 0 ? (
             <div className="space-y-2">
@@ -111,6 +117,15 @@ const OwnerOrdersCart = ({ data }) => {
                   <span className="text-sm text-gray-600">{boy.mobileNo}</span>
                 </div>
               ))}
+            </div>
+          ) : data.shopOrder.assignedDeliveryBoy ? (
+            <div className="flex items-center justify-between bg-white rounded-xl px-4 py-2 border border-gray-100 shadow-sm hover:shadow-md transition">
+              <span className="text-gray-800 font-medium">
+                {data.shopOrder.assignedDeliveryBoy.fullname}
+              </span>
+              <span className="text-gray-800 font-medium">
+                {data.shopOrder.assignedDeliveryBoy.mobileNo}
+              </span>
             </div>
           ) : (
             <div className="text-gray-600 text-sm italic">
