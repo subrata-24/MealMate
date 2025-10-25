@@ -326,6 +326,7 @@ export const getCurrentOrder = async (req, res) => {
 
     return res.status(200).json({
       _id: assignment.order._id,
+      shopName: assignment.shop.name,
       user: assignment.order.user,
       shopOrders,
       deliveryAddress: assignment.order.deliveryAddress,

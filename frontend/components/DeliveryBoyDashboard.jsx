@@ -159,6 +159,29 @@ const DeliveryBoyDashboard = () => {
             </div>
           </section>
         )}
+
+        {currentOrder && (
+          <div className="bg-white rounded-2xl p-5 shadow-2xl w-full max-w-3xl border border-orange-100 mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+              🚚 Currently Processing Order
+            </h2>
+
+            <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-2xl hover:shadow-md transition-all duration-300 hover:ring-2 hover:ring-orange-200 hover:border-orange-300">
+              <p className="text-lg font-semibold text-gray-900 truncate">
+                {currentOrder.shopName}
+              </p>
+              <p className="text-gray-600 mt-1 text-sm md:text-base">
+                {currentOrder.deliveryAddress.text}
+              </p>
+              <p className="mt-2 text-gray-700 text-sm md:text-base font-medium">
+                {currentOrder.shopOrders.shopOrderItems.length} items |{" "}
+                <span className="font-bold text-gray-900">
+                  ৳ {currentOrder.shopOrders.subTotal}
+                </span>
+              </p>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
