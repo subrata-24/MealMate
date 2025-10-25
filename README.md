@@ -55,22 +55,22 @@ It includes live order tracking, geolocation, delivery broadcast system, and an 
 ### ✅ Authentication Screens
 | Login | Signup |
 |-------|--------|
-| ![Login](./frontend/public/login.png) | ![Signup](./frontend/public/signup.png) |
+| ![Login](frontend/public/login.png) | ![Signup](frontend/public/signup.png) |
 
 ### ✅ User Screens
 | User Dashboard | Cart | Place Order |
 |----------------|------|--------------|
-| ![User Dashboard](./frontend/public/user.png) | ![Cart](./frontend/public/cart.png) | ![Place Order](./frontend/public/placeOrder.png) |
+| ![User Dashboard](frontend/public/user.png) | ![Cart](frontend/public/cart.png) | ![Place Order](frontend/public/placeOrder.png) |
 
 ### ✅ Owner Screens
 | Owner Dashboard | Orders |
 |-----------------|--------|
-| ![Owner Dashboard](./frontend/public/Owner.png) | ![Order Management](./frontend/public/order.png) |
+| ![Owner Dashboard](frontend/public/Owner.png) | ![Order Management](frontend/public/order.png) |
 
 ### ✅ Delivery Boy Screens
 | Delivery Boy Dashboard |
 |------------------------|
-| ![Delivery Boy](./frontend/public/deliveryBoy.png) |
+| ![Delivery Boy](frontend/public/deliveryBoy.png) |
 
 ---
 
