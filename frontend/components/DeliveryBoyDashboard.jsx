@@ -36,7 +36,7 @@ const DeliveryBoyDashboard = () => {
                 <span className="text-orange-500">{userData.fullname}</span>
               </h1>
               <p className="mt-1 text-sm md:text-base text-gray-600">
-                Ready to pick up fresh orders
+                Accept the orders that fit your route best.
               </p>
             </div>
 
