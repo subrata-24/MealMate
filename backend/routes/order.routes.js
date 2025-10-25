@@ -1,6 +1,7 @@
 import express from "express";
 import {
   acceptOrder,
+  getCurrentOrder,
   getDeliveryAssignment,
   getMyOrders,
   placeOrder,
@@ -13,6 +14,7 @@ const orderRouter = express.Router();
 orderRouter.post("/create-order", isAuth, placeOrder);
 orderRouter.get("/my-order", isAuth, getMyOrders);
 orderRouter.get("/get-assignmnet", isAuth, getDeliveryAssignment);
+orderRouter.get("/get-current-order", isAuth, getCurrentOrder);
 orderRouter.get("/accept-order/:assignmentId", isAuth, acceptOrder);
 orderRouter.post("/update-status/:orderID/:shopID", isAuth, updateStatus);
 

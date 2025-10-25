@@ -281,3 +281,85 @@ export const acceptOrder = async (req, res) => {
       .json({ message: `Error to accept order: ${error.message}` });
   }
 };
+
+export const getCurrentOrder = async (req, res) => {
+  try {
+    const assignment = await DeliveryAssignment.findOne({
+      assignedTo: req.userID,
+      status: "assigned",
+    })
+      .populate("shop", "name")
+      .populate("assignedTo", "fullname email location mobileNo")
+      .populate({
+        path: "order",
+        populate: [
+          { path: "user", select: "fullname email location mobileNo" },
+        ],
+      });
+
+    if (!assignment) {
+      return res.status(400).json({ message: "Assignment not found" });
+    }
+    if (!assignment.order) {
+      return res.status(400).json({ message: "Order not found" });
+    }
+
+    const shopOrders = assignment.order.shopOrder.find(
+      (so) => String(so._id) === String(assignment.shopOrderId)
+    );
+
+    if (!shopOrders) {
+      return res.status(400).json({ message: "Shop order not found" });
+    }
+
+    let deliveryBoyLocation = { lat: null, lon: null };
+    if (assignment.assignedTo.location?.coordinates?.length === 2) {
+      deliveryBoyLocation.lat = assignment.assignedTo.location.coordinates[1];
+      deliveryBoyLocation.lon = assignment.assignedTo.location.coordinates[0];
+    }
+
+    let customerLocation = { lat: null, lon: null };
+    if (assignment.order.deliveryAddress) {
+      customerLocation.lat = assignment.order.deliveryAddress.latitude;
+      customerLocation.lon = assignment.order.deliveryAddress.longitude;
+    }
+
+    return res.status(200).json({
+      _id: assignment.order._id,
+      user: assignment.order.user,
+      shopOrders,
+      deliveryAddress: assignment.order.deliveryAddress,
+      deliveryBoyLocation,
+      customerLocation,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `Error to get current order: ${error.message}` });
+  }
+};
+
+/*After populate
+{
+  _id: "64fj23...",
+  shop: { _id: "648a1...", name: "Coffee House" },
+  assignedTo: {
+    _id: "64f2dd...",
+    fullname: "Rahim Delivery",
+    email: "rahim@mail.com",
+    mobileNo: "01712345678",
+    location: { type: "Point", coordinates: [90.4125, 23.8103] }
+  },
+  order: {
+    _id: "64abc123",
+    user: {
+      _id: "62user123",
+      fullname: "John Buyer",
+      email: "john@mail.com",
+      mobileNo: "018998877",
+      location: { ... }
+    },
+    // other order fields...
+  }
+}
+*/
