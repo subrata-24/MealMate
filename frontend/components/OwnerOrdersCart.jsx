@@ -17,7 +17,7 @@ const OwnerOrdersCart = ({ data }) => {
         { withCredentials: true }
       );
       dispatch(upDateOrderStatus({ orderID, shopID, status }));
-      setAvailableBoys(result.data.availableBoys);
+      setAvailableBoys(result.data.availableBoys ?? []);
       console.log(result.data);
     } catch (error) {
       console.log(error);

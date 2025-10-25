@@ -268,11 +268,15 @@ export const acceptOrder = async (req, res) => {
       return res.status(400).json({ message: "Order not found" });
     }
 
-    const shopOrders = order.shopOrder.find(
-      (so) => s._id == assignment.shopOrderId
-    );
+    const shopOrders = order.shopOrder.id(assignment.shopOrderId);
 
     shopOrders.assignedDeliveryBoy = req.userID;
     await order.save();
-  } catch (error) {}
+
+    return res.status(200).json({ message: "Order accepted" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `Error to accept order: ${error.message}` });
+  }
 };
