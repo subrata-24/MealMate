@@ -16,7 +16,6 @@ It includes live order tracking, geolocation, delivery broadcast system, and an 
 - Live order status updates
 - Live delivery boy location tracking (Leaflet map)
 - Order history
-- Cancel orders
 - Rate and review food
 
 ### 🏪 Shop Owner Features
@@ -43,10 +42,9 @@ It includes live order tracking, geolocation, delivery broadcast system, and an 
 | Backend     | Node.js, Express.js (REST API) |
 | Database    | MongoDB + 2dsphere Geo Index |
 | State Mgmt  | Redux Toolkit (optional) |
-| Realtime    | Socket.io |
+| Realtime    | Socket.io(Use in future) |
 | Auth        | JWT-based authentication |
 | Location    | Browser Geolocation API |
-| Payment     | [Optional: Stripe Integration] |
 
 ---
 
