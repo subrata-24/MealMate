@@ -7,13 +7,29 @@ import { serverUrl } from "../src/App";
 const DeliveryBoyDashboard = () => {
   const { userData } = useSelector((state) => state.user);
   const [availableAssignment, setAvailableAssignment] = useState([]);
+  const [currentOrder, setCurrentOrder] = useState();
+
   const getAssignment = async () => {
     try {
       const result = await axios.get(`${serverUrl}/api/order/get-assignmnet`, {
         withCredentials: true,
       });
-      console.log(result);
       setAvailableAssignment(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getCurrentOrder = async () => {
+    try {
+      const result = await axios.get(
+        `${serverUrl}/api/order/get-current-order`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(result.data);
+      setCurrentOrder(result.data);
     } catch (error) {
       console.log(error);
     }
@@ -27,7 +43,7 @@ const DeliveryBoyDashboard = () => {
           withCredentials: true,
         }
       );
-      console.log(result);
+      await getCurrentOrder();
     } catch (error) {
       console.log(error);
     }
@@ -35,6 +51,7 @@ const DeliveryBoyDashboard = () => {
 
   useEffect(() => {
     getAssignment();
+    getCurrentOrder();
   }, [userData]);
 
   return (
@@ -71,75 +88,77 @@ const DeliveryBoyDashboard = () => {
           </div>
         </section>
 
-        <section>
-          <div className="bg-white rounded-2xl border border-orange-100 shadow-2xl p-4 md:p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg md:text-xl font-bold text-gray-900">
-                Available Orders
-              </h2>
-              <span className="text-sm md:text-base text-orange-600 font-semibold bg-orange-50 px-3 py-1 rounded-full shadow-lg">
-                {availableAssignment.length}
-              </span>
-            </div>
+        {!currentOrder && (
+          <section>
+            <div className="bg-white rounded-2xl border border-orange-100 shadow-2xl p-4 md:p-5">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg md:text-xl font-bold text-gray-900">
+                  Available Orders
+                </h2>
+                <span className="text-sm md:text-base text-orange-600 font-semibold bg-orange-50 px-3 py-1 rounded-full shadow-lg">
+                  {availableAssignment.length}
+                </span>
+              </div>
 
-            <div className="space-y-4">
-              {availableAssignment.length > 0 ? (
-                availableAssignment.map((a, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col gap-3 p-4 bg-white border border-gray-100 rounded-xl shadow-2xl 
+              <div className="space-y-4">
+                {availableAssignment.length > 0 ? (
+                  availableAssignment.map((a, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col gap-3 p-4 bg-white border border-gray-100 rounded-xl shadow-2xl 
              transition-all duration-300 hover:shadow-lg hover:border-orange-400 hover:ring-2 hover:ring-orange-200"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-3">
-                          <h3 className="text-base md:text-lg font-semibold text-gray-900 truncate">
-                            {a.shopName}
-                          </h3>
-                          <div className="text-sm md:text-base font-medium text-gray-800">
-                            {" "}
-                            Total amount: ৳ {a.subTotal}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-3">
+                            <h3 className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                              {a.shopName}
+                            </h3>
+                            <div className="text-sm md:text-base font-medium text-gray-800">
+                              {" "}
+                              Total amount: ৳ {a.subTotal}
+                            </div>
                           </div>
+                          <p className="mt-1 text-sm md:text-base text-gray-700 truncate">
+                            {a.deliveryAddress.text}
+                          </p>
                         </div>
-                        <p className="mt-1 text-sm md:text-base text-gray-700 truncate">
-                          {a.deliveryAddress.text}
-                        </p>
+
+                        <div className="flex flex-col items-end gap-2">
+                          <div className="text-xs md:text-sm text-green-700 bg-green-100 px-2 py-0.5 rounded-full font-medium shadow-2xl">
+                            New
+                          </div>
+                          <button
+                            className="text-sm md:text-base font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-orange-600 to-red-600 text-white shadow hover:scale-105 transition-transform cursor-pointer"
+                            onClick={() => acceptOrder(a.assignmentID)}
+                          >
+                            Accept
+                          </button>
+                        </div>
                       </div>
 
-                      <div className="flex flex-col items-end gap-2">
-                        <div className="text-xs md:text-sm text-green-700 bg-green-100 px-2 py-0.5 rounded-full font-medium shadow-2xl">
-                          New
-                        </div>
-                        <button
-                          className="text-sm md:text-base font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-orange-600 to-red-600 text-white shadow hover:scale-105 transition-transform cursor-pointer"
-                          onClick={() => acceptOrder(a.assignmentID)}
-                        >
-                          Accept
-                        </button>
+                      <div className="grid grid-cols-3 gap-2 text-sm md:text-base text-gray-700">
+                        {a.items.map((it, idx) => (
+                          <React.Fragment key={idx}>
+                            <div className="truncate">{it.name}</div>
+                            <div className="text-right">x{it.quantity}</div>
+                            <div className="text-right font-medium">
+                              ৳ {it.price}
+                            </div>
+                          </React.Fragment>
+                        ))}
                       </div>
                     </div>
-
-                    <div className="grid grid-cols-3 gap-2 text-sm md:text-base text-gray-700">
-                      {a.items.map((it, idx) => (
-                        <React.Fragment key={idx}>
-                          <div className="truncate">{it.name}</div>
-                          <div className="text-right">x{it.quantity}</div>
-                          <div className="text-right font-medium">
-                            ৳ {it.price}
-                          </div>
-                        </React.Fragment>
-                      ))}
-                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-6 text-base md:text-lg text-gray-500">
+                    No available order
                   </div>
-                ))
-              ) : (
-                <div className="text-center py-6 text-base md:text-lg text-gray-500">
-                  No available order
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
     </div>
   );
