@@ -68,7 +68,7 @@ It includes live order tracking, geolocation, delivery broadcast system, and an 
 ### ✅ Delivery Boy Screens
 | Delivery Boy Dashboard |
 |------------------------|
-| ![Delivery Boy](frontend/public/deliveryBoy.png) |
+| ![Delivery Boy](frontend/public/deliveryBoy.png) | ![Live Tracking](frontend/public/liveTracking.png) |
 
 ---
 
