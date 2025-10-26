@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { serverUrl } from "../src/App";
+import DeliveryBoyTracking from "./DeliveryBoyTracking";
 
 const DeliveryBoyDashboard = () => {
   const { userData } = useSelector((state) => state.user);
@@ -58,7 +59,7 @@ const DeliveryBoyDashboard = () => {
     <div className="w-screen min-h-screen flex flex-col items-center bg-gradient-to-br from-orange-50 via-white to-orange-100 text-gray-700">
       <Navbar />
 
-      <main className="w-full max-w-3xl px-4 py-6">
+      <main className="w-full max-w-3xl px-4 py-1">
         <section className="mb-5">
           <div className="flex items-center justify-between bg-white border border-orange-100 rounded-2xl p-4 shadow-2xl">
             <div>
@@ -180,6 +181,8 @@ const DeliveryBoyDashboard = () => {
                 </span>
               </p>
             </div>
+
+            <DeliveryBoyTracking data={currentOrder} />
           </div>
         )}
       </main>
