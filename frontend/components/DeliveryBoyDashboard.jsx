@@ -10,6 +10,12 @@ const DeliveryBoyDashboard = () => {
   const [availableAssignment, setAvailableAssignment] = useState([]);
   const [currentOrder, setCurrentOrder] = useState();
 
+  const [showOTP, setShowOTP] = useState(false);
+
+  const handleOTP = () => {
+    setShowOTP(true);
+  };
+
   const getAssignment = async () => {
     try {
       const result = await axios.get(`${serverUrl}/api/order/get-assignmnet`, {
@@ -183,6 +189,32 @@ const DeliveryBoyDashboard = () => {
             </div>
 
             <DeliveryBoyTracking data={currentOrder} />
+
+            {!showOTP ? (
+              <button
+                className="mt-5 w-full py-3 px-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-2xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300 cursor-pointer"
+                onClick={handleOTP}
+              >
+                ✅ Mark as Delivered
+              </button>
+            ) : (
+              <div className="mt-5 p-5 bg-white rounded-2xl shadow-2xl border border-gray-200">
+                <p className="text-gray-700 font-semibold mb-3 text-sm md:text-base">
+                  Enter the OTP sent to{" "}
+                  <span className="text-headingText">
+                    {currentOrder.user.fullname}
+                  </span>
+                </p>
+                <input
+                  type="text"
+                  className="w-full border border-gray-400 rounded-xl px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-300 shadow-sm transition-all duration-300 placeholder-gray-400"
+                  placeholder="Enter OTP here"
+                />
+                <button className="w-full py-3 font-bold text-white rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-red-500 hover:to-orange-500 hover:scale-105 shadow-button transition-transform duration-300 cursor-pointer">
+                  Submit OTP
+                </button>
+              </div>
+            )}
           </div>
         )}
       </main>
