@@ -2,6 +2,7 @@ import DeliveryAssignment from "../models/deliveryAssignment.model.js";
 import Order from "../models/order.model.js";
 import Shop from "../models/shop.model.js";
 import User from "../models/user.model.js";
+import { sendDeliveryOtpToUser } from "../utils/mail.js";
 
 export const placeOrder = async (req, res) => {
   try {
@@ -375,7 +376,7 @@ export const sendDeliveryOTP = async (req, res) => {
     shopOrders.deliveryOTP = otp;
     shopOrders.otpExpires = new Date(Date.now() + 5 * 60 * 1000);
     await order.save();
-    await sendOTPToUser(order.user, otp);
+    await sendDeliveryOtpToUser(order.user, otp);
 
     return res
       .status(200)
