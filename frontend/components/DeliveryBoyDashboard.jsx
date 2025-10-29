@@ -9,11 +9,44 @@ const DeliveryBoyDashboard = () => {
   const { userData } = useSelector((state) => state.user);
   const [availableAssignment, setAvailableAssignment] = useState([]);
   const [currentOrder, setCurrentOrder] = useState();
+  const [otp, setOtp] = useState("");
 
   const [showOTP, setShowOTP] = useState(false);
 
-  const handleOTP = () => {
-    setShowOTP(true);
+  const handleSendOTP = async () => {
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/order/send-delivery-otp`,
+        {
+          orderId: currentOrder._id,
+          shopOrderId: currentOrder.shopOrders._id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      // console.log(result.data);
+      setShowOTP(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/order/verify-delivery-otp`,
+        {
+          orderId: currentOrder._id,
+          shopOrderId: currentOrder.shopOrders._id,
+          otp,
+        },
+        { withCredentials: true }
+      );
+      console.log(result.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getAssignment = async () => {
@@ -193,7 +226,7 @@ const DeliveryBoyDashboard = () => {
             {!showOTP ? (
               <button
                 className="mt-5 w-full py-3 px-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-2xl shadow-lg hover:scale-105 hover:shadow-xl transition-transform duration-300 cursor-pointer"
-                onClick={handleOTP}
+                onClick={handleSendOTP}
               >
                 ✅ Mark as Delivered
               </button>
@@ -209,8 +242,13 @@ const DeliveryBoyDashboard = () => {
                   type="text"
                   className="w-full border border-gray-400 rounded-xl px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-300 shadow-sm transition-all duration-300 placeholder-gray-400"
                   placeholder="Enter OTP here"
+                  onChange={(e) => setOtp(e.target.value)}
+                  value={otp}
                 />
-                <button className="w-full py-3 font-bold text-white rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-red-500 hover:to-orange-500 hover:scale-105 shadow-button transition-transform duration-300 cursor-pointer">
+                <button
+                  className="w-full py-3 font-bold text-white rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-red-500 hover:to-orange-500 hover:scale-105 shadow-button transition-transform duration-300 cursor-pointer"
+                  onClick={handleVerifyOtp}
+                >
                   Submit OTP
                 </button>
               </div>
