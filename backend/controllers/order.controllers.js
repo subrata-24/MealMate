@@ -388,6 +388,43 @@ export const sendDeliveryOTP = async (req, res) => {
   }
 };
 
+export const verifyOTP = async (req, res) => {
+  try {
+    const { orderId, shopOrderId, otp } = req.body;
+    const order = await Order.findById(orderId).populate("user");
+    const shopOrders = order.shopOrder.id(shopOrderId);
+    if (!order || !shopOrders) {
+      return res.status(400).json({ message: "Send valid order/shopOrder ID" });
+    }
+
+    if (
+      shopOrders.deliveryOTP !== otp ||
+      !shopOrders.otpExpires ||
+      shopOrders.otpExpires < Date.now()
+    ) {
+      return res.status(400).json({ message: "Invalid/expires OTP" });
+    }
+
+    shopOrders.status = "Delivered";
+    shopOrders.deliveredAt = Date.now();
+    shopOrders.deliveryOTP = null;
+    shopOrders.otpExpires = null;
+    await order.save();
+
+    await DeliveryAssignment.deleteOne({
+      order: order._id,
+      shopOrderId: shopOrders._id,
+      assignedTo: shopOrders.assignedDeliveryBoy,
+    });
+
+    return res.status(200).json({ message: "Successfully delivered food" });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Find error to delivered food: ${error.message}`,
+    });
+  }
+};
+
 /*After populate getCurrentOrder
 {
   _id: "64fj23...",
