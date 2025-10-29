@@ -362,6 +362,31 @@ export const getOrderById = async (req, res) => {
   }
 };
 
+export const sendDeliveryOTP = async (req, res) => {
+  try {
+    const { orderId, shopOrderId } = req.body;
+    const order = await Order.findById(orderId).populate("user");
+    const shopOrders = order.shopOrder.id(shopOrderId); // .id() works if shopOrders is subDocument of order and it is a array
+    if (!order || !shopOrders) {
+      return res.status(400).json({ message: "Send valid order/shopOrder ID" });
+    }
+
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+    shopOrders.deliveryOTP = otp;
+    shopOrders.otpExpires = new Date(Date.now() + 5 * 60 * 1000);
+    await order.save();
+    await sendOTPToUser(order.user, otp);
+
+    return res
+      .status(200)
+      .json({ message: `Successfully sent otp to ${order.user.fullname}` });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error sending OTP to verify delivery food: ${error.message}`,
+    });
+  }
+};
+
 /*After populate getCurrentOrder
 {
   _id: "64fj23...",
