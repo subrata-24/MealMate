@@ -388,7 +388,7 @@ export const sendDeliveryOTP = async (req, res) => {
   }
 };
 
-export const verifyOTP = async (req, res) => {
+export const verifyDeliveryOTP = async (req, res) => {
   try {
     const { orderId, shopOrderId, otp } = req.body;
     const order = await Order.findById(orderId).populate("user");

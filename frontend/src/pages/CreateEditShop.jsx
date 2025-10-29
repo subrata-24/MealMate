@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -13,40 +13,80 @@ const CreateEditShop = () => {
   const { currentCity, currentState, currentAddress } = useSelector(
     (state) => state.user
   );
-  const [name, setName] = useState(shopData?.name || " ");
+  const [name, setName] = useState(shopData?.name || "");
   const [city, setCity] = useState(shopData?.city || currentCity);
   const [state, setState] = useState(shopData?.state || currentState);
-  const [address, setAddress] = useState(shopData?.name || currentAddress);
+  const [address, setAddress] = useState(shopData?.address || currentAddress); // Fixed: was shopData?.name
   const [frontendImage, setFrontendImage] = useState(shopData?.image || null);
   const [backendImage, setBackendImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
+  // Cleanup blob URL to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (frontendImage && frontendImage.startsWith("blob:")) {
+        URL.revokeObjectURL(frontendImage);
+      }
+    };
+  }, [frontendImage]);
+
   const handleOnChange = (e) => {
-    const file = e.target.files[0]; // Get the selected image file
-    setBackendImage(file); // Save original file (for sending to backend)
-    setFrontendImage(URL.createObjectURL(file)); // Create a temporary local URL (for previewing in frontend)
+    const file = e.target.files[0];
+    if (file) {
+      // Revoke previous URL before creating a new one
+      if (frontendImage && frontendImage.startsWith("blob:")) {
+        URL.revokeObjectURL(frontendImage);
+      }
+      setBackendImage(file);
+      setFrontendImage(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+
+    // Validation
+    if (!name.trim()) {
+      setError("Shop name is required");
+      return;
+    }
+    if (!city.trim() || !state.trim() || !address.trim()) {
+      setError("All location fields are required");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const formData = new FormData(); // Used for file + text upload(If file is included the must send the to backend like this)
-      formData.append("name", name);
-      formData.append("city", city);
-      formData.append("state", state);
-      formData.append("address", address);
+      const formData = new FormData();
+      formData.append("name", name.trim());
+      formData.append("city", city.trim());
+      formData.append("state", state.trim());
+      formData.append("address", address.trim());
       if (backendImage) {
-        formData.append("image", backendImage); // attach the actual image file
+        formData.append("image", backendImage);
       }
+
       const result = await axios.post(
         `${serverUrl}/api/shop/create-edit`,
         formData,
         { withCredentials: true }
       );
-      dispatch(setShopData(result.data)); // save shop data in Redux
-      console.log(result.data);
+
+      dispatch(setShopData(result.data));
+      // Navigate only after successful submission
+      navigate("/");
     } catch (error) {
-      console.log(error);
+      console.error("Error saving shop:", error);
+      setError(
+        error.response?.data?.message ||
+          "Failed to save shop. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,10 +113,16 @@ const CreateEditShop = () => {
           </p>
         </div>
 
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            {error}
+          </div>
+        )}
+
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Shop Name
+              Shop Name *
             </label>
             <input
               type="text"
@@ -84,6 +130,8 @@ const CreateEditShop = () => {
               className="w-full px-4 py-2 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
               onChange={(e) => setName(e.target.value)}
               value={name}
+              required
+              disabled={loading}
             />
           </div>
 
@@ -96,6 +144,7 @@ const CreateEditShop = () => {
               className="w-full px-4 py-2 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
               accept="image/*"
               onChange={handleOnChange}
+              disabled={loading}
             />
 
             {frontendImage && (
@@ -112,7 +161,7 @@ const CreateEditShop = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                City
+                City *
               </label>
               <input
                 type="text"
@@ -120,11 +169,13 @@ const CreateEditShop = () => {
                 className="w-full px-4 py-2 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
                 onChange={(e) => setCity(e.target.value)}
                 value={city}
+                required
+                disabled={loading}
               />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                State
+                State *
               </label>
               <input
                 type="text"
@@ -132,13 +183,15 @@ const CreateEditShop = () => {
                 className="w-full px-4 py-2 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
                 onChange={(e) => setState(e.target.value)}
                 value={state}
+                required
+                disabled={loading}
               />
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Address
+              Address *
             </label>
             <input
               type="text"
@@ -146,14 +199,17 @@ const CreateEditShop = () => {
               className="w-full px-4 py-2 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-300"
               onChange={(e) => setAddress(e.target.value)}
               value={address}
+              required
+              disabled={loading}
             />
           </div>
 
           <button
-            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 w-full rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 cursor-pointer"
-            onClick={() => navigate("/")}
+            type="submit"
+            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 w-full rounded-lg shadow-lg hover:shadow-xl transform hover:scale-[1.03] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            Save
+            {loading ? "Saving..." : "Save"}
           </button>
         </form>
       </div>
