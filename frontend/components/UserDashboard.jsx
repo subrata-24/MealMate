@@ -17,6 +17,22 @@ const UserDashboard = () => {
   const [showCateRightButton, setShowCateRightButton] = useState(false);
   const [showShopLeftButton, setShowShopLeftButton] = useState(false);
   const [showShopRightButton, setShowShopRightButton] = useState(false);
+  const [showFoodByCategory, setShowFoodByCategory] = useState([]);
+
+  const filterFoodByCategory = (category) => {
+    if (category == "All") {
+      setShowFoodByCategory(itemsInMyCity);
+    } else {
+      const filteredItems = itemsInMyCity.filter(
+        (item) => item.category == category
+      );
+      setShowFoodByCategory(filteredItems);
+    }
+  };
+
+  useEffect(() => {
+    setShowFoodByCategory(itemsInMyCity);
+  }, [itemsInMyCity]);
 
   const updateButton = (ref, setLeftButton, setRightButton) => {
     const element = ref.current;
@@ -124,7 +140,11 @@ const UserDashboard = () => {
             >
               {categories.map((cate, index) => (
                 <div role="listitem" key={index}>
-                  <CategoryCard name={cate.category} image={cate.image} />
+                  <CategoryCard
+                    name={cate.category}
+                    image={cate.image}
+                    clickInCategory={() => filterFoodByCategory(cate.category)}
+                  />
                 </div>
               ))}
             </div>
@@ -218,12 +238,12 @@ const UserDashboard = () => {
               🍜 Suggested for You
             </h2>
             <span className="text-sm text-gray-500 font-medium pr-4">
-              {itemsInMyCity.length} items
+              {showFoodByCategory.length} items
             </span>
           </div>
 
           <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 px-4 pb-5 shadow-2xl">
-            {itemsInMyCity.map((item, index) => (
+            {showFoodByCategory.map((item, index) => (
               <FoodCart data={item} key={index} />
             ))}
           </div>

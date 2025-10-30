@@ -1,12 +1,13 @@
 import React from "react";
 
-const CategoryCard = ({ name, image }) => {
+const CategoryCard = ({ name, image, clickInCategory }) => {
   return (
     <article
       className="w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] md:w-[180px] md:h-[180px] rounded-2xl overflow-hidden bg-white shadow-2xl hover:shadow-2xl hover:border-orange-300 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 cursor-pointer relative group shrink-0 focus-within:ring-2 focus-within:ring-orange-400 focus-within:ring-offset-2"
       tabIndex="0"
       role="button"
       aria-label={`View ${name} category`}
+      onClick={clickInCategory}
     >
       {/* Image with zoom effect */}
       <div className="w-full h-full overflow-hidden">
