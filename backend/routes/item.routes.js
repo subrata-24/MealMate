@@ -14,7 +14,7 @@ import {
 const itemRouter = express.Router();
 
 itemRouter.post("/add-item", isAuth, upload.single("image"), createItem);
-itemRouter.post("/search-items", isAuth, searchItem);
+itemRouter.get("/search-items", isAuth, searchItem);
 itemRouter.post("/edit-item/:itemID", isAuth, upload.single("image"), editItem);
 itemRouter.get("/get-item-by-id/:itemID", isAuth, getItemById);
 itemRouter.delete("/delete/:itemID", isAuth, deleteItem);

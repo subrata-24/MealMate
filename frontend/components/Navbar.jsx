@@ -9,6 +9,7 @@ import { setUserData } from "../src/redux/userSlice";
 import { FaPlus } from "react-icons/fa";
 import { IoReceiptSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Navbar = () => {
   const { userData, currentCity, cartItems } = useSelector(
@@ -16,6 +17,7 @@ const Navbar = () => {
   );
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [name, setName] = useState("");
   const dispatch = useDispatch();
   const { shopData } = useSelector((state) => state.owner);
   const navigate = useNavigate();
@@ -30,6 +32,25 @@ const Navbar = () => {
       console.log(error);
     }
   };
+
+  const handleSearchItems = async () => {
+    try {
+      const result = await axios.get(
+        `${serverUrl}/api/item/search-items/?name=${name}&city=${currentCity}`,
+        { withCredentials: true }
+      );
+
+      console.log(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (name) {
+      handleSearchItems();
+    }
+  }, [name]);
 
   return (
     <div className="fixed top-0 left-0 w-full h-20 flex items-center justify-between md:justify-center px-4 md:px-8 z-[9999] bg-gradient-to-r from-orange-50 via-white to-green-100 shadow-md">
@@ -50,7 +71,9 @@ const Navbar = () => {
             <input
               type="text"
               placeholder="Search for food..."
-              className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-orange-300 rounded-md"
+              className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-orange-300 rounded-md px-2"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
             />
           </div>
         </div>
@@ -76,6 +99,8 @@ const Navbar = () => {
               type="text"
               placeholder="Search for food..."
               className="w-full bg-transparent outline-none text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-orange-300 rounded-md"
+              onChange={(e) => setName(e.target.value)}
+              value={name}
             />
           </div>
         </div>

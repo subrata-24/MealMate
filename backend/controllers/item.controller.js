@@ -156,7 +156,7 @@ export const searchItem = async (req, res) => {
   try {
     const { name, city } = req.query;
 
-    if (!name || city) {
+    if (!name || !city) {
       return null;
     }
 
@@ -178,8 +178,8 @@ export const searchItem = async (req, res) => {
     const items = await Item.find({
       shop: { $in: shopIds },
       $or: [
-        { name: { $regex: name, options: "i" } },
-        { category: { $regex: name, options: "i" } },
+        { name: { $regex: name, $options: "i" } },
+        { category: { $regex: name, $options: "i" } },
       ],
     }).populate("shop", "name image");
 

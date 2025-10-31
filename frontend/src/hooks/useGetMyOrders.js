@@ -15,7 +15,7 @@ const useGetMyOrders = () => {
           withCredentials: true,
         });
         dispatch(setMyOrders(result.data));
-        console.log(result.data);
+        // console.log(result.data);
       } catch (error) {
         console.error("Failed to fetch orders:", error);
       }
