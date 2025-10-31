@@ -5,14 +5,14 @@ import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { serverUrl } from "../src/App";
-import { setUserData } from "../src/redux/userSlice";
+import { setSearchItems, setUserData } from "../src/redux/userSlice";
 import { FaPlus } from "react-icons/fa";
 import { IoReceiptSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const Navbar = () => {
-  const { userData, currentCity, cartItems } = useSelector(
+  const { userData, currentCity, cartItems, searchItems } = useSelector(
     (state) => state.user
   );
   const [showInfo, setShowInfo] = useState(false);
@@ -41,6 +41,7 @@ const Navbar = () => {
       );
 
       console.log(result.data);
+      dispatch(setSearchItems(result.data));
     } catch (error) {
       console.log(error);
     }
@@ -49,6 +50,8 @@ const Navbar = () => {
   useEffect(() => {
     if (name) {
       handleSearchItems();
+    } else {
+      dispatch(setSearchItems(null));
     }
   }, [name]);
 
