@@ -5,8 +5,10 @@ import CategoryCard from "./CategoryCard";
 import { FaArrowAltCircleLeft, FaArrowAltCircleRight } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import FoodCart from "./FoodCart";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
+  const navigate = useNavigate();
   const cateScrollRef = useRef();
   const shopScrollRef = useRef();
   const { currentCity, shopInMyCity, itemsInMyCity } = useSelector(
@@ -204,7 +206,11 @@ const UserDashboard = () => {
             >
               {shopInMyCity.map((shop, index) => (
                 <div role="listitem" key={index}>
-                  <CategoryCard name={shop.name} image={shop.image} />
+                  <CategoryCard
+                    name={shop.name}
+                    image={shop.image}
+                    clickInCategory={() => navigate(`/shop/${shop._id}`)}
+                  />
                 </div>
               ))}
             </div>
