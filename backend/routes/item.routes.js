@@ -7,6 +7,7 @@ import {
   editItem,
   getItemByCity,
   getItemById,
+  getItemByShop,
 } from "../controllers/item.controller.js";
 
 const itemRouter = express.Router();
@@ -16,5 +17,6 @@ itemRouter.post("/edit-item/:itemID", isAuth, upload.single("image"), editItem);
 itemRouter.get("/get-item-by-id/:itemID", isAuth, getItemById);
 itemRouter.delete("/delete/:itemID", isAuth, deleteItem);
 itemRouter.get("/get-item-by-city/:city", isAuth, getItemByCity);
+itemRouter.get("/get-item-by-shop/:shopId", isAuth, getItemByShop);
 
 export default itemRouter;
