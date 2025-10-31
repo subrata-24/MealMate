@@ -151,3 +151,42 @@ export const getItemByShop = async (req, res) => {
       .json({ message: `Unable to get item by shop: ${error}` });
   }
 };
+
+export const searchItem = async (req, res) => {
+  try {
+    const { name, city } = req.query;
+
+    if (!name || city) {
+      return null;
+    }
+
+    const shops = await Shop.find({
+      city: { $regex: new RegExp(`^${city}$`, "i") },
+    }).populate("items");
+
+    if (!shops) {
+      return res.status(400).json({ message: "Shop not found" });
+    }
+
+    const shopIds = shops.map((shop) => shop._id);
+
+    // $or: MongoDB operator that matches if ANY condition is true
+    // $regex: name: Partial match (if name="piz", matches "pizza", "pizzeria")
+    // options: "i": Case-insensitive search
+    // Searches in BOTH name and category fields
+
+    const items = await Item.find({
+      shop: { $in: shopIds },
+      $or: [
+        { name: { $regex: name, options: "i" } },
+        { category: { $regex: name, options: "i" } },
+      ],
+    }).populate("shop", "name image");
+
+    return res.status(200).json(items);
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `Unable to get item by name: ${error}` });
+  }
+};
