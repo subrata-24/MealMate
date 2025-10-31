@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const Navbar = () => {
-  const { userData, currentCity, cartItems, searchItems } = useSelector(
+  const { userData, currentCity, cartItems } = useSelector(
     (state) => state.user
   );
   const [showInfo, setShowInfo] = useState(false);

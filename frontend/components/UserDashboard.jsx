@@ -11,7 +11,7 @@ const UserDashboard = () => {
   const navigate = useNavigate();
   const cateScrollRef = useRef();
   const shopScrollRef = useRef();
-  const { currentCity, shopInMyCity, itemsInMyCity } = useSelector(
+  const { currentCity, shopInMyCity, itemsInMyCity, searchItems } = useSelector(
     (state) => state.user
   );
 
@@ -104,6 +104,21 @@ const UserDashboard = () => {
     <div className="w-screen min-h-screen flex flex-col gap-8 items-center bg-gradient-to-br from-orange-50 via-white to-green-50 overflow-y-auto pb-12">
       {/* Navbar */}
       <Navbar />
+
+      {/* Show search items */}
+      {searchItems && searchItems.length > 0 && (
+        <div className="w-full max-w-6xl flex flex-col gap-5 items-start rounded-2xl bg-white p-6 sm:p-8 shadow-2xl hover:shadow-2xl border border-orange-100 mt-4 transition-shadow duration-300">
+          <h1 className="text-gray-900 text-2xl sm:text-3xl font-bold tracking-tight border-b-2 border-gray-200 pb-3 w-full">
+            Search Results
+          </h1>
+
+          <div className="w-full h-auto flex flex-wrap gap-6 justify-center">
+            {searchItems.map((item, index) => (
+              <FoodCart data={item} key={index} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Page Body - Maximum width container */}
       <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col gap-9">
