@@ -8,31 +8,74 @@ It includes live order tracking, geolocation, delivery broadcast system, and an 
 
 ## 🚀 Features
 
-### ✅ User Features
-- Browse shops & food items
-- Search by food or shop
-- Add to cart
-- Place orders (Cash on Delivery or Card)
-- Live order status updates
-- Live delivery boy location tracking (Leaflet map)
-- Order history
-- Rate and review food
+### 👤 User Features
+-  Browse shops & food items by category
+-  Advanced search by food name or shop
+-  Add to cart with quantity management
+-  Place orders with multiple payment options:
+  -  Cash on Delivery (COD)
+  -  Online payment via **SSLCommerz** (card, mobile banking, internet banking)
+-  Live order status updates via real-time notifications
+-  Live delivery boy location tracking on interactive **Leaflet map**
+-  OTP verification for secure order delivery handover
+-  Complete order history with details
+-  Rate and review food items
+-  User profile management
 
 ### 🏪 Shop Owner Features
-- Create shop
-- Add, edit, delete items
-- Manage orders
-- Update order status (pending ➝ preparing ➝ out_for_delivery ➝ delivered)
-- Broadcast delivery request to nearby delivery boys (within 5km)
+-  Create and manage shop profile
+-  Add, edit, delete menu items with images & pricing
+-  View and manage incoming orders
+-  Update order status in real-time:
+  - `pending` ➝ `preparing` ➝ `out_for_delivery` ➝ `delivered`
+-  Broadcast delivery request to nearby delivery boys (within 5km radius using geospatial queries)
+-  Track shop revenue and order statistics
+-  Manage shop categories and item availability
 
 ### 🛵 Delivery Boy Features
-- Receive delivery broadcasts within 5km
-- Accept order (locking mechanism – one order at a time)
-- See destination on map
-- Live location sharing to user
-- Update delivery status
+-  Receive delivery broadcast notifications within 5km proximity
+-  Accept order with exclusive locking mechanism (one order at a time)
+-  View customer delivery location on interactive map
+-  Real-time location sharing to customer (live GPS tracking)
+-  Update delivery status with progress tracking
+-  OTP-based secure delivery confirmation
+-  Delivery history and earnings tracker
+-  Availability toggle (online/offline status)
+
+### 🔐 Authentication & Security
+- JWT-based authentication with 7-day token expiry
+- OTP verification for:
+  - User signup
+  - Delivery handover confirmation
+- Role-based access control (User, Shop Owner, Delivery Boy)
+- Secure password hashing
+
+### 🌐 Real-time Features (Socket.IO)
+- Live order status push notifications
+- Delivery boy assignment broadcasts
+- Real-time location streaming (delivery boy ↔ customer)
+- Instant order acceptance notifications
+- Live order updates to shop owners
+
+### 📍 Geospatial Features (MongoDB 2dsphere)
+- 5km proximity-based delivery boy matching
+- Nearby shop discovery
+- Shop radius filtering for service areas
+- Real-time GPS coordinate tracking
+- Distance calculation for delivery assignment
+
+### 💳 Payment Integration (SSLCommerz)
+- Secure online payment processing
+- Multiple payment methods support:
+  - Credit/Debit cards (Visa, Mastercard, Amex)
+  - Mobile banking (bKash, Nagad, Rocket)
+  - Internet banking
+- Automatic order state transitions on payment success/failure
+- Payment validation and callback handling
+- Transaction tracking and history
 
 ---
+
 
 ## 🛠️ Tech Stack
 
