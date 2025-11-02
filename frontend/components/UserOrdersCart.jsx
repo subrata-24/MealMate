@@ -5,6 +5,7 @@ import { serverUrl } from "../src/App";
 
 const UserOrdersCart = ({ data }) => {
   const navigate = useNavigate();
+
   const formateDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString("en-GB", {
@@ -15,16 +16,15 @@ const UserOrdersCart = ({ data }) => {
       minute: "2-digit",
     });
   };
-  console.log(data);
 
   const getStatusColor = (status) => {
     const colors = {
-      pending: "bg-yellow-100 text-yellow-700 border-yellow-300",
-      preparing: "bg-orange-100 text-orange-700 border-orange-300",
-      "Out of Delivered": "bg-blue-100 text-blue-700 border-blue-300",
-      Delivered: "bg-green-100 text-green-700 border-green-300",
+      pending: "bg-orange-100 text-orange-800 border-orange-200",
+      preparing: "bg-orange-100 text-orange-800 border-orange-200",
+      "Out of Delivered": "bg-blue-100 text-blue-800 border-blue-200",
+      Delivered: "bg-green-100 text-green-800 border-green-200",
     };
-    return colors[status] || "bg-gray-100 text-gray-700 border-gray-300";
+    return colors[status] || "bg-gray-100 text-gray-800 border-gray-200";
   };
 
   const handlePayment = async (shopOrd) => {
@@ -52,90 +52,147 @@ const UserOrdersCart = ({ data }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg border border-orange-100 transition-all duration-300 overflow-hidden">
-      {/* Header */}
-      <div className="flex justify-between items-start p-4 sm:p-5 border-b border-gray-100 bg-gradient-to-r from-orange-50 via-white to-orange-50">
-        <div>
-          <p className="text-lg font-semibold text-gray-800">
+    <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-100 transition-all duration-300 ease-out overflow-hidden">
+      <div className="flex justify-between items-start p-6 sm:p-8 border-b border-gray-100 bg-gradient-to-br from-orange-50 via-white to-green-50">
+        <div className="space-y-1">
+          <p className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
             Order #{data._id.slice(-6)}
           </p>
-          <p className="text-sm text-gray-500">{formateDate(data.createdAt)}</p>
-        </div>
-        <div className="text-right">
-          <p className="uppercase text-xs sm:text-sm text-gray-600 font-medium">
-            {data.paymentMethod}
+          <p className="text-sm text-gray-500 font-medium">
+            {formateDate(data.createdAt)}
           </p>
-          <span
-            className={`mt-1 inline-block px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(
-              data.shopOrder?.[0]?.status
-            )}`}
-          >
-            {data.shopOrder?.[0]?.status}
-          </span>
+        </div>
+        <div className="text-right space-y-2">
+          <div className="inline-flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-gray-200 shadow-sm">
+            <span className="text-sm text-gray-700">via</span>
+            <p className="uppercase text-sm text-gray-900 font-bold tracking-wide">
+              {data.paymentMethod}
+            </p>
+          </div>
+          <div className="flex justify-end">
+            <span
+              className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold border shadow-sm ${getStatusColor(
+                data.shopOrder?.[0]?.status
+              )}`}
+            >
+              {data.shopOrder?.[0]?.status}
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Shops */}
-      <div className="p-4 sm:p-5 space-y-5">
+      <div className="p-6 sm:p-8 space-y-6">
         {data.shopOrder.map((shopOrd, index) => (
-          <div className="flex justify-between items-center">
-            <div
-              key={index}
-              className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl border border-orange-100 p-4 shadow-sm hover:shadow-md transition"
-            >
-              <p className="font-semibold text-gray-800 mb-2 flex items-center gap-1">
-                <span className="text-orange-500 text-lg">🍴</span>
-                {shopOrd.shop?.name || "Shop"}
-              </p>
+          <div
+            key={index}
+            className="bg-gradient-to-br from-orange-50 via-white to-green-50 rounded-2xl border border-orange-100 p-6 shadow-2xl hover:shadow-lg transition-all duration-300"
+          >
+            {/* Shop Header with Payment Status */}
+            <div className="flex justify-between items-center mb-6 pb-4 border-b border-orange-100">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-red-500 shadow-md text-white text-xl">
+                  🍴
+                </div>
+                <div>
+                  <p className="text-lg font-bold text-gray-900">
+                    {shopOrd.shop?.name || "Shop"}
+                  </p>
+                  <p className="text-xs text-gray-500 font-medium">
+                    {shopOrd.shopOrderItems.length} items
+                  </p>
+                </div>
+              </div>
 
-              {/* Items */}
-              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-                {shopOrd.shopOrderItems.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex-shrink-0 w-32 sm:w-36 bg-white rounded-xl border border-gray-100 shadow-2xl hover:shadow-lg transition hover:-translate-y-1"
-                  >
+              {/* Payment Status Badge */}
+              {data.paymentMethod === "online" && (
+                <div>
+                  {shopOrd.payment === false ? (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm font-semibold shadow-sm">
+                      <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                      Payment Pending
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 border border-green-200 rounded-lg text-sm font-bold shadow-sm">
+                      <svg
+                        className="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      Payment Confirmed
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Items Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+              {shopOrd.shopOrderItems.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="group bg-white rounded-xl border border-orange-100 shadow-2xl hover:shadow-lg transform hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 overflow-hidden cursor-pointer"
+                >
+                  <div className="relative overflow-hidden h-32 bg-gray-100">
                     <img
                       src={item.item.image}
                       alt={item.item.name}
-                      className="w-full h-24 object-cover rounded-t-xl"
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="p-2">
-                      <p className="text-sm font-semibold text-gray-800 truncate">
-                        {item.name}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        Qty {item.quantity} × ৳{item.price}
+                    <div className="absolute top-2 right-2 bg-white/95 backdrop-blur-sm px-2 py-1 rounded-lg shadow-md">
+                      <p className="text-xs font-bold text-gray-900">
+                        ×{item.quantity}
                       </p>
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div className="p-3 space-y-1">
+                    <p className="text-sm font-bold text-gray-900 truncate">
+                      {item.name}
+                    </p>
+                    <p className="text-xs text-gray-500 font-medium">
+                      ৳{item.price} each
+                    </p>
+                    <p className="text-sm font-bold text-orange-600">
+                      ৳{item.price * item.quantity}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
 
-              <div className="flex justify-between items-center border-t border-orange-100 pt-3 mt-3">
-                <p className="font-semibold text-gray-700 text-sm sm:text-base">
-                  Subtotal: ৳{shopOrd.subTotal}
-                </p>
+            {/* Shop Order Footer */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t border-orange-100">
+              <div className="flex items-center gap-4 w-full sm:w-auto">
+                <div className="text-left">
+                  <p className="text-xs text-gray-500 font-medium mb-1">
+                    Subtotal
+                  </p>
+                  <p className="text-2xl font-extrabold text-gray-900 tracking-tight">
+                    ৳{shopOrd.subTotal}
+                  </p>
+                </div>
                 <span
-                  className={`text-xs sm:text-sm font-semibold capitalize px-3 py-1 rounded-full border ${getStatusColor(
+                  className={`inline-flex items-center text-sm font-bold capitalize px-4 py-2 rounded-full border shadow-sm ${getStatusColor(
                     shopOrd.status
                   )}`}
                 >
                   {shopOrd.status}
                 </span>
               </div>
-            </div>
-            <div className=" text-right">
-              {shopOrd.payment === false ? (
+
+              {/* Payment Action Button */}
+              {data.paymentMethod === "online" && shopOrd.payment === false && (
                 <button
-                  className="p-2 mt-2 bg-gradient-to-l from-orange-500 to-red-500 rounded-lg font-bold text-white hover:bg-gradient-to-l hover:from-orange-600 hover:to-red-600 cursor-pointer hover:scale-105"
+                  className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
                   onClick={() => handlePayment(shopOrd)}
                 >
-                  Pay First
-                </button>
-              ) : (
-                <button className="p-2 mt-2 bg-gradient-to-l from-orange-500 to-red-500 rounded-lg font-bold text-white hover:bg-gradient-to-l hover:from-orange-600 hover:to-red-600 cursor-pointer hover:scale-105">
-                  Paid
+                  💳 Pay Now - ৳{shopOrd.subTotal}
                 </button>
               )}
             </div>
@@ -144,15 +201,18 @@ const UserOrdersCart = ({ data }) => {
       </div>
 
       {/* Footer */}
-      <div className="flex justify-between items-center border-t border-gray-100 p-4 sm:p-5 bg-gray-50/60">
-        <p className="font-bold text-base sm:text-lg text-gray-800">
-          Total: ৳{data.totalAmount}
-        </p>
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-gray-200 p-6 sm:p-8 bg-gradient-to-br from-gray-50 via-orange-50/30 to-gray-50">
+        <div>
+          <p className="text-sm text-gray-500 font-medium mb-1">Grand Total</p>
+          <p className="text-3xl font-extrabold text-gray-900 tracking-tight">
+            ৳{data.totalAmount}
+          </p>
+        </div>
         <button
-          className="bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold px-5 sm:px-6 py-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition cursor-pointer"
+          className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
           onClick={() => navigate(`/track-order/${data._id}`)}
         >
-          Track Order
+          🚚 Track Order
         </button>
       </div>
     </div>
