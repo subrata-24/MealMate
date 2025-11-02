@@ -3,6 +3,9 @@ import Order from "../models/order.model.js";
 import Shop from "../models/shop.model.js";
 import User from "../models/user.model.js";
 import { sendDeliveryOtpToUser } from "../utils/mail.js";
+import SSLCommerzPayment from "sslcommerz-lts";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const placeOrder = async (req, res) => {
   try {
@@ -424,6 +427,92 @@ export const verifyDeliveryOTP = async (req, res) => {
     });
   }
 };
+
+const store_id = process.env.STORE_ID;
+const store_passwd = process.env.STORE_PASSWORD;
+const is_live = false; //true for live, false for sandbox
+export const onlinePayment = async (req, res) => {
+  try {
+    const { shopOrd, userId, deliveryAddress, orderId } = req.body;
+    const user = await User.findById(userId);
+    const tranId = shopOrd._id;
+    const shopOrderId = shopOrd._id;
+    const data = {
+      total_amount: shopOrd.subTotal,
+      currency: "BDT",
+      tran_id: tranId, // use unique tran_id for each api call
+      success_url: `http://localhost:8000/api/order/payment/success/${shopOrderId}/${orderId}/${tranId}`,
+      fail_url: "http://localhost:8000/api/order/payment/failed",
+      cancel_url: "http://localhost:3030/cancel",
+      ipn_url: "http://localhost:3030/ipn",
+      shipping_method: "Food Delivery",
+      product_name: "food",
+      product_category: "Food",
+      product_profile: "general",
+      cus_name: user.fullname,
+      cus_email: user.email,
+      cus_add1: deliveryAddress.text,
+      cus_add2: "Dhaka",
+      cus_city: "Dhaka",
+      cus_state: "Dhaka",
+      cus_postcode: "1000",
+      cus_country: "Bangladesh",
+      cus_phone: user.mobileNo,
+      cus_fax: user.mobileNo,
+      ship_name: user.fullname,
+      ship_add1: deliveryAddress.text,
+      ship_add2: "Dhaka",
+      ship_city: "Dhaka",
+      ship_state: "Dhaka",
+      ship_postcode: 1000,
+      ship_country: "Bangladesh",
+    };
+    const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
+    sslcz.init(data).then((apiResponse) => {
+      // Redirect the user to payment gateway
+      let GatewayPageURL = apiResponse.GatewayPageURL;
+      res.json({ success: true, url: GatewayPageURL });
+      console.log("Redirecting to: ", GatewayPageURL);
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Find error to payment in online: ${error.message}`,
+    });
+  }
+};
+
+export const successFullPayment = async (req, res) => {
+  try {
+    const { shopOrderId, orderId, tranId } = req.params;
+    const order = await Order.findById(orderId);
+    const shopOrder = order.shopOrder.find(
+      (so) => so._id.toString() === shopOrderId
+    );
+    shopOrder.payment = true;
+    shopOrder.tranId = tranId;
+    await order.save();
+    res.redirect("http://localhost:5173/my-orders");
+  } catch (error) {
+    return res.status(500).json({
+      message: `Find error to payment in online: ${error.message}`,
+    });
+  }
+};
+
+export const failedPayment = async (req, res) => {
+  try {
+    res.redirect("http://localhost:5173/my-orders");
+  } catch (error) {
+    return res.status(500).json({
+      message: `Find error to payment in online: ${error.message}`,
+    });
+  }
+};
+
+// export const onlinePayment = async (req, res) => {
+//   try {
+//   } catch (error) {}
+// };
 
 /*After populate getCurrentOrder
 {

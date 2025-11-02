@@ -51,6 +51,14 @@ const shopOrderSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    tranId: {
+      type: String,
+      default: null,
+    },
+    payment: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -1,5 +1,7 @@
+import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { serverUrl } from "../src/App";
 
 const UserOrdersCart = ({ data }) => {
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ const UserOrdersCart = ({ data }) => {
       minute: "2-digit",
     });
   };
+  console.log(data);
 
   const getStatusColor = (status) => {
     const colors = {
@@ -22,6 +25,30 @@ const UserOrdersCart = ({ data }) => {
       Delivered: "bg-green-100 text-green-700 border-green-300",
     };
     return colors[status] || "bg-gray-100 text-gray-700 border-gray-300";
+  };
+
+  const handlePayment = async (shopOrd) => {
+    try {
+      const userId = data.user;
+      const orderId = data._id;
+      const deliveryAddress = data.deliveryAddress;
+      const { data: result } = await axios.post(
+        `${serverUrl}/api/order/online-payment`,
+        { shopOrd, userId, deliveryAddress, orderId },
+        { withCredentials: true }
+      );
+
+      if (result.success) {
+        window.location.replace(result.url);
+      } else {
+        alert("Payment initialization failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert(
+        error.response?.data?.message || "Payment failed. Please try again."
+      );
+    }
   };
 
   return (
@@ -51,50 +78,66 @@ const UserOrdersCart = ({ data }) => {
       {/* Shops */}
       <div className="p-4 sm:p-5 space-y-5">
         {data.shopOrder.map((shopOrd, index) => (
-          <div
-            key={index}
-            className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl border border-orange-100 p-4 shadow-sm hover:shadow-md transition"
-          >
-            <p className="font-semibold text-gray-800 mb-2 flex items-center gap-1">
-              <span className="text-orange-500 text-lg">🍴</span>
-              {shopOrd.shop?.name || "Shop"}
-            </p>
-
-            {/* Items */}
-            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
-              {shopOrd.shopOrderItems.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="flex-shrink-0 w-32 sm:w-36 bg-white rounded-xl border border-gray-100 shadow-2xl hover:shadow-lg transition hover:-translate-y-1"
-                >
-                  <img
-                    src={item.item.image}
-                    alt={item.item.name}
-                    className="w-full h-24 object-cover rounded-t-xl"
-                  />
-                  <div className="p-2">
-                    <p className="text-sm font-semibold text-gray-800 truncate">
-                      {item.name}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Qty {item.quantity} × ৳{item.price}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex justify-between items-center border-t border-orange-100 pt-3 mt-3">
-              <p className="font-semibold text-gray-700 text-sm sm:text-base">
-                Subtotal: ৳{shopOrd.subTotal}
+          <div className="flex justify-between items-center">
+            <div
+              key={index}
+              className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl border border-orange-100 p-4 shadow-sm hover:shadow-md transition"
+            >
+              <p className="font-semibold text-gray-800 mb-2 flex items-center gap-1">
+                <span className="text-orange-500 text-lg">🍴</span>
+                {shopOrd.shop?.name || "Shop"}
               </p>
-              <span
-                className={`text-xs sm:text-sm font-semibold capitalize px-3 py-1 rounded-full border ${getStatusColor(
-                  shopOrd.status
-                )}`}
-              >
-                {shopOrd.status}
-              </span>
+
+              {/* Items */}
+              <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                {shopOrd.shopOrderItems.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="flex-shrink-0 w-32 sm:w-36 bg-white rounded-xl border border-gray-100 shadow-2xl hover:shadow-lg transition hover:-translate-y-1"
+                  >
+                    <img
+                      src={item.item.image}
+                      alt={item.item.name}
+                      className="w-full h-24 object-cover rounded-t-xl"
+                    />
+                    <div className="p-2">
+                      <p className="text-sm font-semibold text-gray-800 truncate">
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Qty {item.quantity} × ৳{item.price}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-between items-center border-t border-orange-100 pt-3 mt-3">
+                <p className="font-semibold text-gray-700 text-sm sm:text-base">
+                  Subtotal: ৳{shopOrd.subTotal}
+                </p>
+                <span
+                  className={`text-xs sm:text-sm font-semibold capitalize px-3 py-1 rounded-full border ${getStatusColor(
+                    shopOrd.status
+                  )}`}
+                >
+                  {shopOrd.status}
+                </span>
+              </div>
+            </div>
+            <div className=" text-right">
+              {shopOrd.payment === false ? (
+                <button
+                  className="p-2 mt-2 bg-gradient-to-l from-orange-500 to-red-500 rounded-lg font-bold text-white hover:bg-gradient-to-l hover:from-orange-600 hover:to-red-600 cursor-pointer hover:scale-105"
+                  onClick={() => handlePayment(shopOrd)}
+                >
+                  Pay First
+                </button>
+              ) : (
+                <button className="p-2 mt-2 bg-gradient-to-l from-orange-500 to-red-500 rounded-lg font-bold text-white hover:bg-gradient-to-l hover:from-orange-600 hover:to-red-600 cursor-pointer hover:scale-105">
+                  Paid
+                </button>
+              )}
             </div>
           </div>
         ))}
