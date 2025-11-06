@@ -41,10 +41,15 @@ const App = () => {
     dispatch(setSocket(socketInstance));
     socketInstance.on("connect", () => {
       if (userData) {
-        socketInstance.emit("identity", { userid: userData._id });
+        socketInstance.emit("identity", { userId: userData._id });
       }
     });
-  });
+
+    // Disconnect the socket when the component unmounts
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, [userData?._id]);
 
   return (
     <div>
