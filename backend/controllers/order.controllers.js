@@ -77,6 +77,28 @@ export const placeOrder = async (req, res) => {
     );
 
     await savedOrder.populate("shopOrder.shop", "name");
+    await savedOrder.populate("shopOrder.owner", "fullname socketId");
+    await savedOrder.populate("user");
+
+    //Get the socket server.It was set in "app.set("io", io);" at index.js
+    const io = req.app.get("io");
+
+    //Send each shoporder to its owner by his socket id
+    if (io) {
+      savedOrder.shopOrder.forEach((shopOrder) => {
+        const ownerSocketId = shopOrder.owner.socketId;
+        if (ownerSocketId) {
+          io.to(ownerSocketId).emit("newOrder", {
+            _id: savedOrder._id,
+            user: savedOrder.user,
+            paymentMethod: savedOrder.paymentMethod,
+            deliveryAddress: savedOrder.deliveryAddress,
+            createdAt: savedOrder.createdAt,
+            shopOrder,
+          });
+        }
+      });
+    }
 
     return res.status(200).json(savedOrder);
   } catch (error) {
