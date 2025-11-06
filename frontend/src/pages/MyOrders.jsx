@@ -1,13 +1,29 @@
 import React from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserOrdersCart from "../../components/UserOrdersCart";
 import OwnerOrdersCart from "../../components/OwnerOrdersCart";
+import { useEffect } from "react";
+import { setMyOrders } from "../redux/userSlice";
 
 const MyOrders = () => {
-  const { myOrders, userData } = useSelector((state) => state.user);
+  const { myOrders, userData, socket } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    socket?.on("newOrder", (data) => {
+      if (data.shopOrder.owner._id == userData._id) {
+        dispatch(setMyOrders([data, ...myOrders]));
+      }
+    });
+
+    return () => {
+      // This is a cleanup function removes the "newOrder" event listener when the component unmounts(user logout,page change etc) or before the effect re-runs, which prevents memory leaks and duplicate listeners from building up.
+      socket?.off("newOrder");
+    };
+  }, [socket]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 via-white to-orange-100 flex justify-center py-8 px-3 sm:px-6">
