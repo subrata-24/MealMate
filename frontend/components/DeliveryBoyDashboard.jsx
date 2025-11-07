@@ -6,7 +6,7 @@ import { serverUrl } from "../src/App";
 import DeliveryBoyTracking from "./DeliveryBoyTracking";
 
 const DeliveryBoyDashboard = () => {
-  const { userData } = useSelector((state) => state.user);
+  const { userData, socket } = useSelector((state) => state.user);
   const [availableAssignment, setAvailableAssignment] = useState([]);
   const [currentOrder, setCurrentOrder] = useState();
   const [otp, setOtp] = useState("");
@@ -88,6 +88,21 @@ const DeliveryBoyDashboard = () => {
       console.log(error);
     }
   };
+
+  //Listens for new delivery assignments from the backend via Socket.IO.Verifies the order status is "Out of Delivery" before accepting.Adds the new assignment to the existing list without replacing previous assignments
+  useEffect(() => {
+    socket.on("newAssignment", (data) => {
+      if (data.sentTo == userData._id && data.status == "Out of Delivery") {
+        console.log(data.sentTo);
+        setAvailableAssignment((prev) => [data, ...prev]);
+        console.log(availableAssignment);
+      }
+    });
+
+    return () => {
+      socket?.off("newAssignment");
+    };
+  }, [socket]);
 
   useEffect(() => {
     getAssignment();

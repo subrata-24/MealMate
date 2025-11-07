@@ -218,6 +218,8 @@ export const updateStatus = async (req, res) => {
           const deliveryBoySocketId = boy.socketId;
           if (deliveryBoySocketId) {
             io.to(deliveryBoySocketId).emit("newAssignment", {
+              sentTo: boy._id,
+              status,
               assignmentID: deliveryAssignment._id,
               orderID: deliveryAssignment.order._id,
               shopName: deliveryAssignment.shop.name,
