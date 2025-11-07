@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import UserOrdersCart from "../../components/UserOrdersCart";
 import OwnerOrdersCart from "../../components/OwnerOrdersCart";
 import { useEffect } from "react";
-import { setMyOrders } from "../redux/userSlice";
+import { setMyOrders, updateRealTimeOrderStatus } from "../redux/userSlice";
 
 const MyOrders = () => {
   const { myOrders, userData, socket } = useSelector((state) => state.user);
@@ -13,15 +13,25 @@ const MyOrders = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    //For upadate order at owner page at real time
     socket?.on("newOrder", (data) => {
       if (data.shopOrder.owner._id == userData._id) {
         dispatch(setMyOrders([data, ...myOrders]));
       }
     });
 
+    //For update status of order sent by owner at user page at real time
+    socket?.on("update-status", ({ orderID, shopID, status, userId }) => {
+      if (userId == userData._id) {
+        console.log(status);
+        dispatch(updateRealTimeOrderStatus({ orderID, shopID, status }));
+      }
+    });
+
     return () => {
       // This is a cleanup function removes the "newOrder" event listener when the component unmounts(user logout,page change etc) or before the effect re-runs, which prevents memory leaks and duplicate listeners from building up.
       socket?.off("newOrder");
+      socket?.off("update-status");
     };
   }, [socket]);
 

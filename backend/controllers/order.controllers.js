@@ -5,7 +5,6 @@ import User from "../models/user.model.js";
 import { sendDeliveryOtpToUser } from "../utils/mail.js";
 import SSLCommerzPayment from "sslcommerz-lts";
 import dotenv from "dotenv";
-import { app } from "../../frontend/firebase.js";
 dotenv.config();
 
 export const placeOrder = async (req, res) => {
@@ -220,14 +219,14 @@ export const updateStatus = async (req, res) => {
       "shopOrder.assignedDeliveryBoy",
       "fullname email mobileNo"
     );
-
+    await order.populate("user");
     const io = req.app.get("io");
-    const userSocketId = order.user.socketId;
+    const userSocketId = order?.user?.socketId;
 
     if (userSocketId) {
       io.to(userSocketId).emit("update-status", {
         orderID: order._id,
-        shopID,
+        shopID: updatedShopOrder.shop._id,
         status: updatedShopOrder.status,
         userId: order.user._id,
       });

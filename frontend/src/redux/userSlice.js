@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
   name: "user",
@@ -89,6 +89,8 @@ const userSlice = createSlice({
     updateRealTimeOrderStatus: (state, action) => {
       const { orderID, shopID, status } = action.payload;
       const order = state.myOrders.find((o) => o._id == orderID);
+      console.log("Order found:", current(order));
+      console.log("All orders:", current(state.myOrders));
       if (order) {
         const shopOrder = order.shopOrder.find((so) => so.shop._id == shopID);
         if (shopOrder) {
@@ -117,5 +119,6 @@ export const {
   upDateOrderStatus,
   setSearchItems,
   setSocket,
+  updateRealTimeOrderStatus,
 } = userSlice.actions;
 export default userSlice.reducer;
