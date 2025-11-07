@@ -86,6 +86,16 @@ const userSlice = createSlice({
         }
       }
     },
+    updateRealTimeOrderStatus: (state, action) => {
+      const { orderID, shopID, status } = action.payload;
+      const order = state.myOrders.find((o) => o._id == orderID);
+      if (order) {
+        const shopOrder = order.shopOrder.find((so) => so.shop._id == shopID);
+        if (shopOrder) {
+          shopOrder.status = status;
+        }
+      }
+    },
     setSearchItems: (state, action) => {
       state.searchItems = action.payload;
     },
