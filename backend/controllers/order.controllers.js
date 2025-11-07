@@ -208,6 +208,31 @@ export const updateStatus = async (req, res) => {
         latitude: b.location.coordinates?.[1],
         mobileNo: b.mobileNo,
       }));
+
+      //Broadcasts new delivery assignments to available delivery boys in real-time using Socket.IO
+      await deliveryAssignment.populate("order");
+      await deliveryAssignment.populate("shop");
+      const io = req.app.get("io");
+      if (io) {
+        availableBoys.forEach((boy) => {
+          const deliveryBoySocketId = boy.socketId;
+          if (deliveryBoySocketId) {
+            io.to(deliveryBoySocketId).emit("newAssignment", {
+              assignmentID: deliveryAssignment._id,
+              orderID: deliveryAssignment.order._id,
+              shopName: deliveryAssignment.shop.name,
+              deliveryAddress: deliveryAssignment.order.deliveryAddress,
+              items:
+                deliveryAssignment.order.shopOrder.find((so) =>
+                  so._id.equals(deliveryAssignment.shopOrderId)
+                ).shopOrderItems || [],
+              subTotal: deliveryAssignment.order.shopOrder.find((so) =>
+                so._id.equals(deliveryAssignment.shopOrderId)
+              )?.subTotal,
+            });
+          }
+        });
+      }
     }
 
     await order.save();
@@ -220,6 +245,8 @@ export const updateStatus = async (req, res) => {
       "fullname email mobileNo"
     );
     await order.populate("user");
+
+    //For update status of order at customer page in real time
     const io = req.app.get("io");
     const userSocketId = order?.user?.socketId;
 
