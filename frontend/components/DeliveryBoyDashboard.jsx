@@ -161,13 +161,15 @@ const DeliveryBoyDashboard = () => {
               <div className="text-center px-3 py-1 bg-white border border-gray-100 rounded-lg shadow-lg">
                 <div className="text-xs md:text-sm text-gray-500">Lat</div>
                 <div className="text-sm md:text-base font-medium text-gray-900">
-                  {userData.location.coordinates[1]}
+                  {deliveryBoyPosition?.lat ||
+                    userData?.location?.coordinates[1]}
                 </div>
               </div>
               <div className="text-center px-3 py-1 bg-white border border-gray-100 rounded-lg shadow-lg">
                 <div className="text-xs md:text-sm text-gray-500">Lng</div>
                 <div className="text-sm md:text-base font-medium text-gray-900">
-                  {userData.location.coordinates[0]}
+                  {deliveryBoyPosition?.lon ||
+                    userData?.location?.coordinates[0]}
                 </div>
               </div>
             </div>
