@@ -4,11 +4,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { serverUrl } from "../App";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import DeliveryBoyTracking from "../../components/DeliveryBoyTracking";
+import { useSelector } from "react-redux";
 
 const TrackOrderPage = () => {
   const { orderId } = useParams();
   const [currentOrder, setCurrentOrder] = useState();
   const navigate = useNavigate();
+  const { socket } = useSelector((state) => state.user);
+  const [liveLocation, setLiveLocation] = useState({});
   const handleTrackOrder = async () => {
     try {
       const result = await axios.get(
@@ -21,6 +24,26 @@ const TrackOrderPage = () => {
       console.log(error);
     }
   };
+
+  //Get the delivery boy live location from backend "socket.js"
+  useEffect(() => {
+    socket.on(
+      "updateDeliveryBoyLocation",
+      ({ latitude, longitude, deliveryBoyId }) => {
+        setLiveLocation((prev) => ({
+          ...prev,
+          [deliveryBoyId]: { lat: latitude, lon: longitude },
+        }));
+        /*
+        Its like map.How it stores:
+        liveLocation = {
+          "xyz789": { lat: 23.7515, lon: 90.3910 }, 
+          "abc123": { lat: 23.8103, lon: 90.4125 } 
+        }
+        */
+      }
+    );
+  }, [socket]);
 
   useEffect(() => {
     handleTrackOrder();
@@ -161,7 +184,10 @@ const TrackOrderPage = () => {
                       </div>
                       <DeliveryBoyTracking
                         data={{
-                          deliveryBoyLocation: {
+                          //If the current delivery boy location is store in liveLocation whiche shows in live by socket.io then send it otherwise send the location get from API call
+                          deliveryBoyLocation: liveLocation[
+                            orders.assignedDeliveryBoy._id
+                          ] || {
                             lat: orders.assignedDeliveryBoy.location
                               .coordinates[1],
                             lon: orders.assignedDeliveryBoy.location
