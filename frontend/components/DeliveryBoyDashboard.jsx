@@ -9,6 +9,7 @@ const DeliveryBoyDashboard = () => {
   const { userData, socket } = useSelector((state) => state.user);
   const [availableAssignment, setAvailableAssignment] = useState([]);
   const [currentOrder, setCurrentOrder] = useState();
+  const [deliveryBoyPosition, setDeliveryBoyPosition] = useState(null);
   const [otp, setOtp] = useState("");
 
   const [showOTP, setShowOTP] = useState(false);
@@ -21,6 +22,7 @@ const DeliveryBoyDashboard = () => {
       (watchId = navigator.geolocation.watchPosition((position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
+        setDeliveryBoyPosition({ lat: latitude, lon: longitude });
         //send the latitude and longitude to backend by "updateLocation" event
         socket.emit("updateLocation", {
           latitude,
@@ -265,7 +267,19 @@ const DeliveryBoyDashboard = () => {
               </p>
             </div>
 
-            <DeliveryBoyTracking data={currentOrder} />
+            <DeliveryBoyTracking
+              data={{
+                //Update the delivery boy location at real time
+                deliveryBoyLocation: deliveryBoyPosition || {
+                  lat: userData.location.coordinates[1],
+                  lon: userData.location.coordinates[0],
+                },
+                customerLocation: {
+                  lat: currentOrder.deliveryAddress.latitude,
+                  lon: currentOrder.deliveryAddress.longitude,
+                },
+              }}
+            />
 
             {!showOTP ? (
               <button
