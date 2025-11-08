@@ -13,6 +13,35 @@ const DeliveryBoyDashboard = () => {
 
   const [showOTP, setShowOTP] = useState(false);
 
+  useEffect(() => {
+    if (!socket || userData.role != "deliveryBoy") return;
+    let watchId;
+    if (navigator.geolocation) {
+      //"watchPosition"->observe the GPS location of user.When user is change it trigger the callback function.
+      (watchId = navigator.geolocation.watchPosition((position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        //send the latitude and longitude to backend by "updateLocation" event
+        socket.emit("updateLocation", {
+          latitude,
+          longitude,
+          userId: userData._id,
+        });
+      })),
+        (error) => {
+          console.log(error);
+        },
+        {
+          enableHighAccuracy: true,
+        };
+    }
+
+    //Stops location tracking when component unmounts using clearWatch(watchId)
+    return () => {
+      if (watchId) navigator.geolocation.clearWatch(watchId);
+    };
+  }, [socket, userData]);
+
   const handleSendOTP = async () => {
     try {
       const result = await axios.post(
