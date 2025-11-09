@@ -2,9 +2,11 @@ import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../src/App";
+import { useState } from "react";
 
 const UserOrdersCart = ({ data }) => {
   const navigate = useNavigate();
+  const [selectedRating, setSelectedRating] = useState({}); //itemId:rating
 
   const formateDate = (dateString) => {
     const date = new Date(dateString);
@@ -15,6 +17,27 @@ const UserOrdersCart = ({ data }) => {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const handleRating = async ({ itemId, rating }) => {
+    try {
+      const result = axios.post(
+        `${serverUrl}/api/item/change-rating`,
+        {
+          rating,
+          itemId,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      setSelectedRating((prev) => ({
+        ...prev,
+        [itemId]: rating,
+      }));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getStatusColor = (status) => {
