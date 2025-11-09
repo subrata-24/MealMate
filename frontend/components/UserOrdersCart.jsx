@@ -19,9 +19,10 @@ const UserOrdersCart = ({ data }) => {
     });
   };
 
+  //Rating change handler
   const handleRating = async ({ itemId, rating }) => {
     try {
-      const result = axios.post(
+      const result = await axios.post(
         `${serverUrl}/api/item/change-rating`,
         {
           rating,
@@ -184,6 +185,29 @@ const UserOrdersCart = ({ data }) => {
                     <p className="text-sm font-bold text-orange-600">
                       ৳{item.price * item.quantity}
                     </p>
+
+                    {/* Rating change logic */}
+                    {shopOrd.status == "Delivered" && (
+                      <div className="flex space-x-1 mt-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            className={`${
+                              selectedRating[item.item._id] >= star
+                                ? "text-yellow-500"
+                                : "text-gray-500 hover:text-yellow-400"
+                            } text-lg cursor-pointer`}
+                            onClick={() =>
+                              handleRating({
+                                itemId: item.item._id,
+                                rating: star,
+                              })
+                            }
+                          >
+                            ★
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
