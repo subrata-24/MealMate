@@ -572,6 +572,75 @@ export const failedPayment = async (req, res) => {
   }
 };
 
+// Get Today's Deliveries by Hour for Delivery Boy
+export const getTodayDeliveries = async (req, res) => {
+  try {
+    const deliveryBoyId = req.userID;
+    // Set start of today (00:00:00.000)
+    const startsOfDay = new Date();
+    startsOfDay.setHours(0, 0, 0, 0);
+
+    /*
+      Step 1: Find orders with at least one delivered shopOrder for this delivery boy
+      Note: MongoDB returns the ENTIRE order document if ANY shopOrder matches,even if the order contains shopOrders from other delivery boys.That's why we need to filter again in Step 2.
+    */
+    const orders = await Order.find({
+      "shopOrder.assignedDeliveryBoy": deliveryBoyId,
+      "shopOrder.status": "Delivered",
+      "shopOrder.deliveredAt": { $gte: startsOfDay },
+    }).lean(); // .lean() returns plain JavaScript objects (faster, no Mongoose overhead)
+
+    /*
+      Step 2: Filter shopOrders to get only this delivery boy's deliveries 
+      Since MongoDB returns entire order documents, we manually filter to extract
+    */
+    let todayDeliveries = [];
+    orders.forEach((order) => {
+      order.shopOrder.forEach((shopOrders) => {
+        if (
+          shopOrders.assignedDeliveryBoy?.toString() ===
+            deliveryBoyId.toString() &&
+          shopOrders.status === "Delivered" &&
+          shopOrders.deliveredAt &&
+          shopOrders.deliveredAt >= startsOfDay
+        ) {
+          todayDeliveries.push(shopOrders);
+        }
+      });
+    });
+
+    /*
+      Example: { 10: 2, 11: 4, 14: 1 }
+      Means: 2 deliveries at 10am, 4 at 11am, 1 at 2pm
+    */
+    let states = {};
+    todayDeliveries.forEach((shopOrder) => {
+      const hour = new Date(shopOrder.deliveredAt).getHours();
+      states[hour] = (states[hour] || 0) + 1;
+    });
+
+    /*
+      Step 4: Transform object into array of objects
+      Convert: { 10: 2, 11: 4 }
+      To: [{ hour: 10, count: 2 }, { hour: 11, count: 4 }]
+      Why? Arrays are easier to work with on the frontend (charts, graphs, etc.)
+    */
+    let formattedStates = Object.keys(states).map((hour) => ({
+      hour: parseInt(hour),
+      count: states[hour],
+    }));
+
+    // Sort by hour (chronological order)
+    formattedStates.sort((a, b) => a.hour - b.hour);
+
+    return res.status(200).json(formattedStates);
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error getting today's deliveries: ${error.message}`,
+    });
+  }
+};
+
 // export const onlinePayment = async (req, res) => {
 //   try {
 //   } catch (error) {}

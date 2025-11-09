@@ -6,6 +6,7 @@ import {
   getDeliveryAssignment,
   getMyOrders,
   getOrderById,
+  getTodayDeliveries,
   onlinePayment,
   placeOrder,
   sendDeliveryOTP,
@@ -23,6 +24,7 @@ orderRouter.get("/get-assignmnet", isAuth, getDeliveryAssignment);
 orderRouter.get("/get-current-order", isAuth, getCurrentOrder);
 orderRouter.post("/send-delivery-otp", isAuth, sendDeliveryOTP);
 orderRouter.post("/online-payment", isAuth, onlinePayment);
+orderRouter.post("/get-today-deliveries", isAuth, getTodayDeliveries);
 orderRouter.post(
   "/payment/success/:shopOrderId/:orderId/:tranId",
   successFullPayment
