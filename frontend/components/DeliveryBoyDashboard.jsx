@@ -4,6 +4,15 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { serverUrl } from "../src/App";
 import DeliveryBoyTracking from "./DeliveryBoyTracking";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 const DeliveryBoyDashboard = () => {
   const { userData, socket } = useSelector((state) => state.user);
@@ -88,7 +97,7 @@ const DeliveryBoyDashboard = () => {
         { withCredentials: true }
       );
       setTodayDeliveries(result.data);
-      console.log(result.data);
+      console.log(todayDeliveries);
     } catch (error) {
       console.log(error);
     }
@@ -155,6 +164,13 @@ const DeliveryBoyDashboard = () => {
     handleTodayDeliveries();
   }, [userData]);
 
+  //Find the total earing of a delivery boy at current day
+  const earningPerDelivery = 50;
+  const totalEarning = todayDeliveries.reduce(
+    (sum, delivery) => (sum += delivery.count * earningPerDelivery),
+    0
+  );
+
   return (
     <div className="w-screen min-h-screen flex flex-col items-center bg-gradient-to-br from-orange-50 via-white to-orange-100 text-gray-700">
       <Navbar />
@@ -191,6 +207,38 @@ const DeliveryBoyDashboard = () => {
           </div>
         </section>
 
+        {/* Show the delvery count in barchart for each hour that he completed  */}
+        <section className="mb-5">
+          <div className="bg-white rounded-2xl shadow-2xl p-3 mb-6 border border-orange-100">
+            <h2 className="text-lg font-bold mb-3 text-[#ff4d2d]">
+              Today's completed delivery
+            </h2>
+
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={todayDeliveries}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="hour" tickFormatter={(h) => `${h}:00`} />
+                <YAxis allowDecimals={false} />
+                <Tooltip
+                  formatter={(value) => [value, "orders"]}
+                  labelFormatter={(label) => `${label}:00`}
+                />
+                <Bar dataKey="count" fill="#ff4d2d" />
+              </BarChart>
+            </ResponsiveContainer>
+
+            <div className="max-w-sm mx-auto mt-4 p-6 bg-white shadow-2xl text-center rounded-2xl">
+              <h1 className="text-xl font-semibold text-gray-800 mb-2">
+                Today's earning
+              </h1>
+              <span className="text-3xl font-bold text-green-600">
+                {totalEarning}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* When not work with any order */}
         {!currentOrder && (
           <section>
             <div className="bg-white rounded-2xl border border-orange-100 shadow-2xl p-4 md:p-5">
@@ -263,6 +311,7 @@ const DeliveryBoyDashboard = () => {
           </section>
         )}
 
+        {/* Show when accept a order(live track) */}
         {currentOrder && (
           <div className="bg-white rounded-2xl p-5 shadow-2xl w-full max-w-3xl border border-orange-100 mb-6">
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
