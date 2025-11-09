@@ -190,3 +190,34 @@ export const searchItem = async (req, res) => {
       .json({ message: `Unable to get item by name: ${error}` });
   }
 };
+
+//Update rating for a item
+export const ratingChange = async (req, res) => {
+  try {
+    const { rating, itemId } = req.body;
+    if (!rating || !itemId) {
+      return res.status(400).json({ message: "Rating/itemId is required" });
+    }
+
+    if (rating < 0 || rating > 5) {
+      return res.status(400).json({ message: "Rating must be 0 to 5" });
+    }
+
+    const item = await Item.findById(itemId);
+    if (!item) {
+      return res.status(400).json({ message: "Item is not found" });
+    }
+
+    const newCount = item.rating.count + 1;
+    const newAvg =
+      (item.rating.count * item.rating.average + rating) / newCount;
+    item.rating.count = newCount;
+    item.rating.average = newAvg;
+    await item.save();
+    return res.status(200).json({ rating: item.rating });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: `Unable to change rating: ${error}` });
+  }
+};
