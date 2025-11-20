@@ -23,6 +23,7 @@ import TrackOrderPage from "./pages/TrackOrderPage";
 import Shop from "./pages/Shop";
 import { io } from "socket.io-client";
 import { setSocket } from "./redux/userSlice";
+import LandingPage from "./pages/LandingPage";
 export const serverUrl = "http://localhost:8000";
 
 const App = () => {
@@ -55,6 +56,10 @@ const App = () => {
     <div>
       <Routes>
         <Route
+          path="/"
+          element={!userData ? <LandingPage /> : <Navigate to={"/home"} />}
+        />
+        {/* <Route
           path="/signup"
           element={!userData ? <SignUp /> : <Navigate to={"/"} />}
         />
@@ -69,7 +74,7 @@ const App = () => {
         <Route
           path="/"
           element={userData ? <Home /> : <Navigate to={"/signin"} />}
-        />
+        /> */}
         <Route
           path="/create-edit-shop"
           element={userData ? <CreateEditShop /> : <Navigate to={"/signin"} />}
