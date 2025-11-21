@@ -18,13 +18,7 @@ const LandingPageFoodCart = ({ data }) => {
 
   return (
     <article
-      className="group/card w-full max-w-[280px] rounded-2xl border-2 border-orange-100 bg-white 
-      shadow-lg hover:shadow-2xl 
-      p-6 sm:p-8 
-      transition-all duration-500 
-      overflow-hidden 
-      flex flex-col cursor-pointer
-      hover:-translate-y-2 hover:scale-[1.05] ease-out"
+      className="group/card w-full max-w-[280px] rounded-2xl border-2 border-orange-100 bg-white shadow-lg hover:shadow-2xl p-6 sm:p-8 transition-all duration-500 overflow-hidden flex flex-col cursor-pointer hover:-translate-y-2 hover:scale-[1.05] ease-out"
       aria-label={`${data.name} food item`}
     >
       {/* Decorative Gradient Orb */}
@@ -59,8 +53,7 @@ const LandingPageFoodCart = ({ data }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-500"></div>
       </div>
 
-      {/* Content section */}
-      <div className="flex flex-col flex-1 p-4 gap-2">
+      <div className="flex flex-col flex-1 ">
         {/* Food name */}
         <h3 className="text-xl font-bold text-gray-900 tracking-tight line-clamp-2 min-h-[3.5rem]">
           {data.name}

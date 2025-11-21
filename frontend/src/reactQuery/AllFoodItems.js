@@ -7,6 +7,7 @@ export const allFoodItems = () => {
     queryKey: ["allFoods"],
     queryFn: async () => {
       const { data } = await axios.get(`${serverUrl}/api/public/get-all-items`);
+      console.log(data);
       return data;
     },
     staleTime: 5 * 60 * 1000,
