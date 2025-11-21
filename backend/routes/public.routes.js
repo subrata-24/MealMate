@@ -1,5 +1,5 @@
 import express from "express";
-import { allFoods, allShop } from "../controllers/public.controller";
+import { allFoods, allShop } from "../controllers/public.controller.js";
 const publicRoutes = express.Router();
 
 publicRoutes.get("/get-all-items", allFoods);

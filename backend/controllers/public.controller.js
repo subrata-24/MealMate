@@ -1,5 +1,5 @@
-import Item from "../models/item.model";
-import Shop from "../models/shop.model";
+import Item from "../models/item.model.js";
+import Shop from "../models/shop.model.js";
 
 export const allFoods = async (req, res) => {
   try {
