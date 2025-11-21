@@ -7,7 +7,7 @@ export const allShops = () => {
     queryKey: ["allShops"],
     queryFn: async () => {
       const { data } = await axios.get(`${serverUrl}/api/public/get-all-shop`);
-      return data.data;
+      return data;
     },
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
