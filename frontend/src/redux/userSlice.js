@@ -14,6 +14,8 @@ const userSlice = createSlice({
     myOrders: [],
     searchItems: [],
     socket: null,
+    openAuthModal: false,
+    currentPage: "login",
   },
   reducers: {
     setUserData: (state, action) => {
@@ -36,6 +38,12 @@ const userSlice = createSlice({
     },
     setSocket: (state, action) => {
       state.socket = action.payload;
+    },
+    setOpenAuthModal: (state, action) => {
+      state.openAuthModal = action.payload;
+    },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
     },
     addToCart: (state, action) => {
       const cartItem = action.payload;
@@ -120,5 +128,7 @@ export const {
   setSearchItems,
   setSocket,
   updateRealTimeOrderStatus,
+  setOpenAuthModal,
+  setCurrentPage,
 } = userSlice.actions;
 export default userSlice.reducer;

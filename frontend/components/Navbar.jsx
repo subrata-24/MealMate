@@ -5,7 +5,12 @@ import { RxCross2 } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { serverUrl } from "../src/App";
-import { setSearchItems, setUserData } from "../src/redux/userSlice";
+import {
+  setCurrentPage,
+  setOpenAuthModal,
+  setSearchItems,
+  setUserData,
+} from "../src/redux/userSlice";
 import { FaPlus } from "react-icons/fa";
 import { IoReceiptSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +26,11 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const { shopData } = useSelector((state) => state.owner);
   const navigate = useNavigate();
+
+  const handleLogInClick = () => {
+    dispatch(setOpenAuthModal(true));
+    dispatch(setCurrentPage("login"));
+  };
 
   const handleSignOut = async () => {
     try {
@@ -263,7 +273,10 @@ const Navbar = () => {
         </div>
       ) : (
         <div className="flex-shrink-0">
-          <button className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-300 via-orange-400 to-orange-500 hover:from-orange-400 hover:via-red-500 hover:to-orange-600 text-white font-bold shadow-2xl hover:shadow-xl transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 corsor-pointer">
+          <button
+            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-300 via-orange-400 to-orange-500 hover:from-orange-400 hover:via-red-500 hover:to-orange-600 text-white font-bold shadow-2xl hover:shadow-xl transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 corsor-pointer"
+            onClick={handleLogInClick}
+          >
             Log In
           </button>
         </div>

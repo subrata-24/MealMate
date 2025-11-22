@@ -9,6 +9,10 @@ import { allShops } from "../reactQuery/AllShops";
 import LandingPageFoodCart from "../../components/LandingPageFoodCart";
 import HeroSection from "../../components/HeroSection";
 import Footer from "../../components/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentPage, setOpenAuthModal } from "../redux/userSlice";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 
 const LandingPage = () => {
   const cateScrollRef = useRef(null);
@@ -18,6 +22,10 @@ const LandingPage = () => {
   const [showCateRightButton, setShowCateRightButton] = useState(false);
   const [showShopLeftButton, setShowShopLeftButton] = useState(false);
   const [showShopRightButton, setShowShopRightButton] = useState(false);
+  const { userData, openAuthModal, currentPage } = useSelector(
+    (state) => state.user
+  );
+  const dispatch = useDispatch();
 
   const { data: foods = [] } = allFoodItems();
   const { data: shops = [] } = allShops();
@@ -140,6 +148,19 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-orange-50/30">
       <Navbar />
+      {/* Modal section */}
+      <Modal
+        isOpen={userData.openAuthModal}
+        onClose={() => {
+          dispatch(setOpenAuthModal(false));
+          dispatch(setCurrentPage("login"));
+        }}
+      >
+        <div>
+          {userData.currentPage === "login" && <SignIn />}
+          {userData.currentPage === "signup" && <SignUp />}
+        </div>
+      </Modal>
       <HeroSection />
       <FoodCarousel />
 
