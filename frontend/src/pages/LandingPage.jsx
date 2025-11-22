@@ -8,6 +8,7 @@ import { allFoodItems } from "../reactQuery/AllFoodItems";
 import { allShops } from "../reactQuery/AllShops";
 import LandingPageFoodCart from "../../components/LandingPageFoodCart";
 import HeroSection from "../../components/HeroSection";
+import Footer from "../../components/Footer";
 
 const LandingPage = () => {
   const cateScrollRef = useRef(null);
@@ -235,6 +236,7 @@ const LandingPage = () => {
           ))}
         </div>
       </section>
+      <Footer />
     </div>
   );
 };
