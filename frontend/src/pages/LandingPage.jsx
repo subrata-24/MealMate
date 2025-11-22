@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import Navbar from "../../components/Navbar";
 import FoodCarousel from "../../components/FoodCarousel";
 import { categories } from "../category";
@@ -10,17 +10,41 @@ import LandingPageFoodCart from "../../components/LandingPageFoodCart";
 import HeroSection from "../../components/HeroSection";
 
 const LandingPage = () => {
-  const cateScrollRef = useRef();
+  const cateScrollRef = useRef(null);
+  const shopScrollRef = useRef(null);
+
   const [showCateLeftButton, setShowCateLeftButton] = useState(false);
   const [showCateRightButton, setShowCateRightButton] = useState(false);
+  const [showShopLeftButton, setShowShopLeftButton] = useState(false);
+  const [showShopRightButton, setShowShopRightButton] = useState(false);
 
-  const { data: foods } = allFoodItems();
-  const { data: shops } = allShops();
-  // console.log(foods);
-  // console.log(shops);
+  const { data: foods = [] } = allFoodItems();
+  const { data: shops = [] } = allShops();
+
+  // Memoized scroll button updater
+  const updateButton = useCallback((ref, setLeftButton, setRightButton) => {
+    const element = ref.current;
+    if (element) {
+      setLeftButton(element.scrollLeft > 0);
+      setRightButton(
+        element.scrollLeft + element.clientWidth < element.scrollWidth - 5
+      );
+    }
+  }, []);
+
+  // Scroll handler with smooth behavior
+  const scrollHandler = useCallback((ref, direction) => {
+    if (ref.current) {
+      ref.current.scrollBy({
+        left: direction === "left" ? -280 : 280,
+        behavior: "smooth",
+      });
+    }
+  }, []);
 
   useEffect(() => {
-    const element = cateScrollRef.current;
+    const cateElement = cateScrollRef.current;
+    const shopElement = shopScrollRef.current;
 
     const handleCateScroll = () => {
       updateButton(
@@ -30,173 +54,185 @@ const LandingPage = () => {
       );
     };
 
-    if (element) {
+    const handleShopScroll = () => {
+      updateButton(
+        shopScrollRef,
+        setShowShopLeftButton,
+        setShowShopRightButton
+      );
+    };
+
+    if (cateElement) {
       updateButton(
         cateScrollRef,
         setShowCateLeftButton,
         setShowCateRightButton
       );
-      element.addEventListener("scroll", handleCateScroll);
+      cateElement.addEventListener("scroll", handleCateScroll);
+    }
+
+    if (shopElement) {
+      updateButton(
+        shopScrollRef,
+        setShowShopLeftButton,
+        setShowShopRightButton
+      );
+      shopElement.addEventListener("scroll", handleShopScroll);
     }
 
     return () => {
-      if (element) element.removeEventListener("scroll", handleCateScroll);
+      if (cateElement)
+        cateElement.removeEventListener("scroll", handleCateScroll);
+      if (shopElement)
+        shopElement.removeEventListener("scroll", handleShopScroll);
     };
-  }, []);
+  }, [updateButton]);
 
-  const scrollHandler = (ref, direction) => {
-    if (ref.current) {
-      ref.current.scrollBy({
-        left: direction === "left" ? -280 : 280,
-        behavior: "smooth",
-      });
-    }
+  // Reusable scroll button component
+  const ScrollButton = ({ direction, show, onClick }) => {
+    if (!show) return null;
+
+    const Icon =
+      direction === "left" ? FaArrowAltCircleLeft : FaArrowAltCircleRight;
+    const position = direction === "left" ? "left-2" : "right-2";
+
+    return (
+      <button
+        className={`absolute top-1/2 ${position} -translate-y-1/2 bg-white text-orange-600 p-3 rounded-full shadow-lg hover:shadow-2xl hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 hover:text-white transform hover:scale-110 active:scale-95 transition-all duration-300 z-20 border-2 border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2`}
+        onClick={onClick}
+        aria-label={`Scroll ${direction}`}
+      >
+        <Icon size={24} />
+      </button>
+    );
   };
 
-  const updateButton = (ref, setLeftButton, setRightButton) => {
-    const element = ref.current;
-    if (element) {
-      setLeftButton(element.scrollLeft > 0);
-      setRightButton(
-        element.scrollLeft + element.clientWidth < element.scrollWidth - 5
-      );
-    }
+  // Reusable gradient fade component
+  const GradientFade = ({ direction, show }) => {
+    if (!show) return null;
+
+    const position = direction === "left" ? "left-0" : "right-0";
+    const gradient =
+      direction === "left"
+        ? "bg-gradient-to-r from-white to-transparent"
+        : "bg-gradient-to-l from-white to-transparent";
+
+    return (
+      <div
+        className={`absolute ${position} top-0 bottom-0 w-16 ${gradient} pointer-events-none z-10`}
+      />
+    );
   };
+
+  // Reusable section header
+  const SectionHeader = ({ emoji, title, count, label }) => (
+    <div className="flex items-center justify-between px-4 pt-6">
+      <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+        {emoji} {title}
+      </h2>
+      <span className="text-sm text-gray-500 font-medium">
+        {count} {label}
+      </span>
+    </div>
+  );
 
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-b from-white to-orange-50/30">
       <Navbar />
       <HeroSection />
+      <FoodCarousel />
 
-      {/* Show all category */}
-      <section className="w-full flex flex-col gap-6 shadow-2xl">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight pl-4 pt-4">
-            🍴 Explore Categories
-          </h2>
-          <span className="text-sm text-gray-500 font-medium pr-4 pt-4">
-            {categories.length} categories
-          </span>
-        </div>
+      {/* Categories Section */}
+      <section className="w-full py-8" aria-label="Categories">
+        <SectionHeader
+          emoji="🍴"
+          title="Explore Categories"
+          count={categories.length}
+          label="categories"
+        />
 
-        <div className="w-full relative group">
-          {/* Left Scroll Button */}
-          {showCateLeftButton && (
-            <button
-              className="absolute top-1/2 left-2 -translate-y-1/2 bg-white text-orange-600 p-3 rounded-full shadow-lg hover:shadow-2xl hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 hover:text-white transform hover:scale-110 active:scale-95 transition-all duration-300 z-20 border-2 border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
-              onClick={() => scrollHandler(cateScrollRef, "left")}
-            >
-              <FaArrowAltCircleLeft size={24} />
-            </button>
-          )}
+        <div className="w-full relative mt-6">
+          <ScrollButton
+            direction="left"
+            show={showCateLeftButton}
+            onClick={() => scrollHandler(cateScrollRef, "left")}
+          />
 
-          {/* Scrollable Categories */}
           <div
-            className="w-full flex overflow-x-auto gap-4 sm:gap-6 pb-5 px-4 scrollbar-hide scroll-smooth shadow-2xl"
+            className="w-full flex overflow-x-auto gap-4 sm:gap-6 pb-5 px-4 scrollbar-hide scroll-smooth"
             ref={cateScrollRef}
             role="list"
           >
             {categories.map((cate, index) => (
-              <div role="listitem" key={index}>
+              <div role="listitem" key={`category-${index}`}>
                 <CategoryCardLanding name={cate.category} image={cate.image} />
               </div>
             ))}
           </div>
 
-          {/* Right Scroll Button */}
-          {showCateRightButton && (
-            <button
-              className="absolute top-1/2 right-2 -translate-y-1/2 bg-white text-orange-600 p-3 rounded-full shadow-lg hover:shadow-2xl hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 hover:text-white transform hover:scale-110 active:scale-95 transition-all duration-300 z-20 border-2 border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
-              onClick={() => scrollHandler(cateScrollRef, "right")}
-            >
-              <FaArrowAltCircleRight size={24} />
-            </button>
-          )}
+          <ScrollButton
+            direction="right"
+            show={showCateRightButton}
+            onClick={() => scrollHandler(cateScrollRef, "right")}
+          />
 
-          {/* Gradient fade indicators */}
-          {showCateLeftButton && (
-            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-orange-50 to-transparent pointer-events-none z-10" />
-          )}
-          {showCateRightButton && (
-            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-orange-50 to-transparent pointer-events-none z-10" />
-          )}
+          <GradientFade direction="left" show={showCateLeftButton} />
+          <GradientFade direction="right" show={showCateRightButton} />
         </div>
       </section>
 
-      {/* Show all shops */}
-      <section
-        className="w-full flex flex-col gap-6 shadow-2xl"
-        aria-label="Shops"
-      >
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight pl-4 pt-4">
-            Restaurant at our page
-          </h2>
-          <span className="text-sm text-gray-500 font-medium pr-4 pt-4">
-            {shops?.length} shops
-          </span>
-        </div>
+      {/* Shops Section */}
+      <section className="w-full py-8" aria-label="Shops">
+        <SectionHeader
+          emoji="🏪"
+          title="Top Restaurants"
+          count={shops.length}
+          label="shops"
+        />
 
-        <div className="w-full relative group">
-          {/* Left Scroll Button */}
-          {showCateLeftButton && (
-            <button
-              className="absolute top-1/2 left-2 -translate-y-1/2 bg-white text-orange-600 p-3 rounded-full shadow-lg hover:shadow-2xl hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 hover:text-white transform hover:scale-110 active:scale-95 transition-all duration-300 z-20 border-2 border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
-              onClick={() => scrollHandler(cateScrollRef, "left")}
-            >
-              <FaArrowAltCircleLeft size={24} />
-            </button>
-          )}
+        <div className="w-full relative mt-6">
+          <ScrollButton
+            direction="left"
+            show={showShopLeftButton}
+            onClick={() => scrollHandler(shopScrollRef, "left")}
+          />
 
           <div
-            className="w-full flex overflow-x-auto gap-4 sm:gap-6 pb-5 px-4 scrollbar-hide scroll-smooth shadow-2xl"
-            ref={cateScrollRef}
+            className="w-full flex overflow-x-auto gap-4 sm:gap-6 pb-5 px-4 scrollbar-hide scroll-smooth"
+            ref={shopScrollRef}
             role="list"
           >
-            {shops?.length &&
-              shops.map((shop, index) => (
-                <div role="listitem" key={index}>
-                  <CategoryCardLanding name={shop.name} image={shop.image} />
-                </div>
-              ))}
+            {shops.map((shop, index) => (
+              <div role="listitem" key={`shop-${shop.id || index}`}>
+                <CategoryCardLanding name={shop.name} image={shop.image} />
+              </div>
+            ))}
           </div>
 
-          {/* Right Scroll Button */}
-          {showCateRightButton && (
-            <button
-              className="absolute top-1/2 right-2 -translate-y-1/2 bg-white text-orange-600 p-3 rounded-full shadow-lg hover:shadow-2xl hover:bg-gradient-to-r hover:from-orange-500 hover:to-red-500 hover:text-white transform hover:scale-110 active:scale-95 transition-all duration-300 z-20 border-2 border-orange-200 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
-              onClick={() => scrollHandler(cateScrollRef, "right")}
-            >
-              <FaArrowAltCircleRight size={24} />
-            </button>
-          )}
+          <ScrollButton
+            direction="right"
+            show={showShopRightButton}
+            onClick={() => scrollHandler(shopScrollRef, "right")}
+          />
 
-          {/* Gradient fade indicators */}
-          {showCateLeftButton && (
-            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-orange-50 to-transparent pointer-events-none z-10" />
-          )}
-          {showCateRightButton && (
-            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-orange-50 to-transparent pointer-events-none z-10" />
-          )}
+          <GradientFade direction="left" show={showShopLeftButton} />
+          <GradientFade direction="right" show={showShopRightButton} />
         </div>
       </section>
 
       {/* Food Items Section */}
-      <section className="w-full flex flex-col gap-6  shadow-2xl">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight pl-4 pt-4">
-            🍜 Suggested foods for You
-          </h2>
-          <span className="text-sm text-gray-500 font-medium pr-4">
-            {foods?.length} items
-          </span>
-        </div>
+      <section className="w-full py-8" aria-label="Food Items">
+        <SectionHeader
+          emoji="🍜"
+          title="Tasty Treats for You"
+          count={foods.length}
+          label="items"
+        />
 
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 sm:gap-6 px-4 pb-5 shadow-2xl">
-          {foods?.length &&
-            foods.map((food, index) => (
-              <LandingPageFoodCart data={food} key={index} />
-            ))}
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 px-4 mt-6 pb-8">
+          {foods.map((food, index) => (
+            <LandingPageFoodCart data={food} key={food.id || `food-${index}`} />
+          ))}
         </div>
       </section>
     </div>
