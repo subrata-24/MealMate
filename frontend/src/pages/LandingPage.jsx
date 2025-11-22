@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCurrentPage, setOpenAuthModal } from "../redux/userSlice";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import Modal from "../../components/Modal";
 
 const LandingPage = () => {
   const cateScrollRef = useRef(null);
@@ -150,15 +151,15 @@ const LandingPage = () => {
       <Navbar />
       {/* Modal section */}
       <Modal
-        isOpen={userData.openAuthModal}
+        isOpen={openAuthModal}
         onClose={() => {
           dispatch(setOpenAuthModal(false));
           dispatch(setCurrentPage("login"));
         }}
       >
         <div>
-          {userData.currentPage === "login" && <SignIn />}
-          {userData.currentPage === "signup" && <SignUp />}
+          {currentPage === "login" && <SignIn />}
+          {currentPage === "signup" && <SignUp />}
         </div>
       </Modal>
       <HeroSection />

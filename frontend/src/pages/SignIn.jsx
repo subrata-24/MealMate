@@ -8,7 +8,11 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
 import { ClipLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
-import { setUserData } from "../redux/userSlice";
+import {
+  setCurrentPage,
+  setOpenAuthModal,
+  setUserData,
+} from "../redux/userSlice";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -69,6 +73,11 @@ const SignIn = () => {
     } catch (error) {
       setErrors(error?.response?.data?.message);
     }
+  };
+
+  const handleSignUpCLick = () => {
+    dispatch(setOpenAuthModal(true));
+    dispatch(setCurrentPage("signup"));
   };
 
   return (
@@ -235,8 +244,8 @@ const SignIn = () => {
         <p className="text-gray-600 text-center mt-6">
           Don't have an account?
           <span
-            onClick={() => navigate("/signup")}
             className="text-orange-600 font-semibold ml-2 cursor-pointer hover:underline hover:text-orange-700 transition-colors"
+            onClick={handleSignUpCLick}
           >
             Sign Up
           </span>
