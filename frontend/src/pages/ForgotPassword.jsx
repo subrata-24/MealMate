@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
 import { ClipLoader } from "react-spinners";
+import { setCurrentPage, setOpenAuthModal } from "../redux/userSlice";
+import { useDispatch } from "react-redux";
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
@@ -14,6 +16,7 @@ const ForgotPassword = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSendOtp = async () => {
     setLoading(true);
@@ -95,7 +98,7 @@ const ForgotPassword = () => {
       setLoading(false);
       console.log(result);
       setErrors({});
-      navigate("/signin");
+      dispatch(setCurrentPage("login"));
     } catch (error) {
       setLoading(false);
       setErrors({ global: error?.response?.data?.message });

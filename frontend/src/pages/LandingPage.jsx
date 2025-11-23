@@ -14,6 +14,7 @@ import { setCurrentPage, setOpenAuthModal } from "../redux/userSlice";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import Modal from "../../components/Modal";
+import ForgotPassword from "./ForgotPassword";
 
 const LandingPage = () => {
   const cateScrollRef = useRef(null);
@@ -160,6 +161,7 @@ const LandingPage = () => {
         <div>
           {currentPage === "login" && <SignIn />}
           {currentPage === "signup" && <SignUp />}
+          {currentPage === "otp" && <ForgotPassword />}
         </div>
       </Modal>
       <HeroSection />

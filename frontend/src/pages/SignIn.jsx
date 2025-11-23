@@ -7,7 +7,7 @@ import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
 import { ClipLoader } from "react-spinners";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setCurrentPage,
   setOpenAuthModal,
@@ -22,6 +22,7 @@ const SignIn = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const { openAuthModal, currentPage } = useSelector((state) => state.user);
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -79,6 +80,10 @@ const SignIn = () => {
   const handleSignUpCLick = () => {
     dispatch(setOpenAuthModal(true));
     dispatch(setCurrentPage("signup"));
+  };
+
+  const handleForgetPassword = () => {
+    dispatch(setCurrentPage("otp"));
   };
 
   return (
@@ -181,7 +186,7 @@ const SignIn = () => {
         <div className="flex justify-end mt-2">
           <button
             className="text-orange-600 font-semibold cursor-pointer hover:text-orange-700 hover:underline transition-colors"
-            onClick={() => navigate("/forgot-password")}
+            onClick={handleForgetPassword}
           >
             Forgot Password?
           </button>
