@@ -6,23 +6,23 @@ const Modal = ({ isOpen, onClose, children }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-black/50"
+      className="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-black/50 p-4 overflow-y-auto"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl transform transition-all"
+        className="relative w-full max-w-md my-8 bg-white rounded-2xl shadow-2xl transform transition-all max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
         <button
-          className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
+          className="sticky top-4 left-full ml-auto mr-4 z-10 text-gray-400 hover:text-red-500 transition-colors bg-white rounded-full p-1"
           onClick={onClose}
         >
           <RxCross2 size={24} />
         </button>
 
         {/* Modal Content */}
-        <div className="p-6">{children}</div>
+        <div className="px-6 pb-6">{children}</div>
       </div>
     </div>
   );

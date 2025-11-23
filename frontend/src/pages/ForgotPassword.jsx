@@ -113,7 +113,7 @@ const ForgotPassword = () => {
           <IoMdArrowRoundBack
             size={28}
             className="text-orange-600 cursor-pointer hover:text-orange-700 transition-colors"
-            onClick={() => navigate("/signin")}
+            onClick={() => dispatch(setCurrentPage("login"))}
           />
           <h1 className="text-3xl font-extrabold text-orange-600 tracking-tight">
             Forgot Password

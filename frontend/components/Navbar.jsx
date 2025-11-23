@@ -103,7 +103,7 @@ const Navbar = () => {
       </div>
 
       {/* Search Bar (desktop only) */}
-      {userData && userData.role === "user" ? (
+      {userData && userData.role === "user" && (
         <div className="hidden md:flex items-center flex-1 max-w-2xl mx-8 h-14 bg-white gap-4 shadow-lg hover:shadow-xl rounded-2xl px-6 border-2 border-orange-100 transition-all duration-300">
           <div className="flex items-center gap-2 w-1/3 pr-4 border-r-2 border-gray-200">
             <IoLocation size={22} className="text-orange-500 flex-shrink-0" />
@@ -122,7 +122,8 @@ const Navbar = () => {
             />
           </div>
         </div>
-      ) : (
+      )}
+      {/* (
         <div className="hidden md:flex items-center flex-1 max-w-2xl mx-8 h-14 bg-white gap-4 shadow-lg hover:shadow-xl rounded-2xl px-6 border-2 border-orange-100 transition-all duration-300">
           <div className="flex items-center gap-3 w-full">
             <FaSearch size={20} className="text-orange-500 flex-shrink-0" />
@@ -135,7 +136,7 @@ const Navbar = () => {
             />
           </div>
         </div>
-      )}
+      ) */}
 
       {/*User Controls */}
       {userData ? (

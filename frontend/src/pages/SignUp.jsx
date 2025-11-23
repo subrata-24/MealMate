@@ -8,7 +8,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
 import { ClipLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
-import { setUserData } from "../redux/userSlice";
+import { setCurrentPage, setUserData } from "../redux/userSlice";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -85,6 +85,10 @@ const SignUp = () => {
     } catch (error) {
       setErrors(error?.response?.data?.message);
     }
+  };
+
+  const handleSignIn = () => {
+    dispatch(setCurrentPage("login"));
   };
 
   const [fullname, setFullname] = useState("");
@@ -365,7 +369,7 @@ const SignUp = () => {
           Already have an account?
           <span
             className="text-orange-600 font-semibold ml-2 cursor-pointer hover:underline"
-            onClick={() => navigate("/signin")}
+            onClick={handleSignIn}
           >
             Sign In
           </span>
