@@ -24,6 +24,9 @@ import Shop from "./pages/Shop";
 import { io } from "socket.io-client";
 import { setSocket } from "./redux/userSlice";
 import LandingPage from "./pages/LandingPage";
+import UserDashboard from "../components/UserDashboard";
+import OwnerDashboard from "../components/OwnerDashboard";
+import DeliveryBoyDashboard from "../components/DeliveryBoyDashboard";
 export const serverUrl = "http://localhost:8000";
 
 const App = () => {
@@ -57,24 +60,51 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={!userData ? <LandingPage /> : <Navigate to={"/home"} />}
+          element={!userData ? <LandingPage /> : <Navigate to="/home" />}
         />
         {/* <Route
-          path="/signup"
-          element={!userData ? <SignUp /> : <Navigate to={"/"} />}
+          path="/user"
+          element={
+            userData && userData?.role === "user" ? (
+              <UserDashboard />
+            ) : (
+              <Navigate to={"/"} />
+            )
+          }
         />
         <Route
+          path="/owner"
+          element={
+            userData && userData?.role === "owner" ? (
+              <OwnerDashboard />
+            ) : (
+              <Navigate to={"/"} />
+            )
+          }
+        />
+        <Route
+          path="/delivery-boy"
+          element={
+            userData && userData?.role === "deliveryBoy" ? (
+              <DeliveryBoyDashboard />
+            ) : (
+              <Navigate to={"/"} />
+            )
+          }
+        /> */}
+
+        {/* <Route
           path="/signin"
           element={!userData ? <SignIn /> : <Navigate to={"/"} />}
         />
         <Route
           path="/forgot-password"
           element={!userData ? <ForgotPassword /> : <Navigate to={"/"} />}
-        />
-        <Route
-          path="/"
-          element={userData ? <Home /> : <Navigate to={"/signin"} />}
         /> */}
+        <Route
+          path="/home"
+          element={userData ? <Home /> : <Navigate to="/" />}
+        />
         <Route
           path="/create-edit-shop"
           element={userData ? <CreateEditShop /> : <Navigate to={"/signin"} />}

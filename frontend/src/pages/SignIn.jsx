@@ -49,6 +49,7 @@ const SignIn = () => {
       setLoading(false);
       setErrors({});
       dispatch(setUserData(result.data));
+      console.log(result.data);
     } catch (error) {
       setErrors({ global: error?.response?.data?.message });
       setLoading(false);
