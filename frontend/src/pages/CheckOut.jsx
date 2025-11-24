@@ -245,7 +245,7 @@ const CheckOut = () => {
                 }}
                 className="w-full h-full rounded-3xl z-0"
                 center={[location?.lat || 23.8103, location?.lon || 90.4125]}
-                zoom={location?.lat ? 16 : 5}
+                zoom={5}
                 scrollWheelZoom={true}
               >
                 <TileLayer
