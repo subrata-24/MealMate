@@ -27,6 +27,7 @@ import LandingPage from "./pages/LandingPage";
 import UserDashboard from "../components/UserDashboard";
 import OwnerDashboard from "../components/OwnerDashboard";
 import DeliveryBoyDashboard from "../components/DeliveryBoyDashboard";
+import SuccessfullOrderDeliver from "./pages/SuccessfullOrderDeliver";
 export const serverUrl = "http://localhost:8000";
 
 const App = () => {
@@ -107,41 +108,47 @@ const App = () => {
         />
         <Route
           path="/create-edit-shop"
-          element={userData ? <CreateEditShop /> : <Navigate to={"/signin"} />}
+          element={userData ? <CreateEditShop /> : <Navigate to={"/"} />}
         />
         <Route
           path="/add-item"
-          element={userData ? <AddItem /> : <Navigate to={"/signin"} />}
+          element={userData ? <AddItem /> : <Navigate to={"/"} />}
         />
         <Route
           path="/edit-item/:itemID"
-          element={userData ? <EditItem /> : <Navigate to={"/signin"} />}
+          element={userData ? <EditItem /> : <Navigate to={"/"} />}
         />
         <Route
           path="/cart"
-          element={userData ? <CartPage /> : <Navigate to={"/signin"} />}
+          element={userData ? <CartPage /> : <Navigate to={"/"} />}
         />
         <Route
           path="/checkout"
-          element={userData ? <CheckOut /> : <Navigate to={"/signin"} />}
+          element={userData ? <CheckOut /> : <Navigate to={"/"} />}
         />
         <Route
           path="/place-order"
-          element={userData ? <OrderPlaced /> : <Navigate to={"/signin"} />}
+          element={userData ? <OrderPlaced /> : <Navigate to={"/"} />}
         />
         <Route
           path="/my-orders"
-          element={userData ? <MyOrders /> : <Navigate to={"/signin"} />}
+          element={userData ? <MyOrders /> : <Navigate to={"/"} />}
         />
 
         <Route
           path="/track-order/:orderId"
-          element={userData ? <TrackOrderPage /> : <Navigate to={"/signin"} />}
+          element={userData ? <TrackOrderPage /> : <Navigate to={"/"} />}
         />
 
         <Route
           path="/shop/:shopId"
-          element={userData ? <Shop /> : <Navigate to={"/signin"} />}
+          element={userData ? <Shop /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/complete-order"
+          element={
+            userData ? <SuccessfullOrderDeliver /> : <Navigate to={"/"} />
+          }
         />
       </Routes>
     </div>

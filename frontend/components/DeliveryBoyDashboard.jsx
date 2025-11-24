@@ -13,6 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 const DeliveryBoyDashboard = () => {
   const { userData, socket } = useSelector((state) => state.user);
@@ -22,6 +23,9 @@ const DeliveryBoyDashboard = () => {
   const [otp, setOtp] = useState("");
   const [todayDeliveries, setTodayDeliveries] = useState([]);
   const [showOTP, setShowOTP] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!socket || userData.role != "deliveryBoy") return;
@@ -53,6 +57,7 @@ const DeliveryBoyDashboard = () => {
   }, [socket, userData]);
 
   const handleSendOTP = async () => {
+    setLoading(true);
     try {
       const result = await axios.post(
         `${serverUrl}/api/order/send-delivery-otp`,
@@ -65,7 +70,9 @@ const DeliveryBoyDashboard = () => {
         }
       );
       setShowOTP(true);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -81,9 +88,10 @@ const DeliveryBoyDashboard = () => {
         },
         { withCredentials: true }
       );
-      console.log(result.data);
+      navigate("/complete-order");
     } catch (error) {
       console.log(error);
+      setError(error?.response?.data?.message || "Something went wrong.");
     }
   };
 
@@ -500,12 +508,49 @@ const DeliveryBoyDashboard = () => {
               {/* OTP Section */}
               {!showOTP ? (
                 <button
-                  className="group/btn relative w-full py-4 px-6 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 hover:from-orange-600 hover:via-red-600 hover:to-orange-700 text-white font-extrabold text-lg rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 hover:-translate-y-1 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-300 focus:ring-offset-2 overflow-hidden"
+                  className={`group/btn relative w-full py-4 px-6 
+    bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 
+    hover:from-orange-600 hover:via-red-600 hover:to-orange-700 
+    text-white font-extrabold text-lg rounded-2xl shadow-xl 
+    hover:shadow-2xl transform hover:scale-105 hover:-translate-y-1 
+    active:scale-95 transition-all duration-300 focus:outline-none 
+    focus:ring-4 focus:ring-orange-300 focus:ring-offset-2 overflow-hidden
+    ${loading ? "cursor-not-allowed opacity-70" : ""}
+  `}
                   onClick={handleSendOTP}
+                  disabled={loading}
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
-                    <span className="text-2xl">✅</span>
-                    Mark as Delivered
+                    {loading ? (
+                      <>
+                        <svg
+                          className="animate-spin h-6 w-6 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                          ></path>
+                        </svg>
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-2xl">✅</span>
+                        Mark as Delivered
+                      </>
+                    )}
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-1000"></div>
                 </button>
@@ -536,6 +581,12 @@ const DeliveryBoyDashboard = () => {
                     onChange={(e) => setOtp(e.target.value)}
                     value={otp}
                   />
+
+                  {error && (
+                    <p className="text-red-500 text-sm font-semibold mb-4">
+                      {error}
+                    </p>
+                  )}
 
                   <button
                     className="group/btn relative w-full py-4 px-6 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 hover:from-orange-600 hover:via-red-600 hover:to-orange-700 text-white font-extrabold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 hover:-translate-y-1 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-300 focus:ring-offset-2 overflow-hidden"
