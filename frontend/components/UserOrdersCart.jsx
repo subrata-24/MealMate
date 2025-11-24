@@ -165,8 +165,8 @@ const UserOrdersCart = ({ data }) => {
                 >
                   <div className="relative overflow-hidden h-32 bg-gray-100">
                     <img
-                      src={item.item.image}
-                      alt={item.item.name}
+                      src={item?.item?.image}
+                      alt={item?.item?.name}
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute top-2 right-2 bg-white/95 backdrop-blur-sm px-2 py-1 rounded-lg shadow-md">

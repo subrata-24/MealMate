@@ -1,6 +1,7 @@
 import React from "react";
 import FoodCarousel from "./FoodCarousel";
 import video from "../src/assets/video.mp4";
+import bg from "../src/assets/bg.jpg";
 
 const ArrowRight = () => (
   <svg
@@ -123,7 +124,7 @@ const HeroSection = () => (
           <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-red-500 to-pink-600 rounded-[3rem] transform rotate-6 shadow-2xl"></div>
           <div className="absolute inset-0 bg-white rounded-[3rem] shadow-2xl overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=1000&fit=crop"
+              src={bg}
               alt="Delicious food"
               className="w-full h-full object-cover"
             />

@@ -83,7 +83,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400">
-          <p>© 2025 MealMate. All rights reserved. Made with ❤️</p>
+          <p>© 2025 MealMate. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -13,6 +13,9 @@ const useGetCity = () => {
   const apiKey = import.meta.env.VITE_GEOAPIKEY;
   const { userData } = useSelector((state) => state.user);
   useEffect(() => {
+    if (!userData) {
+      return;
+    }
     navigator.geolocation.getCurrentPosition(async (position) => {
       //   console.log(position);
       const latitude = position.coords.latitude;

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { FaPencilAlt } from "react-icons/fa";
 import { MdRestaurantMenu } from "react-icons/md";
 import OwnerItemCard from "./OwnerItemCard";
+import Footer from "./Footer";
 
 const OwnerDashboard = () => {
   const { shopData } = useSelector((state) => state.owner);

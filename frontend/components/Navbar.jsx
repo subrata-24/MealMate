@@ -242,13 +242,7 @@ const Navbar = () => {
 
           {/* Dropdown Info */}
           {showInfo && (
-            <div
-              className={`fixed top-[85px] right-[10px] ${
-                userData.role === "deliveryBoy"
-                  ? "md:right-[20%] lg:right-[34%]"
-                  : "md:right-[10%] lg:right-[25%]"
-              } w-[220px] bg-white shadow-2xl rounded-2xl flex flex-col p-6 gap-4 border-2 border-orange-100 z-40`}
-            >
+            <div className="absolute top-[60px] right-0 w-[220px] bg-white shadow-2xl rounded-2xl flex flex-col p-6 gap-4 border-2 border-orange-100 z-40">
               <div className="text-lg font-bold text-gray-900 border-b-2 border-gray-100 pb-3">
                 {userData.fullname}
               </div>
@@ -275,7 +269,7 @@ const Navbar = () => {
       ) : (
         <div className="flex-shrink-0">
           <button
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-300 via-orange-400 to-orange-500 hover:from-orange-400 hover:via-red-500 hover:to-orange-600 text-white font-bold shadow-2xl hover:shadow-xl transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 corsor-pointer"
+            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-orange-400 via-red-500 to-orange-600 hover:from-orange-500 hover:via-red-600 hover:to-orange-700 text-white font-bold shadow-2xl hover:shadow-xl transform hover:scale-105 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 corsor-pointer"
             onClick={handleLogInClick}
           >
             Log In

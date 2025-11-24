@@ -8,7 +8,6 @@ function useUpdateLocation() {
 
   useEffect(() => {
     if (!userData) {
-      console.log("Not logged in, skipping location update watch.");
       return;
     }
 
