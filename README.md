@@ -133,7 +133,7 @@ Make sure you have installed:
 
 ### 📥 Clone Repository
 ```bash
-git clone https://github.com/yourusername/mealmate.git
+git clone https://github.com/subrata-24/mealmate.git
 cd mealmate
 ```
 ### 🔧 Backend Setup
